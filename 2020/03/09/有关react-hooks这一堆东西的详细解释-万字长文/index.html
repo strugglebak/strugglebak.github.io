@@ -89,13 +89,13 @@
 <meta property="og:site_name" content="Stay Hungry">
 <meta property="og:description" content="本文主要会就 React hooks 中用的比较多的 useState 做一个详细讲解，其他的 hooks 会涉及到原理和使用但不会涉及到源码仿写，望周知">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="leanote://file/getImage?fileId=5e52751bab64416afb003031">
-<meta property="og:image" content="leanote://file/getImage?fileId=5e528645ab644169050035d5">
-<meta property="og:updated_time" content="2020-03-09T10:19:30.284Z">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/有关react-hooks这一堆东西的详细解释-万字长文/1.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/有关react-hooks这一堆东西的详细解释-万字长文/2.jpg">
+<meta property="og:updated_time" content="2020-03-10T17:08:04.685Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="有关react hooks这一堆东西的详细解释(万字长文)">
 <meta name="twitter:description" content="本文主要会就 React hooks 中用的比较多的 useState 做一个详细讲解，其他的 hooks 会涉及到原理和使用但不会涉及到源码仿写，望周知">
-<meta name="twitter:image" content="leanote://file/getImage?fileId=5e52751bab64416afb003031">
+<meta name="twitter:image" content="https://strugglebak.github.io/2020/03/09/有关react-hooks这一堆东西的详细解释-万字长文/1.jpg">
 
 
 
@@ -458,7 +458,7 @@
 <li>对于类组件来说，不存在全局作用域重名的问题，对于函数组件来说就有，这个时候怎么办？<br>  只需要将 <code>_state</code> 和 <code>index</code> 放在组件对应的虚拟 DOM 对象上即可</li>
 </ul>
 <p>原理是这样的</p>
-<p><img src="leanote://file/getImage?fileId=5e52751bab64416afb003031" alt=""></p>
+<p><img src="./1.jpg" alt=""></p>
 <p>在函数组件调用了 <code>useState</code> 时，就会更新绑定在虚拟 DOM 对象上的 <code>_state</code> 和 <code>index</code>，当下次数据有变化触发 render 时，会再次调用 <code>useState</code> 并生成一个新的虚拟 DOM 对象，这个对象会跟之前的旧对象进行一个 Diff 的操作，对比出要更改的节点后会出一个 Patch，然后再根据这个 Patch 更新虚拟 DOM 上的数据，这里面包括了 <code>_state</code> 和 <code>index</code>，最后再修改生成一个真实 DOM 节点。</p>
 <h3 id="useState-注意点"><a href="#useState-注意点" class="headerlink" title="useState 注意点"></a>useState 注意点</h3><ul>
 <li><p>对于其使用状态</p>
@@ -534,7 +534,7 @@
 <p>现在有个问题，在点击完 +1 button 然后点击 log，打印出来的 n 是正常的。但是如果是先 log 然后立即执行 +1，那么我们可以发现一个 bug，就是 <strong>n 居然没有变化!!!居然还是之前的旧数据!!!</strong></p>
 <p>wtf, 这是什么情况???</p>
 <p>先来看一张图</p>
-<p><img src="leanote://file/getImage?fileId=5e528645ab644169050035d5" alt=""></p>
+<p><img src="./2.jpg" alt=""></p>
 <ul>
 <li>如果先点 +1 再点 log<br>  <code>setN</code> 会先执行，然后触发 <code>render</code>，3 秒过后，<code>log</code> 里面读到的 <code>n</code> 就是 <strong>已经从 <code>useState</code></strong> 里面读出来的 <code>n</code>，所以 <code>n = 1</code></li>
 <li>如果先点 log 再点 +1<br>  <code>log</code> 会先执行，但是注意，此时 <code>log</code> 里的 <code>n</code> 还是初始状态下读到的 <strong>旧的 <code>n</code></strong>，随后 <code>setN</code> 执行后会产生一个<strong>新的 <code>n</code></strong>。然而此时其触发的 <code>render</code> 早就更新页面上的 <code>n</code> 了。所以会出现这种 “滞后” 的 bug</li>
