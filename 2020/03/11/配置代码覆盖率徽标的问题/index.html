@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="找库首先是看到 axios 这个库 里面有个 coverage 然后查人家的 package.json 发现是用 coveralls 这个工具的，并且命令为&quot;coveralls&quot;: &quot;cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js&quot; 原理就是用 coveralls 这个工具计算好代码覆盖率之后，会在项目根目录下生">
+<meta name="description" content="配置代码覆盖率的这个徽标也是一个很麻烦的问题，由于采用的是 travis 这个 ci 工具，所以坑还是有点多的，这里也记录了如何生成一个 github 的 token，也算做个记录">
 <meta name="keywords" content="bug">
 <meta property="og:type" content="article">
 <meta property="og:title" content="配置代码覆盖率徽标的问题">
 <meta property="og:url" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/index.html">
 <meta property="og:site_name" content="Stay Hungry">
-<meta property="og:description" content="找库首先是看到 axios 这个库 里面有个 coverage 然后查人家的 package.json 发现是用 coveralls 这个工具的，并且命令为&quot;coveralls&quot;: &quot;cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js&quot; 原理就是用 coveralls 这个工具计算好代码覆盖率之后，会在项目根目录下生">
+<meta property="og:description" content="配置代码覆盖率的这个徽标也是一个很麻烦的问题，由于采用的是 travis 这个 ci 工具，所以坑还是有点多的，这里也记录了如何生成一个 github 的 token，也算做个记录">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/1.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/2.png">
@@ -104,10 +104,10 @@
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/13.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/14.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/15.png">
-<meta property="og:updated_time" content="2020-03-10T16:48:07.039Z">
+<meta property="og:updated_time" content="2020-03-10T16:52:31.329Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置代码覆盖率徽标的问题">
-<meta name="twitter:description" content="找库首先是看到 axios 这个库 里面有个 coverage 然后查人家的 package.json 发现是用 coveralls 这个工具的，并且命令为&quot;coveralls&quot;: &quot;cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js&quot; 原理就是用 coveralls 这个工具计算好代码覆盖率之后，会在项目根目录下生">
+<meta name="twitter:description" content="配置代码覆盖率的这个徽标也是一个很麻烦的问题，由于采用的是 travis 这个 ci 工具，所以坑还是有点多的，这里也记录了如何生成一个 github 的 token，也算做个记录">
 <meta name="twitter:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/1.png">
 
 
@@ -414,7 +414,11 @@
       
 
       
-        <h2 id="找库"><a href="#找库" class="headerlink" title="找库"></a>找库</h2><p>首先是看到 <a href="http://https://github.com/axios/axios" target="_blank" rel="noopener">axios 这个库</a> 里面有个 <code>coverage</code><br><img src="./1.png" alt=""></p>
+        <blockquote>
+<p>配置代码覆盖率的这个徽标也是一个很麻烦的问题，由于采用的是 travis 这个 ci 工具，所以坑还是有点多的，这里也记录了如何生成一个 github 的 token，也算做个记录</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="找库"><a href="#找库" class="headerlink" title="找库"></a>找库</h2><p>首先是看到 <a href="http://https://github.com/axios/axios" target="_blank" rel="noopener">axios 这个库</a> 里面有个 <code>coverage</code><br><img src="./1.png" alt=""></p>
 <p>然后查人家的 <code>package.json</code> 发现是用 <code>coveralls</code> 这个工具的，并且命令为<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">"coveralls"</span>: <span class="string">"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"</span></span><br></pre></td></tr></table></figure></p>
 <p>原理就是用 <code>coveralls</code> 这个工具计算好代码覆盖率之后，会在项目根目录下生成 <code>coveralls</code> 文件夹，里面就有相关的文件以及最关键的 – <code>lcov.info</code>， 这个文件就是我想要的那个徽标</p>
 <h2 id="网站配置"><a href="#网站配置" class="headerlink" title="网站配置"></a>网站配置</h2><p>首先我项目都是基于 TravisCI 进行持续集成的，最开始的 <code>.travis.yml</code> 如下<br><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">language:</span> <span class="string">node_js</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line"><span class="attr">  directories:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">"~/.npm"</span></span><br><span class="line"><span class="attr">notifications:</span></span><br><span class="line"><span class="attr">  email:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">node_js:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">'10'</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">'11'</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">'8'</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">npm</span> <span class="string">run</span> <span class="attr">test:prod</span> <span class="string">&amp;&amp;</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br><span class="line"><span class="attr">after_success:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">travis-deploy-once</span> <span class="string">"npm run report-coverage"</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">if</span> <span class="string">[</span> <span class="string">"$TRAVIS_BRANCH"</span> <span class="string">=</span> <span class="string">"master"</span> <span class="bullet">-a</span> <span class="string">"$TRAVIS_PULL_REQUEST"</span> <span class="string">=</span> <span class="string">"false"</span> <span class="string">];</span> <span class="string">then</span> <span class="string">npm</span></span><br><span class="line">  <span class="string">run</span> <span class="string">travis-deploy-once</span> <span class="string">"npm run deploy-docs"</span><span class="string">;</span> <span class="string">fi</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">if</span> <span class="string">[</span> <span class="string">"$TRAVIS_BRANCH"</span> <span class="string">=</span> <span class="string">"master"</span> <span class="bullet">-a</span> <span class="string">"$TRAVIS_PULL_REQUEST"</span> <span class="string">=</span> <span class="string">"false"</span> <span class="string">];</span> <span class="string">then</span> <span class="string">npm</span></span><br><span class="line">  <span class="string">run</span> <span class="string">travis-deploy-once</span> <span class="string">"npm run sr"</span><span class="string">;</span> <span class="string">fi</span></span><br><span class="line"><span class="attr">branches:</span></span><br><span class="line"><span class="attr">  except:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">"/^v\\d+\\.\\d+\\.\\d+$/"</span></span><br></pre></td></tr></table></figure></p>
