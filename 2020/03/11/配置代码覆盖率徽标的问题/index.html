@@ -104,7 +104,7 @@
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/13.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/14.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/11/配置代码覆盖率徽标的问题/15.png">
-<meta property="og:updated_time" content="2020-03-10T16:52:31.329Z">
+<meta property="og:updated_time" content="2020-03-12T03:35:43.042Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置代码覆盖率徽标的问题">
 <meta name="twitter:description" content="配置代码覆盖率的这个徽标也是一个很麻烦的问题，由于采用的是 travis 这个 ci 工具，所以坑还是有点多的，这里也记录了如何生成一个 github 的 token，也算做个记录">
@@ -450,6 +450,9 @@
 <p>看了下，大致意思就是，你可以使用下面这条命令<br><figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">travis encrypt --pro SOMEVAR=<span class="string">"secretvalue"</span> --<span class="keyword">add</span><span class="bash"></span></span><br></pre></td></tr></table></figure></p>
 <p>去加密一个变量，然后这个就会以加密后的一串字符串追加到 <code>.travis.yml</code> 文件后<br><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">env:</span></span><br><span class="line"><span class="attr">  global:</span></span><br><span class="line"><span class="attr">    secure:</span> <span class="string">WPuJZvLNAyAfwu2gM89Y3t520/rnO5GK25Bf1WViJff5q...</span></span><br></pre></td></tr></table></figure></p>
 <p>这就表示把你定义的变量加入到 travis 这个环境变量里面去了，然后你在 travis 上编译测试成功后，会在你项目你自己已经定义好的变量中去找，因为这是一个 key 和 value，找到你对应的 key 再解密然后比对 value，就达到了权限验证的目的了。</p>
+<blockquote>
+<p>这里我执行的命令是 <code>travis encrypt --pro GITHUB_TOKEN=&quot;yourgithubtokenvalue&quot; --add</code></p>
+</blockquote>
 <p>比如我的就是设置的变量名就是 <code>GITHUB_TOKEN</code>，就在 travis 项目中的 <code>setting</code> 页面中的那个 <code>Environment Variables</code> 里填，<code>Value</code> 项就是你在 github 上设置成功的 token 值，然后点击 <code>Add</code> 添加</p>
 <p><img src="./13.png" alt=""></p>
 <p>最后就是项目的修改和提交了，主要就是更改了 <code>.travis.yml</code> 配置文件，提交了之后等待 travis 测试通过，再刷新 <code>Coveralls</code> 官网对应的项目，看到下图表示代码覆盖率报告已经生成，也就是说可以在 <code>shields.io</code> 上拿到 <code>coverage</code> 的徽标了!</p>
