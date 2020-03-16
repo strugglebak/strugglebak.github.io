@@ -93,7 +93,7 @@
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/17/watermelon-clock-基于TypeScript-React的西瓜闹钟项目的实践总结/2.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/17/watermelon-clock-基于TypeScript-React的西瓜闹钟项目的实践总结/3.png">
 <meta property="og:image" content="https://strugglebak.github.io/2020/03/17/watermelon-clock-基于TypeScript-React的西瓜闹钟项目的实践总结/4.png">
-<meta property="og:updated_time" content="2020-03-16T16:09:58.563Z">
+<meta property="og:updated_time" content="2020-03-16T16:11:47.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="watermelon-clock:基于TypeScript+React的西瓜闹钟项目的实践总结">
 <meta name="twitter:description" content="注意，本项目是基于 create-react-app 搭建，但是使用了 --typescript 选项，所以是基于 TypeScript 写的。另外，项目地址在这里，求各位大佬看到了如果喜欢还请点个小星星(拜托啦这真的对我很重要 QAQ)">
@@ -419,10 +419,18 @@
 </blockquote>
 <a id="more"></a>
 <h2 id="项目实现-Feature"><a href="#项目实现-Feature" class="headerlink" title="项目实现 Feature"></a>项目实现 Feature</h2><ul>
-<li>小巧的用户验证<br>  这一部分主要是用来注册/登陆的验证用的，注册/登陆后会自动跳转至首页，所以这边也做了一个简单的路由鉴权功能</li>
-<li>西瓜闹钟<br>  点击开始闹钟时，会显示 25 分钟的倒计时，计时结束后若没有打断则会生成一个西瓜</li>
-<li>待办 todo 任务<br>  新建待办任务和完成待办任务后都会出现任务的列表，而且是不同的列表展示</li>
-<li>数据统计<br>  主要有 3 个<ul>
+<li><p>小巧的用户验证</p>
+<p>  这一部分主要是用来注册/登陆的验证用的，注册/登陆后会自动跳转至首页，所以这边也做了一个简单的路由鉴权功能</p>
+</li>
+<li><p>西瓜闹钟</p>
+<p>  点击开始闹钟时，会显示 25 分钟的倒计时，计时结束后若没有打断则会生成一个西瓜</p>
+</li>
+<li><p>待办 todo 任务</p>
+<p>  新建待办任务和完成待办任务后都会出现任务的列表，而且是不同的列表展示</p>
+</li>
+<li><p>数据统计</p>
+<p>  主要有 3 个</p>
+<ul>
 <li>月度统计：统计每个月任务总量的累计/增长率/平均值</li>
 <li>西瓜历史统计：主要是一个长达 25 分钟的西瓜量，表示自己长时间的执行完某个任务的量化显示，可编辑/删除/恢复，同时也可以手动增加西瓜记录</li>
 <li>待办 todo 历史统计：表示自己短时间内执行完的小任务的量化表示，可编辑/删除/恢复，同时可以查看已经删除的任务</li>
@@ -460,14 +468,17 @@
   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redux/</span><br><span class="line">├── actionTypes.ts</span><br><span class="line">├── actions</span><br><span class="line">│   ├── todosActions.ts</span><br><span class="line">│   ├── userActions.ts</span><br><span class="line">│   └── waterMelonActions.ts</span><br><span class="line">├── reducers</span><br><span class="line">│   ├── indexReducer.ts</span><br><span class="line">│   ├── todosReducer.ts</span><br><span class="line">│   ├── userReducer.ts</span><br><span class="line">│   └── waterMelonReducer.ts</span><br><span class="line">└── store.ts</span><br></pre></td></tr></table></figure>
 <p>  因为这里的各种 <code>type</code> 都比较简单，所以这里就没有分各个模块文件了，只是就大概的 <code>actions</code> 以及 <code>reducers</code> 分了一下，<code>store.ts</code> 模块主要就是 <code>creatStore</code> 以及 <code>applyMiddleware</code> 中间件。这里还用了一个 <code>redux-devtools-extension</code> redux 的调试工具，在 debug 环境调试用的。</p>
 </li>
-<li><p>用户登陆/注册的鉴权<br>  其实在用户登陆和注册之前可以先调用下 <code>getUserInfo</code> 获取下用户的信息，先判断是否会得到错误，如果没错那么本来没有在 <code>/</code> 路由的就跳转到 <code>/</code>，如果出错了那么在判断其是否在 <code>/</code> 路由，在的话就强制跳转至 <code>/login</code> 路由页面</p>
+<li><p>用户登陆/注册的鉴权</p>
+<p>  其实在用户登陆和注册之前可以先调用下 <code>getUserInfo</code> 获取下用户的信息，先判断是否会得到错误，如果没错那么本来没有在 <code>/</code> 路由的就跳转到 <code>/</code>，如果出错了那么在判断其是否在 <code>/</code> 路由，在的话就强制跳转至 <code>/login</code> 路由页面</p>
 <p>  登陆和注册的逻辑基本就是如下</p>
   <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> http.post(url, params)</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> http.get(<span class="string">'/me'</span>)</span><br><span class="line">  <span class="keyword">const</span> userInfo = response.data</span><br><span class="line">  dispatch(&#123;</span><br><span class="line">    type: VERIFY_USER_SUCCESS,</span><br><span class="line">    payload: userInfo</span><br><span class="line">  &#125;)</span><br><span class="line">  history.push(<span class="string">'/'</span>)</span><br><span class="line">&#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e.response)</span><br><span class="line">  <span class="keyword">let</span> errorInfo</span><br><span class="line">  <span class="keyword">if</span>(!e.response)&#123;</span><br><span class="line">    errorInfo = <span class="string">'请检查网络是否正常'</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; errors &#125; = e.response.data</span><br><span class="line">    errorInfo = errors.account</span><br><span class="line">    ? errors.account</span><br><span class="line">    : errors</span><br><span class="line">  &#125;</span><br><span class="line">  dispatch(&#123;</span><br><span class="line">    type: VERIFY_USER_FAILURE,</span><br><span class="line">    error: errorInfo</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>为什么使用 <code>redux-thunk</code> 来 <code>dispatch</code> 数据<br>  因为用到了异步，而我们这里的异步比较简单，实际上用 <code>redux-thunk</code> 这个中间件就能解决问题了。那么这里的 <code>actions</code> 的写法也比较简单，只是需要返回一个 <code>async</code> 的带有 <code>dispatch</code> 函数参数的一个函数即可，<code>redux-thunk</code> 会自己帮你 enhance 这个 <code>dispatch</code></p>
+<li><p>为什么使用 <code>redux-thunk</code> 来 <code>dispatch</code> 数据</p>
+<p>  因为用到了异步，而我们这里的异步比较简单，实际上用 <code>redux-thunk</code> 这个中间件就能解决问题了。那么这里的 <code>actions</code> 的写法也比较简单，只是需要返回一个 <code>async</code> 的带有 <code>dispatch</code> 函数参数的一个函数即可，<code>redux-thunk</code> 会自己帮你 enhance 这个 <code>dispatch</code></p>
   <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> xxx = <span class="keyword">async</span> (dispatch: any) =&gt; &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  dispatch(&#123;</span><br><span class="line">    type: <span class="string">'YYY'</span>,</span><br><span class="line">    payload: &#123;...&#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><code>react-redux</code> 中的 <code>connect</code> 组件<br>  首先我不认同只有父级组件用 <code>connect</code> 而其他组件就被动传 <code>props</code> 的这种用法。因为尽管是比较简单的一个项目，但是在某个功能模块上依然存在层级嵌套比较深的情况。有一般而言传个三级就觉得很麻烦了，这个时候子组件使用 <code>connect</code> 是很有必要的(虽然可能写起来依然麻烦了点，但是的确能省点心思思考我的父级组件到底给我传了个啥)</p>
+<li><p><code>react-redux</code> 中的 <code>connect</code> 组件</p>
+<p>  首先我不认同只有父级组件用 <code>connect</code> 而其他组件就被动传 <code>props</code> 的这种用法。因为尽管是比较简单的一个项目，但是在某个功能模块上依然存在层级嵌套比较深的情况。有一般而言传个三级就觉得很麻烦了，这个时候子组件使用 <code>connect</code> 是很有必要的(虽然可能写起来依然麻烦了点，但是的确能省点心思思考我的父级组件到底给我传了个啥)</p>
 </li>
 </ul>
 <h3 id="封装的-history-配置"><a href="#封装的-history-配置" class="headerlink" title="封装的 history 配置"></a>封装的 <code>history</code> 配置</h3><p>这部分的代码也并不是特别复杂，如下所示</p>
