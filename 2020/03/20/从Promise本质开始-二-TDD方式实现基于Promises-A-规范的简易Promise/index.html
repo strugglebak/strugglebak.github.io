@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Stay Hungry">
 <meta property="og:description" content="之前我还讲过 如何为实现 Promise 搭建 TDD 环境，而本文的目的主要是探讨如何基于 TDD 这样的方式实现一个 Promise，并且描述了部分 Promises/A+ 规范，以此为基础实现的一个 Promise">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-19T16:27:55.948Z">
+<meta property="og:updated_time" content="2020-03-19T16:45:14.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从Promise本质开始(二):TDD方式实现基于Promises&#x2F;A+规范的简易Promise">
 <meta name="twitter:description" content="之前我还讲过 如何为实现 Promise 搭建 TDD 环境，而本文的目的主要是探讨如何基于 TDD 这样的方式实现一个 Promise，并且描述了部分 Promises/A+ 规范，以此为基础实现的一个 Promise">
@@ -551,7 +551,7 @@
 <li>在 <code>resolve</code>/<code>reject</code> 时<strong>遍历</strong>，取出对应的 <code>succeed</code>/<code>fail</code>，并执行</li>
 </ul>
 <h2 id="与-Promises-A-规范的区别"><a href="#与-Promises-A-规范的区别" class="headerlink" title="与 Promises/A 规范的区别"></a>与 Promises/A 规范的区别</h2><p>至此，我们已经完成一个 Promise 的基本功能，这个功能包括了 Promise 的核心 API，即 <code>new Promise</code> 以及 <code>then</code> 和里面的成功以及失败回调，下面就来讲(fan)讲(yi) Promises/A+ 规范和 Promises/A 规范的几个<strong>比较重要</strong>的区别</p>
-<h3 id="Omissions"><a href="#Omissions" class="headerlink" title="Omissions"></a>Omissions</h3><p>下面的几点都是 Promise/A 规范所遗漏的:</p>
+<h3 id="Omissions"><a href="#Omissions" class="headerlink" title="Omissions"></a>Omissions</h3><p>下面的几点都是 Promises/A 规范所遗漏的:</p>
 <ol>
 <li>进度处理: 实际上，它并未被指定，并且当前在实现 promise 的社区中没有形成一致的意见</li>
 <li>可交互的 promises: 这被认为超出了可互操作保证所必需的最小 API 的范围</li>
