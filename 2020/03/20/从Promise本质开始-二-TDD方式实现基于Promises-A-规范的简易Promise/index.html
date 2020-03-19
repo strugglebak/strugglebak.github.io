@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Stay Hungry">
 <meta property="og:description" content="之前我还讲过 如何为实现 Promise 搭建 TDD 环境，而本文的目的主要是探讨如何基于 TDD 这样的方式实现一个 Promise，并且描述了部分 Promises/A+ 规范，以此为基础实现的一个 Promise">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-19T16:24:16.776Z">
+<meta property="og:updated_time" content="2020-03-19T16:27:55.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从Promise本质开始(二):TDD方式实现基于Promises&#x2F;A+规范的简易Promise">
 <meta name="twitter:description" content="之前我还讲过 如何为实现 Promise 搭建 TDD 环境，而本文的目的主要是探讨如何基于 TDD 这样的方式实现一个 Promise，并且描述了部分 Promises/A+ 规范，以此为基础实现的一个 Promise">
@@ -402,6 +402,7 @@
 <p>之前我还讲过 <a href="https://strugglebak.github.io/2020/03/09/%E4%BB%8EPromise%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%80-%E5%AE%9E%E7%8E%B0Promise%E5%89%8D%E8%A8%80/">如何为实现 Promise 搭建 TDD 环境</a>，而本文的目的主要是探讨如何基于 TDD 这样的方式实现一个 Promise，并且描述了部分 Promises/A+ 规范，以此为基础实现的一个 Promise</p>
 </blockquote>
 <a id="more"></a>
+<p><a href="https://github.com/strugglebak/promise-easy" target="_blank" rel="noopener">项目地址</a></p>
 <h2 id="先实现一个最基础版本的-Promise"><a href="#先实现一个最基础版本的-Promise" class="headerlink" title="先实现一个最基础版本的 Promise"></a>先实现一个最基础版本的 Promise</h2><p>有了之前的准备，现在就可以进行 TDD(Test Driven Develop)测试驱动开发了，注意，以下的测试代码都写在测试文件 <code>test/index.ts</code> 中，并且文件大致的代码结构为如下所示</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; assert &#125; <span class="keyword">from</span> <span class="string">'chai'</span></span><br><span class="line"><span class="keyword">import</span> &#123; describe, it &#125; <span class="keyword">from</span> <span class="string">'mocha'</span></span><br><span class="line"><span class="keyword">import</span> <span class="built_in">Promise</span> <span class="keyword">from</span> <span class="string">'../src/promise'</span></span><br><span class="line"></span><br><span class="line">describe(<span class="string">'Promise'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="comment">// TODO</span></span><br><span class="line">  it(<span class="string">'TODO'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>并且源码文件为 <code>src/promise.ts</code></p>
