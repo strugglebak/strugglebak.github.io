@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://strugglebak.github.io/"/>
-  <updated>2022-06-05T12:53:10.772Z</updated>
+  <updated>2022-06-05T13:22:48.483Z</updated>
   <id>https://strugglebak.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CMU-15-445-645-笔记-02-高级SQL</title>
+    <link href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-%E7%AC%94%E8%AE%B0-02-%E9%AB%98%E7%BA%A7SQL/"/>
+    <id>https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-02-高级SQL/</id>
+    <published>2022-06-05T13:00:10.000Z</published>
+    <updated>2022-06-05T13:22:48.483Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>注: 本文首发我的 b 站专栏文章<a href="https://www.bilibili.com/read/cv14530555" target="_blank" rel="noopener">CMU 15-445/645-笔记-02-高级SQL</a></p></blockquote><a id="more"></a><p><img src="./Cover.png" alt></p><ul><li><p>课程目标</p><p>  <img src="./1.png" alt></p></li><li><p>Relational Languages<br>  <img src="./2.png" alt></p></li><li><p>SQL 的历史<br>  <img src="./3.png" alt></p><ul><li>除了 IBM 推出的 SQL 之外，还有另一个主流是由伯克利推出的 Ingres</li><li>而 PostgreSQL 是由开发 Ingres 那帮人开发的，所以才被称之为 “Post” “gre” “SQL”，与 “In” “gres” 对应，因为是在 Ingres 之后才出现的</li><li>开发 Ingres 那帮人有自己的语言，叫 Quel</li><li>英国有个人为他的编程语言也取名叫 SQL，IBM 因此与这个人产生版权以及商标纠纷</li><li>当 IBM 推出了 DB2 和 SQL 时，Oracle 也在同时支持 SQL</li><li>SQL 一直在发展，推出很多新特性<br>  <img src="./4.png" alt></li><li>现在只有非常少的数据库系统通过 SQL:2016 标准</li></ul></li><li><p>SQL 并不是一门单一的语言，它是一些东西的集合</p><p>  <img src="./5.png" alt></p><ul><li>DML: 类似 insert/update/delete/select 命令</li><li>DDL: 跟 schema 有关，通过定义 schema 创建表来存数据</li><li>DCL: 跟安全性授权相关</li><li>lists，也就是列表，可以有重复元素，是有序的</li><li>sets, 也就是集合，没有重复元素，是无序的</li><li>bags, 允许元素重复，无序</li></ul></li><li><p>Example Database</p><p>  <img src="./6.png" alt></p></li><li><p>Aggregates 聚合函数</p><p>  <img src="./7.png" alt></p><p>  <img src="./8.png" alt></p><p>  用 “<em>“ 代替 login<br>  “</em>“ 是 SQL 中的特殊关键字，代表该 tuple 中所有属性</p><p>  <img src="./9.png" alt></p><p>  更进一步，用 “1” 代替 “*”，每数一个 tuple，tuple 的数量就 +1</p><p>  <img src="./10.png" alt></p><p>  一般来讲建议使用 “COUNT(1)”</p><ul><li><p>可以在单个查询中放入多个聚合函数</p><p>  <img src="./11.png" alt></p></li><li><p>DISTINCT<br>  得到去重数据时使用</p><p>  <img src="./12.png" alt></p></li><li><p>一个错误的例子，在聚合函数之外输出其他 columns 会 undefined</p><p>  <img src="./13.png" alt></p></li><li><p>如何解决上面的错误例子？使用 GROUP BY</p><p>  <img src="./14.png" alt></p><p>  基于某个属性把想要的 tuple 放到一起<br>  物以类聚的结果</p><p>  <img src="./15.png" alt></p><p>  新增一个 s.name</p><p>  <img src="./16.png" alt></p></li><li><p>数据过滤，使用 HAVING</p><p>  <img src="./17.png" alt></p></li><li><p>所谓查询优化，可以用 GROUP BY 来做，统计小于某个值的一些集合的数量，或者通过 HAVING 做一些过滤操作，那么要查找的数据集就小了，自然也就快了</p></li></ul></li><li><p>字符串操作<br>  不同数据库对字符串的处理</p><p>  <img src="./18.png" alt></p><ul><li><p>SQL 标准规范有说，所有的字符串，例如 varchar、char、和 text field，它们必须区分大小写，并且使用 单引号 来进行声明</p></li><li><p>‘%’ 和 ‘_’</p><p>  <img src="./19.png" alt></p><ul><li>‘%’: 匹配一个或者多个字符</li><li>‘_’: 匹配一个字符</li></ul></li><li><p>对于字符串函数、数学函数和日期函数来讲，它们可以出现在查询中的任意位置</p><p>  <img src="./20.png" alt></p><p>  你可以把它放在 SELECT/HAVING/或者其他条件语句中等</p></li><li><p>‘||’<br>  SQL 标准下可以使用 ‘||’ 把字符串连起来</p><p>  <img src="./21.png" alt></p></li><li><p>Postgres 和 Oracle 大概是所有数据库系统中遵循 SQL 标准做的最好的</p><ul><li>Postgres ~= Oracle &gt; SQL server &gt; DB2</li><li>SQLite 还行</li><li>MySQL 最差</li></ul></li></ul></li><li><p>DATE/TIME 操作</p><p>  <img src="./22.png" alt></p><p>  注意这里记录用的是 时间戳，但是当你对时间进行操作，提取其中的信息时，结果会变得不可靠</p><p>  比如对日期进行加减处理，三个数据库 SQL 的不同写法</p><ol><li>PostgreSQL</li><li>MySQL</li><li><p>SQLite</p><p><img src="./23.png" alt></p><p>SQLite 居然是最流行的。。。最初由 Richard Hipp 和其他两人开发，手机安卓应用很多前端数据库就用的是 SQLite，很多桌面应用比如 Photoshop 和 ILLustrator，内部也运行 SQLite</p><p>顺便互联网在美国兴起的时间居然是 2000 年代早期。。。</p><p>MySQL 是 Oracle 的，所以 Oracle 有 MySQL 的版权，但 SQLite 没有</p></li></ol></li><li><p>输出重定向</p><p>  <img src="./24.png" alt></p><p>  即你输出的结果可以保存到另一张表中</p><ul><li>可以用 INTO</li><li>或者用 CREATE TABLE</li><li><p>或者用 INSERT INTO</p><p>  <img src="./25.png" alt></p></li></ul></li><li><p>输出控制</p><p>  <img src="./26.png" alt></p><p>  如果想要输出结果变得有序，使用 ORDER BY，因为 SQL 是基于 bag<br>  代数，它是无序的，所以需要使用这个</p><p>  想要在输出列表中加属性，可以接 DESC/ASC</p><p>  <img src="./27.png" alt></p><p>  限制输出可以用 LIMIT</p><p>  <img src="./28.png" alt></p><p>  可以在 LIMIT 后面加 OFFSET</p><p>  <img src="./29.png" alt></p><p>  OFFSET 的意思是，在限制返回 tuple 的数量之前，需要先跳过多少个 tuple，当跳过这么多你设置的 tuple 之后，再开始返回数据</p></li><li><p>嵌套查询（难的优化的东西来了！）<br>  即在查询的内部再嵌套一个查询</p><p>  <img src="./30.png" alt></p><p>  一个嵌套查询例子，SELECT 嵌 SELECT（实际上这也可以用 JOIN 来实现）</p><p>  <img src="./31.png" alt></p><p>  为什么这种方式很慢，实际上这里可以理解为有俩 for 循环查询，因为要对这个表里面每个 tuple 遍历一遍，然后对于每个 tuple 也要遍历一遍，用 JOIN 可以优化</p><p>  用 IN 来优化</p><p>  <img src="./32.png" alt></p><p>  其他查询优化操作符</p><p>  <img src="./33.png" alt></p><p>  使用 ANY 来优化</p><p>  <img src="./34.png" alt></p><p>  SELECT 嵌套也可以不用写在 WHERE 中</p><p>  <img src="./35.png" alt></p><p>  一个查询没有学生注册的所有课程的例子，注意这个例子中使用了 NOT EXIST，逻辑相当于取了个反</p><p>  <img src="./36.png" alt></p><p>  内部查询可以引用外部查询的东西，但是反过来不行</p></li><li><p>window 函数<br>  window 函数会对一个 tuple 子集进行函数计算，并将它们聚合成一个结果。输出每一行数据，并在其后面追加一个聚合字段所表示的数据</p><p>  <img src="./37.png" alt></p><p>  这里的 OVER 有点像 GROUP BY 的意思</p><p>  一个例子<br>  <img src="./38.png" alt></p><p>  输出结果如下</p><p>  <img src="./39.png" alt></p><p>  可以看到后面增加了一个 row_num 的字段</p><ul><li>OVER 关键字的作用是当计算 window 函数时，指定一种组合 tuple 的方式</li><li><p>使用 PARTITION BY 指定 group</p><p>  <img src="./40.png" alt></p><p>  输出如下</p><p>  <img src="./41.png" alt></p><p>  根据 cid 对它们进行分组，每一组内按 row_num 的顺序排列</p></li><li><p>在 window grouping 中也可以使用 ORDER BY</p><p>  <img src="./42.png" alt></p></li><li><p>一个例子，查询每门课中最高分的学生</p><p>  <img src="./43.png" alt></p><p>  在这个内部查询（红色部分表示的）中，遍历整个 enrolled 表，对于每个 tuple，基于 cid 来对它们进行分组</p><p>  RANK() 这个聚合函数会对每一个组进行 rank 排序</p><p>  注意此处的 ‘ranking.rank’ 实际上并不存在于数据库中，它只存在于这个查询之中（感觉像是一个临时变量</p><p>  最终的结果如下，PostgreSQL 支持这个语句</p><p>  <img src="./44.png" alt></p><p>  RANK() 函数会根据排序后每个 tuple 在输出列表中出现的现后顺序来进行计算</p><p>  如果是 SQL 为 <code>SELECT *, RANK() OVER() AS rank FROM enrolled;</code>，那么就是如下的结果</p><p>  <img src="./45.png" alt></p><p>  rank 处的值都是 1，因为这里面并没有排序，所以所有记录中的 rank 都是 1</p><p>  这里的例子中，如果没有 ORDER BY，就没有 rank</p></li></ul></li><li><p>CTE（Common Table Expressions）公用表表达式<br>  这个感觉有点像是可以把一些公用的东西抽出来，然后给其他 SQL 引用的感觉</p><p>  <img src="./46.png" alt></p><p>  它和嵌套查询非常类似，可以将一个查询的输出结果作为另一个查询的输入，但某些 功能 CTE 能做，嵌套查询做不到</p><ul><li><p>一个更复杂的例子</p><p>  <img src="./47.png" alt></p><p>  将输出的 col1 和 col2 与 cteName 中的查询语句中的 name 进行绑定，然后在下面的 SELECT 语句中就可以直接引用 col1 和 col2</p></li><li><p>例子，在 enrolled 表中找到最大的学生 id</p><p>  <img src="./48.png" alt></p><p>那么问题来了，这个跟嵌套查询有啥区别呢？<br>在 CTE 中可以递归，但是嵌套查询不能（所以感觉像是声明了一个函数类似<br>  东西？）<br>比如打印 1 到 10，注意: 不带 ALL 的 UNION 操作会将重复结果移除</p><p><img src="./49.png" alt></p><p>主要逻辑就是调用之前的 CTE 中的 tuple 作为输出结果。<br>在这个例子中，会生成只有一个属性的表（counter），调用一个 SELECT 来获取这个 tuple，然后对它进行 +1，这样就生成了一个新的 tuple。接着继续上述操作，直到 WHERE 条件无法匹配为止</p></li></ul></li></ul><ul><li><p>总结</p><p>  <img src="./50.png" alt></p><p>  在理想情况下，可以无需将数据存放到本地，或者来回移动，就能对整个查询进行计算</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;注: 本文首发我的 b 站专栏文章&lt;a href=&quot;https://www.bilibili.com/read/cv14530555&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;CMU 15-445/645-笔记-02-高级SQL&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="Database" scheme="https://strugglebak.github.io/categories/Database/"/>
+    
+    
+      <category term="Database" scheme="https://strugglebak.github.io/tags/Database/"/>
+    
+  </entry>
   
   <entry>
     <title>CMU-15-445-645-笔记-01-课程简介与关系模型</title>
@@ -476,31 +500,6 @@
       
       
         &lt;h2 id=&quot;解释一下-Session&quot;&gt;&lt;a href=&quot;#解释一下-Session&quot; class=&quot;headerlink&quot; title=&quot;解释一下 Session&quot;&gt;&lt;/a&gt;解释一下 Session&lt;/h2&gt;&lt;p&gt;Session 代表服务器与浏览器之间的一次会话过程，这是一
-      
-    
-    </summary>
-    
-      <category term="web前端" scheme="https://strugglebak.github.io/categories/web%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="http" scheme="https://strugglebak.github.io/tags/http/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Cookie、登录和注册</title>
-    <link href="https://strugglebak.github.io/2019/02/20/Cookie%E3%80%81%E7%99%BB%E5%BD%95%E5%92%8C%E6%B3%A8%E5%86%8C/"/>
-    <id>https://strugglebak.github.io/2019/02/20/Cookie、登录和注册/</id>
-    <published>2019-02-20T14:07:47.000Z</published>
-    <updated>2022-06-04T08:13:28.629Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h1><p>Cookie 是什么，Cookie 就是一串数据，而这串数据可以存在用户本地的终端上，从而起到辨别用户身份的作用。</p><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>1993 年 3 月由网景公司前程序员卢·蒙特利发明，最开始定义于 RFC 2109, 而目前应用最广泛的标准是网景公司制定的标准上进行扩展后的版本</p><h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>HTTP 协议本身是个无状态的协议，如果单单只通过这个协议，那么对于服务端来说，用户上一次操作了啥它是不知道的,比如一个购物网站，用户买了点东西，到最后结帐时服务器不会知道用户买了什么，为了解决这个问题，Cookie 应运而生，即用户在买了点东西之后，服务器发送一段包含商品信息的 Cookie 给用户，这下用户在浏览其他网页时(或者在做其他的操作时)浏览器将这段 Cookie 发送回服务器，用户有买其他东西的时候在继续如上的操作，那么在结帐时服务器只需要那段用户(浏览器)返回的 Cookie 就行了，这样就知道了用户买了啥。</p><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol><li>服务器通过 Set-Cookie 响应头设置 Cookie</li><li>浏览器得到 Cookie 之后，每次请求都要带上 Cookie 发送给服务器</li><li>服务器读取 Cookie 就知道了用户的一些信息(登录信息、购物信息等)</li></ol><h2 id="其他一些-Cookie-相关"><a href="#其他一些-Cookie-相关" class="headerlink" title="其他一些 Cookie 相关"></a>其他一些 Cookie 相关</h2><ul><li>不同浏览器登录带上的 Cookie 是不一样的</li><li>Cookie 可以被用户篡改，Session 可以解决这个问题</li><li>Cookie 的默认有效期为 20 分钟左右，不同的浏览器策略不一样,后端可用 Set-Cookie 的 Max-Age 属性来强制设置有效期</li><li>Cookie 遵守的同源策略跟 AJAX 的略有不同<br>  比如<br>  当请求 qq.com 下的资源时，浏览器会默认带上 qq.com 对应的 Cookie，不会带上 baidu.com 对应的 Cookie<br>  当请求 v.qq.com 下的资源时，浏览器不仅会带上 v.qq.com 的Cookie，还会带上 qq.com 的 Cookie<br>  另外，可以用过设置 Set-Cookie 的 Path 属性将 Cookie 与部分 Web 站点关联起来,起到一些限制作用</li><li><p>删除 cookie 的唯一方式</p>  <figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 删除 Cookie 则指定 Set-Cookie 的 Expire 属性，指定一个已经过期的日期即可</span></span><br><span class="line">document.cookie = 'fontSize=;expires=Thu, 01-Jan-<span class="number">1970</span> 00:00:01 GMT';</span><br><span class="line"><span class="comment">// 这里 fontSize 为空，expires 为 1970 年的一个日期</span></span><br></pre></td></tr></table></figure></li></ul><h1 id="注册和登录"><a href="#注册和登录" class="headerlink" title="注册和登录"></a>注册和登录</h1><p><a href="https://github.com/strugglebak/sign-in-and-sign-up-demo" target="_blank" rel="noopener">代码链接</a></p><h2 id="注册逻辑"><a href="#注册逻辑" class="headerlink" title="注册逻辑"></a>注册逻辑</h2><p>这里从最简单的情况开始说起，即一般来说，前端通过 POST 请求发送邮箱、密码、确认密码到后端，而后端通过解析 HTTP 请求的第四部分的信息得到前端发送的邮箱、密码、确认密码，然后会经历以下步骤</p><ol><li>确认邮箱是否有效(当然这个也可以放到前端来做)</li><li>密码与确认密码是否一致(当然这个也可以放到前端来做)</li><li>检测邮箱对应用户是否已经注册(这里就要用到数据库的查询功能了),若存在则返回一个 400 状态码,若不存在就直接将信息录入数据库</li></ol><h2 id="登录逻辑"><a href="#登录逻辑" class="headerlink" title="登录逻辑"></a>登录逻辑</h2><p>登录的逻辑也是差不多的，收到前端登录请求后,解析出主要的信息(邮箱、密码)、然后查询数据对比用户是否存在，用户存在则发送 Cookie 给前端并返回 200 OK，用户不存在则返回一个 401</p><h2 id="一些细节"><a href="#一些细节" class="headerlink" title="一些细节"></a>一些细节</h2><p>解析请求时需要监听这个请求传输过程中的 data 事件，为什么需要监听这个事件呢？因为当 <code>http.createServer</code> 的回调被调用的时候，也就是这个 server 接收到了所有的请求头的时候，但在这个时候也可能没有接收到请求中的 data 部分，所以这个时候就需要等待。当这段数据流发送过来时，就会触发 <code>data</code> 事件;当数据流都发送结束时，就会触发 <code>end</code> 事件。通过监听这两个事件来拿到请求中的 POST 上传的数据内容，代码如下<br><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readBody</span>(<span class="params">request</span>)</span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>)=&gt;</span>&#123;</span><br><span class="line">     <span class="keyword">let</span> body = []</span><br><span class="line">     <span class="comment">// 监听 data 事件</span></span><br><span class="line">     request.on(<span class="string">'data'</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">       body.push(chunk);</span><br><span class="line">     &#125;).on(<span class="string">'end'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="comment">// data 事件结束</span></span><br><span class="line">       <span class="comment">// body 转码</span></span><br><span class="line">       body = Buffer.concat(body).toString();</span><br><span class="line">       resolve(body)</span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p><p>这段代码的逻辑是，先将那些一段一段的数据放到一个数据里面，然后用一个 <code>Buffer</code> 将这些数据连起来并最终返回一个大的 <code>Buffer</code>,最后再将这段二进制数据变成字符串，然后通过 Promise 将数据结果传出去</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;Cookie&quot;&gt;&lt;a href=&quot;#Cookie&quot; class=&quot;headerlink&quot; title=&quot;Cookie&quot;&gt;&lt;/a&gt;Cookie&lt;/h1&gt;&lt;p&gt;Cookie 是什么，Cookie 就是一串数据，而这串数据可以存在用户本地的终端上，从而起到辨别用户身份的
       
     
     </summary>
