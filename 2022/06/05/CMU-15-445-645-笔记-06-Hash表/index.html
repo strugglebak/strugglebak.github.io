@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-06-Hash表">
+<meta name="keywords" content="Database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU-15-445-645-笔记-06-Hash表">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-06-Hash表">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/Cover.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/11.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/12.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/13.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/14.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/15.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/16.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/17.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/18.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/19.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/20.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/21.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/22.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/23.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/24.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/25.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/26.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/27.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/28.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/29.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/30.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/31.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/32.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/33.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/34.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/35.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/36.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/37.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/38.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/39.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/40.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/41.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/42.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/43.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/44.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/45.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/46.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/47.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/48.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/49.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/50.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/51.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/52.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/53.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/54.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/55.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/56.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/57.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/58.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/59.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/60.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/61.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/62.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/63.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/64.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/65.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/66.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/67.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/68.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/69.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/70.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/71.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/72.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/73.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/74.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/75.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/76.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/77.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/78.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/79.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/80.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/81.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/82.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/83.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/84.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/85.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/86.png">
+<meta property="og:updated_time" content="2022-06-05T14:13:27.950Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMU-15-445-645-笔记-06-Hash表">
+<meta name="twitter:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-06-Hash表">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/Cover.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/">
+
+
+
+
+
+  <title>CMU-15-445-645-笔记-06-Hash表 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CMU-15-445-645-笔记-06-Hash表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-05T22:01:32+08:00">
+                2022-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index">
+                    <span itemprop="name">Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/05/CMU-15-445-645-笔记-06-Hash表/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/05/CMU-15-445-645-笔记-06-Hash表/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注: 本文首发我的 b 站专栏文章<a href="https://www.bilibili.com/read/cv14598675" target="_blank" rel="noopener">CMU 15-445/645-笔记-06-Hash表</a></p>
+</blockquote>
+<a id="more"></a>
+<p><img src="./Cover.png" alt></p>
+<ul>
+<li><p>课程目标</p>
+<p>  <img src="./1.png" alt></p>
+</li>
+<li><p>目前已经讲过的内容</p>
+<p>  <img src="./2.png" alt></p>
+</li>
+<li><p>数据结构</p>
+<p>  <img src="./3.png" alt></p>
+<p>  memcache 本质上来讲就是一个超大的 hash table，而 MySQL 的 innodb 引擎使用的是 B+ tree，它们将 tuple 存储在 B+ tree 的叶子节点上</p>
+<p>  临时数据也可以用数据结构来维护（就是缓存），比如在执行一个查询时，为了高效地计算某些东西，可以在运行时构建一个数据结构，放入所需数据，完成查询的执行，然后将这个临时数据结构丢弃掉</p>
+<p>  表索引（table index）也有对应的数据结构，即使用 tuple 中的 key 来构建一个词汇表，有些像书中的目录，这样就能很快地找到那个对应的单个元素，也没必要对整个数据库进行循环扫描了</p>
+</li>
+<li><p>设计数据结构</p>
+<p>  <img src="./4.png" alt></p>
+<ol>
+<li>如何弄一个数据结构，使得无须对该数据结构进行大改或者每次要重新转换整个数据结构的情况下，支持快速读写</li>
+<li><p>该如何让多个线程或者多个查询去访问这个数据结构，并且该数据结构表示的数据不会再物理存储层面出现问题，因为同时被线程修改的某个地址的数据会变成脏数据，从而让它们访问到某些无效的 page 或者是某些无效的内存位置</p>
+<p>这里最关心的应该还是数据结构的 物理完整性，而不是 逻辑完整性</p>
+</li>
+</ol>
+</li>
+<li><p>Hash 表</p>
+<p>  <img src="./5.png" alt></p>
+<p>  hash 表是一个抽象的数据类型，它可以提供无序的关联数据的实现（unordered associative array implementation）的 API</p>
+<p>  注意，hash 函数并不会一直让我们精确地找到我们想要找的东西，因为这会产生 hash 碰撞，但至少它能让我们找到正确的位置，然后我们知道该如何在周围找到我们想要的那个数据</p>
+<p>  hash 表操作时间复杂度最坏的情况为什么是 O(n) 呢？这是因为 key 通过 hash 都碰撞到一起，放在一个数据/队列/链表中了，所以这个时候就需要遍历查找想要的那个 key</p>
+<p>  虽然 hash 表操作平均时间复杂度为 O(1)，但不同的 hash 函数执行时间可能不一样，有些快有些慢，在面对超大规模基数的数据查询时，慢的 hash 函数会导致整个应用需要付出大量的金钱，比如商业交易这一场景</p>
+<ul>
+<li><p>静态 Hash 表</p>
+<p>  <img src="./6.png" alt></p>
+<p>  一个最简单的 hash 表如上图所示，它其实就是一个巨大的数组，看起来就像是一大块内存</p>
+<p>  数组中每个 offset 位置都对应了一个给定的元素</p>
+<p>  通过对 key 进行 hash，即将 key 与所有元素数量进行取模（如果该 key 对应这个数组的下标），就会得到它对应的 offset 值</p>
+<p>  <img src="./7.png" alt><br>  <img src="./8.png" alt></p>
+<p>  但实际上 hash 表并不完全是这样，hash 表需要保存的是一些指向这些原始的 key 所在位置的指针</p>
+<p>  <img src="./9.png" alt></p>
+<p>  对于这种 hash 表而言，存在的问题是什么呢？</p>
+<ol>
+<li>需要提前知道 hash 表中元素的数量</li>
+<li><p>key 与 key 之间没有碰撞（collision）</p>
+<p>碰撞 指的是，对 key 进行 hash 后的结果指向了同一个 slot</p>
+<p><img src="./10.png" alt></p>
+<p>完美 hash 函数（perfect hash function）是一种存在于研究文献中的一种理论上的东西，因为在实际工作中，如果 key1 != key2，那么有可能 hash(key1) = hash(key2)。实际上能实现所谓完美 hash 函数的方式是通过另一张 hash 表将一个 key 映射到另一个 hash value 上（这种方式真的很蠢，因为速度会很慢），比如 Java 中的 concurrentHashmap，第一次 hash 是为了分区，第二次 hash 是为了确定具体位置，但也不能保证完美</p>
+</li>
+</ol>
+<p>那么该如何在摈弃上述两个假设的前题下实现一个 hash 表呢？</p>
+<p><img src="./11.png" alt></p>
+<p>要实现一个 hash 表，它的数据结构应该是由 2 部分组成</p>
+</li>
+</ul>
+<ol>
+<li><p>hash 函数<br> 该函数将任意的 key 映射到一个较小范围的 integer value 上，同时该函数会生成一个 32/64 bit 的唯一 hash 值（也可能不唯一）</p>
+<p> hash 函数的速度和碰撞率之间要做取舍</p>
+</li>
+<li><p>hashing scheme<br> 即当在 hash 表中遇上 hash 碰撞时，用 hashing scheme 来处理这种问题，hashing scheme 是一种机制或者说步骤</p>
+<p> 同样的，这个也需要在内存和计算（速度）之间做取舍，即时间换空间，空间换时间。</p>
+</li>
+</ol>
+<ul>
+<li><p>Hash 函数</p>
+<p>  <img src="./12.png" alt></p>
+<p>  hash 函数就是一个速度很快的函数，将任意的 byte array 或者任意的 key 传入函数，它就会返回一个 32/64 bit 的 integer</p>
+<p>  比如一些著名的 hash 函数，比如 SHA-256/MD5</p>
+<p>  实际上 SHA-256 是不可逆的加密 hash 函数，它是一种使用了 公钥/私钥 的东西</p>
+<p>  对于 MD5 来说，可以将任意的 key 传入它的 hash 函数，然后返回一个 32 bit 的唯一 hash 值，它本来应该是不可逆的，但现在因为有人破解了它，所以可逆</p>
+<p>  在数据库系统中，如果要做 hash 表，那么我们对它的加密性并不在意，所以也不会去用 SHA-256（用这个加密速度也超慢）</p>
+<p>  MD5 是一种单向散列（one-way hash），可以将它作为构建 hash 表的 hash 函数，但没必要因为它还是非常慢。同时它也是不安全的，因为可以通过彩虹表对它进行破解</p>
+<p>  一些 hash 函数图</p>
+<p>  <img src="./13.png" alt></p>
+<ul>
+<li>CRC-64 是 1975 年被发明出来的，它的碰撞率虽然合理，但是速度非常非常慢</li>
+<li>MurmurHash，从数据库层面来讲，它的诞生开启了现代 hash 函数的时代。它在 2008 年诞生，是开源的。G 家在 2010 年早期采用了 MurmurHash，并对其做了改进，使得长度更短的 key 可以获得更快的速度，然后 G 家就发布了 CityHash。2014 年时他们由基于这个做了改进，然后发布了 FarmHash，它的碰撞率比 CityHash 更低</li>
+<li><p>Meta 的 XXHash 的速度更快，碰撞率最低（这里指的是 XXHash 3）</p>
+<p>2 张 hash 函数的 benchmark 图</p>
+<p><img src="./14.png" alt><br><img src="./15.png" alt></p>
+<p>从上图可以看到，当 key 的大小为 32 byte 和 64 byte 时，FarmHash、CityHash、XXHash3 都出现了非常漂亮的尖峰，这是因为它们进行计算处理的 key 都刚好填满单个 Cache Line（CPU 和主存之间数据传输的最小单位）。当从内存中读取一次数据时，将 64 byte 大小的 key 放入 Cache 中，这样就可以一次性操作所有从该缓存中找到的数据，即一次操作一整个 Cache line 中的数据。当 key 的大小超过 64 byte 后，CityHash 和 FarmHash 就会切换到另一种不同的算法上，导致速度上会有些不同</p>
+<p>所以在数据库系统中，尽可能多地去使用 XXHash3</p>
+</li>
+</ul>
+</li>
+<li><p>静态 Hashing Schemes</p>
+<p>  <img src="./16.png" alt></p>
+<p>  注意，此处讨论的内容跟所使用的 hash 函数没有关系，所有的 hashing scheme 的工作方式都是一样的，因为这是做完 hash 计算，跳转到某个位置时才做的</p>
+<p>  Cuckoo 和 Robin Hood Hashing 都是基于 Linear Probe Hashing 做的改进版</p>
+<p>  注意这些都是 静态 Hashing Schemes，意味着在分配内存时，一开始就得知道要保存的 key 的数量，在某些情况下，可以猜出这个 hash 取模的基数有多大（key % n，n 就是这个基数）。在进行查询处理或者使用 hash 表进行 join 操作时，需要知道在 hash 表中大概要对多少个 key 进行 hash，然后就可以进行内存分配了</p>
+<p>  如果 hash 表容量快满了，就必须对其进行扩容，基本上是扩展到原来的 2 倍。即将第一个 hash 表中所有的 key 复制到第二个 hash 表上，但这样做代价非常高（所有元素重新打散并 hash 存储，代价很高）</p>
+<p>  理想情况下，如果大概知道 hash 表的容量上限是多少，也就没必要去做扩容的操作了</p>
+<ol>
+<li><p>Linear Probe Hashing</p>
+<p> <img src="./17.png" alt></p>
+<p> Linear Probe Hashing 有时也叫 Open Addressing，即开地址法，它就是一个大型的 slot 表，通过 hash 函数来跳转到该表中的某个 offset 值上，或者是在该表中添加一些 slot</p>
+<p> Python 的 Dictionary 背后的数据结构其实就是 hash 表，它就是一个使用了 Linear Probe Hashing 的 hash 表</p>
+<p> 如何解决 hash 碰撞？如果在进行 hash 计算所得到的 slot 位置上已经有数据在上面，那么就挨着这条数据往下扫描，直到遇到下一个能插入数据的空 slot 为止（空的 slot 指没有找到 key 对应的 value）</p>
+<p> 一个例子</p>
+<p> <img src="./18.png" alt><br> <img src="./19.png" alt></p>
+<p> slot 上会保留原始的 key/value 对，原始的 key 会有所保留的原因是，当要开始查找时，如果有多个 entry（key/value 对），那么就必须在 slot 上往下扫描，我们需要知道在该 slot 中存放的 key 是不是我们想要的那个，毕竟也没法保证根据 hash 计算得到的 slot 表中的位置就是我们想要的那个准确位置</p>
+<p> 比如对 C 进行 hash，但此时 C 落在了之前 A 的位置</p>
+<p> <img src="./20.png" alt></p>
+<p> 所以此时就直接跳到 A 的下一个位置，然后把 entry（这里指 key/value 对） 插入到那个位置上</p>
+<p> <img src="./21.png" alt></p>
+<p> 比如插入 E 也是一样的</p>
+<p> <img src="./22.png" alt></p>
+<p> 那么假设要删除 C，应该怎么做呢？</p>
+<p> <img src="./23.png" alt><br> <img src="./24.png" alt></p>
+<p> 先对 C 进行 hash，hash 完后，找到的是 A 所在的位置，但这并不是要删除的那个数据，于是继续往下扫描，找到了 C，直接移除</p>
+<p> <img src="./25.png" alt></p>
+<p> 但是这里会有一个问题</p>
+<p> <img src="./26.png" alt></p>
+<p> 如果去查找 D，那么它会发现 C 的位置是一个空 slot，那么它就认为它的查找已经完成了，即便这个 D 所对应的数据是在下面的</p>
+<p> 所以有两种方式来做移除</p>
+<ol>
+<li><p>tombstone<br> 即在原来 C 的位置上放一个这个标记，表示这里没有一个 logic entry 了，但从物理上来讲，这个 slot 是被占用了</p>
+<p> <img src="./27.png" alt></p>
+<p> 当查找 D 时，会落到这个有 tombstone 标记的 slot 上面</p>
+<p> <img src="./28.png" alt></p>
+<p> 然后虽然这个 slot 中没有数据，但它确实不是空 slot，所以直接跳到下一个</p>
+<p> 但，这就浪费了空间。这需要后续清理掉，并用上 fill factor（填充因子）</p>
+</li>
+<li><p>data movement<br> <img src="./29.png" alt><br> 就是做数据移动，看到有空数据往上移动</p>
+<p> <img src="./30.png" alt></p>
+<p> 但要记住这个 slot 表是 环形 的</p>
+<p> <img src="./31.png" alt></p>
+<p> 技术上来讲，B 应该是在 F 后面的，虽然物理上不是，如果像上图中那样，将 B 移动到箭头所指向的位置，可能会导致某些错误发生</p>
+<p> <img src="./32.png" alt></p>
+<p> 因为 B 原来 hash 的位置是在上面，如果移动到下面的位置，在查找 B 时，会看到那里啥都没有</p>
+<p> 所以大部分情况下都会去使用 tombstone，数据移动这种方式实际上很复杂</p>
+<p>在实战中，一般使用 n 或者 2n 作为 slot 的数量，n 为要放入 key 的数量</p>
+</li>
+</ol>
+</li>
+<li><p>Robin Hood Hashing</p>
+<p> 在了解这个之前，得先了解 Non-Unique Keys，即非唯一 Key，因为在实际的数据集中，没办法假设所有的 Key 都是唯一的，所以需要在 hash 表中对它们进行处理，有 2 种方法可以做到</p>
+<p> 第 1 种方法是，维护一个单独的链表，上面保存了所有的值。即在 hash 表中的 key 会指向属于该 key 的单独链表，该链表上所保存的 value 对应的都是同一个 key</p>
+<p> <img src="./33.png" alt></p>
+<p> 第 2 种方法是，保存冗余的 key，这也是最常见的。即在 slot 数组中不断地复制这个 key</p>
+<p> <img src="./34.png" alt></p>
+<p> 在实战中，第 2 种方法用的多</p>
+<p> Bobin Hood Hashing 是在 1985 年提出的，出自当时一篇无人问津的 paper，然后过去 10 年，它在 Hacker News 上出现过几次。而 Bobin Hood（罗宾汉）是一个英国的民间传说，讲述的是一个劫富济贫的侠盗的故事。那么 Bobin Hood Hashing 做的事情也是类似的，就是会让那些 “poor” key 从 “rich” key 身上偷取 slot</p>
+<p> <img src="./35.png" alt></p>
+<p> Number of Positions（距离数）表示的是你所在的位置与你第一次进行 hash 所计算出的位置之间的距离差。</p>
+<p> 距离数越大，越 “poor”，反之越 “rich”</p>
+<p> 基本思路是，对整个 hash 表进行平衡，尝试让每个 key 都尽可能靠近它原本所在的位置。即对所有的 key 来讲，在全局状态下尽可能快地找到它们，而不是针对于某一个。</p>
+<p> 一个例子</p>
+<p> <img src="./36.png" alt></p>
+<p> 在插入数据 A 时，可以记录下数据 A 实际所在的位置与第一次 hash 计算出的原始位置所差的跳转次数</p>
+<p> 第一次插入 A 时，跳转次数为 0，所以是 A | val[0]，对于 B 也是一样</p>
+<p> C 要插入时，本来要插 A 的位置，但因为 A 的位置不是空的，所以它插入到 A 的下一位</p>
+<p> <img src="./37.png" alt></p>
+<p> 所以是 C | val[1]，因为 C 当前所在的位置距离它第一次通过 hash 所得出的位置相差 1 个单位</p>
+<p> 对于 D 来说也是一样的</p>
+<p> <img src="./38.png" alt></p>
+<p> 而对于 E</p>
+<p> <img src="./39.png" alt></p>
+<p> 因为 E 需要跳转 2 次才能达到 D 跳转一次的位置（D 跳转一次就到它原本第一次 hash 计算出来的位置了），E[2] &gt; D[1]，所以 E 比 D 要更 “poor”，所以 E 就要去 偷 D 所在的 slot 的位置，并插入其中</p>
+<p> <img src="./40.png" alt></p>
+<p> 那么现在就只能将 D 插入到 E 的下面了，并将 D | val[1]，更新为 D | val[2]</p>
+<p> <img src="./41.png" alt></p>
+<p> 而 F 就是放到 D 下面</p>
+<p> <img src="./42.png" alt></p>
+<p> 这种方法会使得写入或者插入的代价更高，因为这种方式进行了多次写入的操作，而 Linear Probe Hashing 只需要一次写入</p>
+<p> 但是在该算法下，需要对更多的条件进行检查，看看能否将一个放到另一个的位置上，只要有一次条件误判，就会付出巨大的代价。更多的写入操作带来更多的缓存无效。所以在实战中，还是优先使用 Linear Probe Hashing，它依然是最快的方法</p>
+</li>
+<li><p>Cuckoo Hashing</p>
+<p> <img src="./43.png" alt></p>
+<p> 思路是，使用多个 hash 表，然后要做的是该判断往哪个 hash 表中插入 key，即哪个 hash 表能提供一个空余的 slot</p>
+<p> 在 Cuckoo Hashing 中，查找和删除的时间复杂度始终是 O(1)，这意味着当进行查找时，始终都会跳到 hash 表上，准确地找到那个数据</p>
+<p> 但插入操作的代价可能更高，因为要判断是在 hash 表 1 中还是 hash 表 2 中进行存储等操作</p>
+<p> 例子</p>
+<p> 注意大多数人在使用 Cuckoo Hashing 时，通常都只使用 2 个 hash 表</p>
+<p> 对于 Cuckoo Hashing 中的每个 hash 表来说，必须为 hash 函数提供一个单独的 hash seed，拿到 key 之后，对它 hash 2 次（这里对同一个 key，给 hash 函数不同的 seed，那么就会生成不同的 hash 值）</p>
+<p> <img src="./44.png" alt></p>
+<p> 这个时候要插入 B 了</p>
+<p> <img src="./45.png" alt></p>
+<p> 但是在 hash 表 1 中，对应的位置已经有 A 了，这个时候就选择 hash 表 2 插入</p>
+<p> <img src="./46.png" alt></p>
+<p> 这个时候插入 C</p>
+<p> <img src="./47.png" alt></p>
+<p> 但现在 hash1(C) 和 hash2(C) 的位置都被 A 和 B 占了，这个时候该怎么办呢？</p>
+<p> 答案是随机选一个，这里选的是 hash 表 2，然后移除掉 B，插入 C</p>
+<p> <img src="./48.png" alt></p>
+<p> 那么 B 怎么办呢？重新 hash 一下 B，抢走 A 的 slot</p>
+<p> <img src="./49.png" alt></p>
+<p> 那么 A 怎么办呢？重新 hash 一下 A，把 A 放到 hash 表 2 中的一个空 slot 的地方</p>
+<p> <img src="./50.png" alt></p>
+<p> 但这个方式存在 递归碰撞，即有可能在碰到最后一个元素后，又碰到最初的那个元素去了，这种情况下，需要扩容（卧槽，这 tm 扩容。。。）</p>
+</li>
+</ol>
+</li>
+<li><p>动态 Hash 表</p>
+<p>  <img src="./51.png" alt></p>
+<p>  动态 hash 表能够在无须重建整个东西的情况下，根据需要调整大小，比如 chained hash table，这是最常用的一种动态 hash 表</p>
+<ol>
+<li><p>Chained Hash 表</p>
+<p> <img src="./52.png" alt></p>
+<p> 也叫 chained hashing/bucket hash table，里面主要维护了一个包含了 bucket 的链表，通过将具有相同 hash key 的所有元素放入相同的 bucket 来解决冲突，也就是在 bucket list 末尾追加，所以每个 bucket chain 都可以永远扩容下去</p>
+<p> 所以要查找的话，也只能循环扫描了</p>
+<p> 例子</p>
+<p> <img src="./53.png" alt></p>
+<p> 可以将这些 bucket 当作是 page</p>
+</li>
+<li><p>Extendible Hashing</p>
+<p> <img src="./54.png" alt></p>
+<p> 基于 chained hash 表的思想，但是不同于它的无限扩容，Extendible Hashing 要做是将链表逐步拆分</p>
+<p> 这里 “拆分” 的意思也跟 “重建” 差不多，也要进行一波扩容并重新 hash 的操作，但这里只是对 某个独立的局部 进行操作</p>
+<p> 要拆分的只是那些要 overflow 的 chain，而不是整个 hash 表</p>
+<p> 拆分完那些 overflowed bucket 之后，在其对应的 slot array 中，允许多个 slot 指向同一个 bucket chain</p>
+<p> 优势是，在移动数据时，只需要移动那些 overflowed 的 bucket 就行</p>
+<p> 例子</p>
+<p> 要有 1 个 全局 counter，它负责 bit 的数量，即负责需要看几个 bit 才能去找对应的 bucket</p>
+<p> <img src="./55.png" alt></p>
+<p> 而对于每个 bucket chain 或者每个 bucket，给它们一个局部的 counter，表示需要看几个 bit 才能找到该位置</p>
+<p> <img src="./56.png" alt></p>
+<p> 在这个例子中，第 1 个 bucket 中的局部 counter 的值是 1，表示只需要看 1 bit 就能定位到这个 bucket</p>
+<p> 这就是为啥你看那个蓝色圈出来的 bit，看 00 和 01 时，它们俩都会映射到同一个 bucket，因为它们第 1 个 bit 都是 0，因为这个 bucket 存在 overflow 的情况，还没有对它进行拆分</p>
+<p> 另外 2 个 bucket 拥有的分别是蓝色圈出来的 10 和 11，因为它们的局部 counter 的值是 2，也就是说需要看 2 个 bit 才行</p>
+<p> 现在假设要查找 A</p>
+<p> <img src="./57.png" alt></p>
+<p> 注意这里生成的 hash 是一堆 bit 序列</p>
+<p> 然后看下全局 counter，它会检查这个 hash 函数生成的 bit 序列中的前多少位，以此来决定要跳转到哪个 bucket</p>
+<p> <img src="./58.png" alt></p>
+<p> 例子中全局 counter 的值是 2，那么只需要看这个 bit 序列的前 2 位，即 01，然后在 slot array 中查找</p>
+<p> <img src="./59.png" alt></p>
+<p> 找到 01，跟着指针，就找到了对应的那个 bucket</p>
+<p> <img src="./60.png" alt></p>
+<p> 如果这个时候要插入 B</p>
+<p> <img src="./61.png" alt></p>
+<p> 因为全局 counter 是 2，那么看 B 的前 2 位，是 10，跟着 slot array 中 10 指的位置，第 2 个 bucket 那儿有一个空余的位置，插入它即可</p>
+<p> 如果这个时候要插入 C</p>
+<p> <img src="./62.png" alt></p>
+<p> C 目前要插入的位置是第 2 个 bucket，但是此时第 2 个 bucket 没空间了，它变成 overflowed 的了，所以现在必须要对它进行拆分</p>
+<p> 怎么拆分呢？</p>
+<p> 先把全局 counter 增加到 3</p>
+<p> <img src="./63.png" alt></p>
+<p> 然后将 slot array 扩容到原来的 2 倍，这样就可以处理 3 bit 的情况了</p>
+<p> <img src="./64.png" alt></p>
+<p> 注意，这个 slot array 的扩容操作代价很低，因为这只是一个指针数组，可以在上面用一个 latch 来保护它，调整完大小再将数据放回去，无须移动 bucket 中的数据</p>
+<p> <img src="./65.png" alt></p>
+<p> 如上图，对 bucket 进行重构，将保存在这些单个 page 上的数据进行拆分，并根据局部 counter 中的值，将它们重新映射</p>
+<p> 现在再尝试插入 C</p>
+<p> <img src="./66.png" alt></p>
+<p> 3 个 bit，C 的 hash 结果的前 3 位是 101，找到 slot array 中 101 的位置，跟着它的指针，即能找到对应位置插入</p>
+<p> 注意这里并没有对全部的 bucket 进行拆分，而只是拆分了之前那个 overflowed 的 bucket，即之前的第 2 个</p>
+<p> 删除操作其实就是将插入操作逆向执行</p>
+<p> 每个 bucket 就是 page</p>
+<p> Buffer 池中可能存储的是一张表下涉及的多个 page 的数据条目，也可能是多个表下的部分数据条目</p>
+</li>
+<li><p>Linear Hashing</p>
+<p> <img src="./67.png" alt></p>
+<p> Extendible Hashing 存在一个小问题，就是要拆分 overflowed bucket 时，需要将 slot array 扩容为原来的 2 倍大，在调整 slot array 的大小时，需要在上面使用一个 latch，这样能保证直到重新分配完所有的数据为止，其他人不会对其进行读写</p>
+<p> 这会成为一个性能瓶颈，因为这个 hash 表同一时间可能会被多个人访问</p>
+<p> Linear Hashing 的思路是，只需要去重新分配那些 overflowed bucket 即可，没必要去用一个全局的 latch 来阻止所有人访问这个 hash 表</p>
+<p> 那么如何做到呢？</p>
+<p> Linear Hashing 会去维护多个 hash 函数，这些 hash 函数的工作方式和之前讲到的 Cuckoo Hashing 中相同，用不同的 seed 对给定的 key 生成不同的 hash 值，然后找到那个对应的 bucket</p>
+<p> 这里需要维护一个新的东西，叫 split pointer，它会去跟踪那个要进行 split 的 overflowed bucket</p>
+<p> 例子</p>
+<p> <img src="./68.png" alt></p>
+<p> 初始状态下，这个 split pointer 指向 slot array 的第 0 个</p>
+<p> <img src="./69.png" alt></p>
+<p> 此处 hash 函数中的 n 即拥有的 entry 的数量</p>
+<p> 假设现在要去查找 key 为 6 的相关数据</p>
+<p> <img src="./70.png" alt></p>
+<p> 6 % 4 = 2，那么在 slot array 中就是 2 所在的位置，顺着其指针找，找到第 3 个 bucket，然后在 bucket 中顺序查找比对 key，就找到了对应的位置</p>
+<p> 假设现在要插入 17</p>
+<p> <img src="./71.png" alt></p>
+<p> 那么 17 % 4 就是 1，找到 slot array 中 1 所在的位置，顺着其指针找，找到第 2 个 bucket，但在这个 bucket 中，没有空余的 slot，那么怎么办呢？创建一个 overflow bucket，在这个上面放 17 这个值</p>
+<p> <img src="./72.png" alt></p>
+<p> 因为现在创建了一个 overflowed bucket，就相当于触发了一次 overflow，所以现在不管这个 split pointer 指向的是哪个 bucket，对应 bucket 现在都要进行一次拆分，比如图中的第一个 bucket，哪怕这个 bucket 还可以存数据</p>
+<p> 拆分的工作方式是这样的</p>
+<p> <img src="./73.png" alt></p>
+<p> 在 slot array 的地方再增加一个 entry，也就是新增了一个格子 4。用一个新的 hash 函数，即 key % 2n，而这个 split pointer 会帮助我们跟踪，该使用第 1 个还是第 2 个 hash 函数，它也会告诉我们，在 slot array 中，拆分 bucket 的距离有多远</p>
+<p> <img src="./74.png" alt></p>
+<p> 然后在 slot array 为 4 的位置，新增一个 bucket，把 20 放入这个新增的 bucket 中。</p>
+<p> <img src="./75.png" alt></p>
+<p> 然后将这个 split pointer 下移一个单位</p>
+<p> 那么如果此时再想进行一次查找时，首先用第一个 hash 函数对其进行 hash</p>
+<p> <img src="./76.png" alt></p>
+<p> 如果此时 hash 得到的结果所指向的位置时在 split pointer 所在的这条分界线之上，那么就知道正在查找的那个 bucket 已经被拆分了</p>
+<p> <img src="./77.png" alt></p>
+<p> 因此现在就应该使用第 2 个 hash 函数来去找数据，因为数据肯定不在原来要拆分的那个 bucket 上</p>
+<p> 如果是查找 9 ，逻辑也是一样的</p>
+<p> <img src="./78.png" alt></p>
+<p> 9 % 4 = 1，因为在 1 所在 slot array 的那个位置 在 split pointer 分界线之下，所以它是没有被拆分的，所以使用第一个 hash 函数是对的，那么就可以顺着指针直接去找了</p>
+<p> 然而算法最糟糕的情况是，每个人都往同一个 bucket 中插入数据，这会导致它花了很长时间对 bucket 进行拆分，但使用一个具备低碰撞率的优秀 hash 函数的话，可以解决这个问题</p>
+<p> 如果进行删除操作，split pointer 会往回移动，不过如果要实现会相当棘手</p>
+<p> 例子</p>
+<p> 假设现在要删除 20</p>
+<p> <img src="./79.png" alt></p>
+<p> 如果用第 1 个 hash，那么它算出来就是 0，但此处的位置是在 split pointer 的分界线之上，所以需要用第 2 个 hash</p>
+<p> <img src="./80.png" alt></p>
+<p> 于是在 slot array 的 4 这个位置，delete 对应的 bucket 里的 20</p>
+<p> <img src="./81.png" alt></p>
+<p> 那么这个 bucket 就空了，如果要回收，就是反向操作</p>
+<p> 首先清掉这个空 bucket，并且清掉指针</p>
+<p> <img src="./82.png" alt></p>
+<p> 然后将 split pointer 往回移动一个单位</p>
+<p> <img src="./83.png" alt></p>
+<p> 现在，分界线消失了，第 2 个 hash 函数也没了，内存回收完毕</p>
+<p> <img src="./84.png" alt></p>
+<p> （这里 4 的消失，我认为也是随着指针清空然后这个也被 remove 掉了）</p>
+<p> 如果回收完后 紧接着 是下面这种情况，在 overflowed bucket 中插入一个 21</p>
+<p> <img src="./85.png" alt></p>
+<p> 就会触发 overflow（因为 slot array 的位置 1 对应的 bucket 放不下，要放到其 overflow bucket 中），那么又要根据算法拆分 bucket</p>
+<p> 算法做了很多事情让插入更快，但很难做到快速删除</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>结论</p>
+<p>  <img src="./86.png" alt></p>
+<p>  hash 表没办法比较 key 的大小，所以不适合用于表索引的一些场景</p>
+<p>  相反，在创建索引时，最常用的就是 B+ Tree</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/" title="CMU-15-445-645-笔记-06-Hash表">https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Database
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/" rel="next" title="CMU-15-445-645-笔记-05-Buffer池与内存管理">
+                <i class="fa fa-chevron-left"></i> CMU-15-445-645-笔记-05-Buffer池与内存管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-06-Hash表/';
+          this.page.identifier = '2022/06/05/CMU-15-445-645-笔记-06-Hash表/';
+          this.page.title = 'CMU-15-445-645-笔记-06-Hash表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
