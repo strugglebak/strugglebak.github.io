@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-05-Buffer池与内存管理">
+<meta name="keywords" content="Database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU-15-445-645-笔记-05-Buffer池与内存管理">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-05-Buffer池与内存管理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/Cover.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/11.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/12.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/13.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/14.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/15.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/16.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/17.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/18.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/19.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/20.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/21.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/22.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/23.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/24.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/25.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/26.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/27.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/28.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/29.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/30.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/31.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/32.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/33.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/34.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/35.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/36.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/37.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/38.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/39.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/40.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/41.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/42.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/43.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/44.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/45.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/46.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/47.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/48.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/49.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/50.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/51.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/52.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/53.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/54.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/55.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/56.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/57.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/58.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/59.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/60.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/61.png">
+<meta property="og:updated_time" content="2022-06-05T13:58:23.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMU-15-445-645-笔记-05-Buffer池与内存管理">
+<meta name="twitter:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-05-Buffer池与内存管理">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/Cover.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/">
+
+
+
+
+
+  <title>CMU-15-445-645-笔记-05-Buffer池与内存管理 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CMU-15-445-645-笔记-05-Buffer池与内存管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-05T21:51:27+08:00">
+                2022-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index">
+                    <span itemprop="name">Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注: 本文首发我的 b 站专栏文章<a href="https://www.bilibili.com/read/cv14580880" target="_blank" rel="noopener">CMU 15-445/645-笔记-05-Buffer池与内存管理</a></p>
+</blockquote>
+<a id="more"></a>
+<p><img src="./Cover.png" alt></p>
+<ul>
+<li><p>课程目标</p>
+<p>  <img src="./1.png" alt></p>
+</li>
+<li><p>上节课回顾</p>
+<p>  <img src="./2.png" alt></p>
+<p>  画红线的部分</p>
+<ol>
+<li>想要能够去支持超出我们所拥有的内存容量大小的数据库</li>
+<li>最小化在磁盘上执行查询时速度缓慢带来的影响</li>
+</ol>
+<ul>
+<li><p>数据库 Workloads</p>
+<p>  <img src="./3.png" alt></p>
+<p>  HTAP（混合事务分析处理 Hybrid Transaction Analytical Processsing），是几年前 Gartner 发明的一个新流行词，它所描述的是既做 OLTP 又做 OLAP 的数据库系统</p>
+</li>
+<li><p>Bifurcated Environment</p>
+<p>  <img src="./4.png" alt></p>
+<p>  一般数据库的标准配置是这样的</p>
+<ol>
+<li>前端 OLTP 数据库</li>
+<li><p>后端 OLAP 大型数据仓库（back-end data warehouse）</p>
+<p>这两者有时候被称为 Data Silo，即数据孤岛，数据存储相互独立，彼此之间不会真的交流</p>
+<p><img src="./5.png" alt></p>
+<p>然后就可以进行 ETL（Extract Transform Load） 的操作，即将业务系统的数据经过抽取、清洗、转换之后加载到数据仓库的过程</p>
+<p>以 Zynga 这家游戏公司为例，Zynga 收购了很多游戏初创公司，比如 FarmVille，它买下这些公司时，会去运行他们自己的前端 OLTP 数据库，只有他们将这些数据放入他们的后端大型仓库时，他们才能更高地分析出怎么做才能让你们在 FarmVille 上买东西</p>
+<p>等后端 OLAP 数据仓库拿到分析后的信息数据后，就推到前端 OLTP 数据库中，并对外暴露</p>
+<p><img src="./6.png" alt></p>
+<p>所以 HTAP 基本上在做一些平常只能在 OLAP 端所做的，可以直接在前端的 Data Silo 里面做这些，并且不用等数据传回到后端数据仓库了</p>
+<p>这可以用 MySQL、PostgreSQL、mongoDB 来做前端数据库，可以用 Hadoop、Spark、Greenplum、Vertica 来做后端数据仓库</p>
+</li>
+</ol>
+</li>
+<li><p>数据库存储</p>
+<p>  <img src="./7.png" alt></p>
+<ol>
+<li>空间管理<br> 这里指的是在哪里将数据写入磁盘</li>
+<li>时间管理<br> 这里指的是什么时候将 pages 读入内存</li>
+</ol>
+</li>
+<li><p>面向磁盘的 DBMS</p>
+<p>  <img src="./8.png" alt></p>
+<p>  如果执行引擎在请求 page 时，内存中没有足够的空余来容纳我们需要的那个 page，这个时候就必须要决定哪个 page 进行写出操作，即 “remove”，而这正是 Buffer 池要解决的问题</p>
+<p>  系统的其他部分无须知道或者关系哪些东西在内存里，哪些东西不在，它只会等它需要拿到的东西，然后返回一个指针给到执行引擎</p>
+</li>
+</ul>
+</li>
+<li><p>Buffer 池的组织</p>
+<p>  <img src="./9.png" alt></p>
+<p>  Buffer 池需要我们在数据库系统内部分配一块很大的内存，就是调用 malloc，拿到一些内存块，并将从磁盘中读取到的所有的 pages 都放到这个里面去。注意这段内存完全是由数据库系统来控制，而不是交给操作系统来做。</p>
+<p>  然后，这段内存区域被分成一个个固定大小的 chunk，它被称为 frame，frame 对应的是之前提到的 slot（slot 存储的虽然是对应 tuple 的 offset，但对外来看，相当于指代了一段存储区域），即 Buffer 池内存区域中的区块或者是 chunk，frame 里存放的是 page</p>
+<p>  当数据库系统发出一个请求 page 的请求，会发生啥呢？</p>
+<p>  <img src="./10.png" alt></p>
+<p>  首先会去看 Buffer 池中有没有这个 page，如果没有就拷贝一份到内存中，也就是其中一个 frame</p>
+<p>  <img src="./11.png" alt></p>
+<p>  注意 Buffer 池中 page 的顺序可能和磁盘上的顺序不一致，所以在此之上，就需要一个额外的 indirection 层，如果需要某个特定的 page，只要通过这个 indirection 层就能知道这个 page 在哪个 frame 中</p>
+</li>
+<li><p>Buffer 池元数据</p>
+<p>  <img src="./12.png" alt></p>
+<p>  page 表其实就是一个 hash 表，用来跟踪在内存中有哪些 page，可以通过 page 表和 page ID 找到在 frame 中对应的那个 page</p>
+<p>  数据库系统必须维护一些额外的元数据，以此来跟踪当前 Buffer 池中的 page 发生了什么</p>
+<p>  要跟踪的有俩</p>
+<ol>
+<li>Dirty Flag<br> 这个 flag 表示的是，从磁盘读取到这个 page 后，这个 page 是否被修改过，比如查询或者事务对其修改过</li>
+<li><p>Pin/引用计数<br> 这个表示 想要使用该 page 的当前线程数量/正在对该 page 进行的 查询 的数量（这里又联想到 GC），page 目前还在被强引用，说明此时不应该将 page 写出到磁盘上</p>
+<p><img src="./13.png" alt></p>
+<p>比如在上图的例子中，如果不想让 page3 从 Buffer 池中移除掉，就把他 Pin 住</p>
+<p><img src="./14.png" alt><br><img src="./15.png" alt></p>
+<p>如果想要去读取一个不在当前内存中的 page2，那么就要在这个 page 表中加上一个 latch 锁，这样 Buffer 池就可以从磁盘中拿到这个 page2，然后更新 page 表里面指向 page2 的指针。为什么要加锁？因为同一时间可能有多个线程在跑，资源会有冲突</p>
+<p>这也解释了为什么 mmap is suck，因为操作系统不会管你是不是在用 page2，它可能会提前将 page2 写出到磁盘</p>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p>Locks vs. Latches</p>
+<p>  <img src="./16.png" alt></p>
+<p>  以数据库的语义来讲，lock 是某种高级逻辑原语（high-level logical primitive），它会去保护数据库中的逻辑内容，比如 tuple、表以及数据库，事务在运行时会去持有这个 lock</p>
+<p>  latch 是一种低级保护原语（low-level protection primitive），它用来保护数据库系统内部的关键部分，比如物理数据结构、内存区域</p>
+<p>  在执行操作 （operation）期间，数据库会持有这些 latch，用来保护某些东西</p>
+<p>  如果在执行操作时，没能拿到对应的 latch，那么这个操作就会被中止，同时也不需要关心回滚问题</p>
+<p>  在操作系统的语义里面，latch 就相当于 mutex，mutex 也被用来保护一些关键内容，但是在 latch 中所使用的 mutex 实现其实是 spin lock（自旋锁）</p>
+</li>
+<li><p>Page 表 vs. Page 目录</p>
+<p>  <img src="./17.png" alt></p>
+<p>  Page 表是内存中的内部映射，它将 page ID 映射到它们在 Buffer 池中 frame 的位置，这个没必要做持久化，但必须要保证它是线程安全的。因为如果系统崩溃了，恢复后 Buffer 池里面的东西丢了就丢了，对数据库而言没有影响</p>
+<p>  Page 目录是用来找到 page 在数据库文件中的位置，对 Page 目录做出的所有改变都必须持久化，它们必须要被写到磁盘上。因为如果系统崩溃了，恢复后我们需要知道在哪里可以找到之前的 page</p>
+</li>
+<li><p>Buffer 池内存分配策略</p>
+<p>  <img src="./18.png" alt></p>
+<ol>
+<li><p>全局策略<br> 即这个策略能使整个要试着执行的 workload 都受益，比如查看所有运行在该系统上的查询/事务，选择哪些内容应该存储到内存</p>
+</li>
+<li><p>局部策略<br> 针对每个单个查询/事务，让其进行得更快的最佳方法</p>
+<p>大多数数据库系统可能会试着尽量同时采取全局和局部优化策略</p>
+</li>
+</ol>
+<ul>
+<li><p>Buffer 池优化</p>
+<p>  <img src="./19.png" alt></p>
+<ol>
+<li><p>多 Buffer 池</p>
+<p> <img src="./20.png" alt></p>
+<p> 可以在每个 Buffer 池上使用局部策略，这样就可以为放入的数据进行量身定制，比如让每个表都有一个 Buffer 池，当处于以下情况时，</p>
+<ul>
+<li>在某些表中可能会进行一系列的循环扫描</li>
+<li>在某些表中可能会进行索引查询</li>
+<li><p>某个时刻需要跳转到某个 page 上（表内查询）</p>
+<p>就可以根据这 2 种 workload 类型来决定使用不同的替换策略，比如让一个 Buffer 池处理索引，另一个 Buffer 池处理表</p>
+<p>这么做同时也会减少那些尝试访问 Buffer 池的不同线程之间争抢 latch 锁的情况，比如，如果有多个 page 表，那么每条线程就能在同一时间访问不同的 page 表，因此它们就不会去争抢这些 latch（这我是有点怀疑的，是不是一定要 page 表的数量要大于线程数？？）</p>
+<p>Oracle、DB2、Sybase、SQL server、Informix 这些全都支持多 Buffer 池， MySQL 的做法是，对于一个给定的 page ID，它会通过 round-robin hash 来判断这个数据在哪，放在哪个 Buffer 池里面。</p>
+<p><img src="./21.png" alt><br><img src="./22.png" alt></p>
+<p>有 2 种方式来使用这些</p>
+</li>
+<li><p>Buffer 池通过管理和维护数据库对象（Database Object）的 record ID，来管理数据库对象，即将数据库对象的 record ID 维护到一个列表中，这样就能根据每个 ID 找到对应的对象条目。通过 record ID 能找到 Object ID、page ID、slot number，通过 Object ID 能找到对应的 Buffer 池，通过 page ID 和 slot number 就能找到对应的数据</p>
+</li>
+<li>传入 record ID，通过 hash 来确定数据在 Buffer 池中的位置，通过取模来确定在哪个 Buffer 池里</li>
+</ul>
+</li>
+<li><p>Pre-Fetching（预取）</p>
+<p> <img src="./23.png" alt></p>
+<p> 当处理完 page1 后，如果要继续请求 page2 或 page3 的数据，通过 pre-fetching 的方式，它已经在 Buffer 池中了，那么也无序停顿去从磁盘中把相关 page 取出然后写入到 Buffer 池内存中</p>
+<p> 另外，mmap 也是可以做到 pre-fetching 的</p>
+<p> 有一个 index game 例子（这个例子主要是讲操作系统怎么去做 pre-fetching 的）</p>
+<p> <img src="./24.png" alt></p>
+<p> <img src="./25.png" alt></p>
+<p> index-page3 和 index-page5 它们在磁盘上并没有连续排列在一起，所以操作系统会尝试去 pre fetch page2 和 page3，但实际上并不需要 page2，需要的是 page5，但是还没有 pre fetch 到它。出现这个的原因是操作系统并不知道查询要去做什么，因为操作系统做的是 索引扫描（像例子中的树那样的一个结构，需要 dfs 遍历），它不像数据库系统那样做的是 按照顺序扫描</p>
+<p> 而对于 Buffer 池的 pre-fetching 来讲，这不是没有代价的，因为需要跟踪一些额外的元数据</p>
+</li>
+<li><p>扫描共享 scan sharing</p>
+<p> <img src="./26.png" alt></p>
+<p> 这个优化策略想的是，查询之间可以利用彼此的结果，某个查询可以复用另一个查询从磁盘中读取到的数据，也可以将该数据用于其他的查询</p>
+<p> 但这和结果缓存（result caching）的方式不同，结果缓存指的是，当运行完全相同的查询时，计算出了某些结果，然后将这些结果缓存起来，遇到相同的查询时就再展示出来，而不是去重新执行这个查询</p>
+<p> 而扫描共享的工作方式是，当允许将多个查询附加到一个单个游标（这个游标指的是上文所说的移动的 Q1 箭头 →）上，即将这些查询注册到这个游标数据结构管理的一个集合中时，扫描 pages，并将它们放入 Buffer 池中</p>
+<p> 这有点像是那种 发布/订阅 的模式：我想知道你是否拿到了一个新的 page，然后你就可以去通知可能在等待这个 page 的线程，即便这个线程并不是真的要去拿到这个 page 去读取数据</p>
+<p> <img src="./27.png" alt></p>
+<p> DBMS 开始工作后，如果一个查询开始了一次扫描，然后它意识到这里有另一个查询也在做相同的扫描，它就将它自己附加到第一个查询的游标上，当这个查询拿到 page 时，它就通知我们该查询拿到了这个 page，我们也就可以去访问它了</p>
+<p> 所以第二个查询出现的位置必须被跟踪到，记录好这个位置后，拿到数据即可返回，然后继续走原来剩余的逻辑</p>
+<p> 知道了第一个查询结束时的游标位置，如果那里可能还有其他数据需要回去读取，就能直接回到之前那个点上，去获取剩余的数据</p>
+<p> 这项技术只有 DB2 和 SQL server 完全支持，而 Oracle 支持一种基本的扫描共享技术，称之为游标共享（Cursor Sharing），但只有当有 2 个查询在同一时刻执行时，它才会有效</p>
+<p> 两个相同查询的例子</p>
+<p> <img src="./28.png" alt></p>
+<p> 假设第一个查询 Q1，它要计算 SUM，那么它需要从磁盘中遍历整个 pages，然后将遍历的 page 写出到 Buffer 池中，按照惯例，此时 Buffer 池中已满，它需要将 page0 移除掉，并替换上 page3</p>
+<p> <img src="./29.png" alt></p>
+<p> 替换成功后，继续扫描，但是这个时候，第二个查询 Q2 出现了，它也想从磁盘中遍历整个 pages</p>
+<p> <img src="./30.png" alt></p>
+<p> 在没有扫描共享的情况下，就会出问题，因为此时 Buffer 池已满，对于 Q2 来讲它需要的是 Buffer 池中的 page0，但是刚刚 page0 已经被 Buffer 池扔回到磁盘里面去了，那么 Q2 这个查询就 gg 了</p>
+<p> 所以在有扫描共享的情况下，Q2 只需要跳到 Q1 目前所在的位置，并且去读取 Q1 要读的相同的数据，并计算出 Q2 所找的那部分数据的结果</p>
+<p> <img src="./31.png" alt><br> <img src="./32.png" alt></p>
+<p> 而当 Q1 结束时，Q1 的游标就消失了，Q2 查询从头开始</p>
+<p> <img src="./33.png" alt><br> <img src="./34.png" alt></p>
+<p> 直到遍历到 page2，Q2 结束，这就是 Q2 扫描的路径</p>
+<p> 那么每个查询在读取数据的同时也在计算中间结果，它们也需要一块内存区域去存放这些数据，而这个内存区域跟这个 Buffer 池是分开的，但通常情况下，这块内存区域也可以由一个 Buffer 池所支持。但它到底是在一个全局 Buffer 池中还是在这个查询所私有的 Buffer 池中，还得取决于具体实现</p>
+<p> 如果在扫描 Buffer 池中的数据，并更新中间结果时，可能会遇上内存溢出，为了腾出空间保留中间结果，会将 Buffer 池中的 page 数据刷出到磁盘</p>
+<p> 通过 locks 可以对一些 pages 进行跟踪管理是否允许对这些 pages 进行读写，或者时将 locks 应用于一些数据库对象上</p>
+<p> 如果将 Q2 的查询修改下，让它去计算 100 条数据的平均值</p>
+<p> <img src="./35.png" alt></p>
+<p> 这里并没有明确说这里要的是否是 前 100 个 tuple 的数据。因为现在 Q2 的游标是在 page2 处，所以遍历可以从 page3 开始，然后看下这前 3 个 page 中前 100 个 tuple，计算出结果。但如果从 page0 开始扫描计算，那可能会得到一个不同的结果。但因为关系模型中数据库是无序的，所以根据关系模型，这是没问题的。</p>
+</li>
+<li><p>Buffer 池 Bypass</p>
+<p> <img src="./36.png" alt></p>
+<p> 思路是，分配一小块内存给执行查询的那条线程，当它从磁盘中读取 page 时，如果该 page 不在 Buffer 池中，那么它将会把这个 page 从磁盘写入本地内存而不是 Buffer 池。当查询完成时，所有的这些 page 都会被丢弃掉。</p>
+<p> 这么做是为了避免去 page 表中进行查询所带来的开销，因为 page 表中对应的条目是带锁的。</p>
+<p> 在 Informix 中，这叫做 “Light Scans”，主流数据库都支持它</p>
+<p> 注意，只有当操作的是中间结果以及查询扫描的量不大的场景才适用</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>操作系统 Page 缓存</p>
+<p>  <img src="./37.png" alt></p>
+<p>  数据库所有的磁盘操作都是通过最底层的 OS API 来做的，比如 fopen/fread/fwrite 等。默认情况下，操作系统会维护它自己的文件系统缓存，比如，当从磁盘读取一个 page 时，OS 会去在它的文件系统缓存中保存一份副本，写入到 Buffer 池中时，里面就会有另一个副本。但大部分数据库系统不会让 OS 对要读取的文件进行任何缓存处理，因为它们要自己管理内存。</p>
+<p>  但是，唯一利用操作系统 page 缓存的就是 PostgreSQL，因为从它们工程师的角度看，他们就无须再管理一个额外的缓存，他们依然有他们自己的 Buffer 池，但没有那么大，这样就不会去使用系统中所有的内存。但像 MySQL 或 Oracle 就会</p>
+<p>  htop</p>
+<p>  <img src="./38.png" alt></p>
+<p>  Mem 部分，橙条代表操作系统的 page 缓存，绿条代表该计算机上运行的进程的实际使用物理内存</p>
+<p>  使用如下命令清除 OS page 缓存</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sync; <span class="built_in">echo</span> 3 &gt; /proc/sys/vm/drop_caches</span><br></pre></td></tr></table></figure>
+<p>  <img src="./39.png" alt></p>
+<p>  可以看到机器使用的总内存已经下降到 3GB 左右</p>
+<p>  顺便，如果 Buffer 池的大小小于要读取的数据库表的大小的话，那么在 Buffer 池中命中 pages 的数量，要小于在磁盘中读取 pages 的数量</p>
+<p>  <img src="./40.png" alt></p>
+<p>  比如上图中，从磁盘读取的 27932 &gt;&gt; Buffer 池中的 16316</p>
+<p>  这取决于 Buffer 池的大小，如果把 Buffer 池大小设置（下图为修改 PostgreSQL 的配置文件，修改项为 shared_buffers）为比要读取的数据库表大小还大，那么</p>
+<p>  <img src="./41.png" alt><br>  <img src="./42.png" alt></p>
+<p>  Buffer 池就会命中（hit）全部的 pages，因为给了数据库系统合适大小的内存量，对于这个查询而言，就没必要去从磁盘拿 page 了</p>
+<p>  hit 的意思是找的东西在 Buffer 池中的数量</p>
+<p>  pg_prewarm 会告诉数据库系统去读取磁盘上该表的所有数据，并将他放入 Buffer 池中（SELECT pg_prewram(‘testreals’)）</p>
+<p>  为什么其他主流数据库系统不依赖操作系统 page 缓存呢？因为假设在 OS page cache 中放入一个 page，而在 Buffer 池中放入该 page 的一个副本，如果这个时候要对 Buffer 池中修改这个 page 部分，那么 OS page cache 和 Buffer 池中的 page 就不再是同一个东西了，OS page cache 中存的就是老 page 数据，那么这个数据就冗余了。</p>
+<p>  同时，不同数据库支持的操作系统也不一样，如果都用操作系统 page 缓存，那么可能出现性能上的差异，为了保证跨 OS 间的一致性，必须要把这个交给数据库系统本身来管理</p>
+<p>  如果使用的是 Direct IO，这就会告诉操作系统不要去缓存任何东西，这样数据库系统就始终得跑到磁盘上去获取数据了</p>
+<p>  操作系统 page 缓存是磁盘和数据库之间的东西</p>
+</li>
+<li><p>Buffer 替换策略</p>
+<p>  <img src="./43.png" alt></p>
+<p>  如果现在需要讲一个 page 放入内存中，但是内存里没有空间放它，这个时候该怎么办呢？</p>
+<p>  在替换策略中，最重要的就是 准确性，因为要确保移除的 page 是在未来不太会被用到的那些 page</p>
+<ol>
+<li>运行某些算法来弄清楚该移除哪个 page 会比读取 page 时所花的时间要长</li>
+<li><p>跟踪大量额外的元数据也会带来开销，因为可能会出现跟踪的元数据的体积比 page 本身还要大</p>
+<p>非常高端的、价格很昂贵的企业级数据库和开源数据库之间有什么区别呢？</p>
+</li>
+<li><p>高端数据库拥有非常复杂的替换策略，它们会跟踪统计 page 的相关使用数据，会尝试从查询实际所做的事情中推断出最好的决策</p>
+</li>
+<li>开源数据库的某些比较新的系统中，它们在这方面并没有做的像高端数据库那么好，它们就只能做些简单版的东西了</li>
+</ol>
+<ul>
+<li><p>Least-Recently Used（LRU）</p>
+<p>  一种使用起来超简单的技术就是 LRU，即跟踪一个 page 最后一次被访问时的时间戳，然后只要看哪个 page 拥有的时间戳是最老的，哪个就应该要被移除掉</p>
+<p>  那么此时就可以维护一个单独的数据结构，比如队列，根据 page 的时间戳进行排序</p>
+</li>
+<li><p>Clock<br>  一个 LRU 的近似算法，就是 Clock</p>
+<p>  <img src="./44.png" alt></p>
+<p>  在 Clock 中，没必要去追踪每个 page 的时间戳，相反，唯一需要去跟踪的信息是每个 page 的标志位（reference bit），它会告诉你自从上次检查过该 page 后，这个 page 是否被访问了，所以你需要将你的 page 弄成一个环形的 Buffer，like a clock。在一圈时钟这个时间段内，如果标志位没有变化，就可以从 Buffer 池中移除这个 page。</p>
+<p>  <img src="./45.png" alt></p>
+<p>  假设某些查询访问了 page1，那么此时 page1 的标志位会被设置成 1，注意这里无论多少查询访问过这个 page1 多少次，这里的值始终都被设置为 1，因为标志位不是计数器。</p>
+<p>  当现在需要去移除 page 时</p>
+<p>  <img src="./46.png" alt><br>  <img src="./47.png" alt></p>
+<p>  clock 会从 page1 这个地方开始走起来，当看到 page1 的标志位为 1 时，说明这个 page1 被访问过，所以不应该去移除掉 page1，但现在只是将 page1 的标志位设置成 0。然后走向下一个 page2。此时它发现 page2 的标志位是 0，就可以将 page2 移除掉（因为它不是 1，如果是 1 会被先设置成 0 然后遍历下一个 page）</p>
+<p>  使用 Clock 算法的优点是，在移除 page 时，不会精确地移除最近最少使用的那个 page。</p>
+<p>  在某些查询上表现得很好，比如点查询（point query）时访问单个东西</p>
+</li>
+<li><p>问题</p>
+<p>  <img src="./48.png" alt></p>
+<p>  但 Clock 和 LRU 都容易受到 sequential flooding 带来的影响</p>
+<p>  这意味着，当进行读取每个 page 的特殊扫描时，这可能会污染 page 缓存，可能会将接下来真正要用到的 page 从 Buffer 池中移除掉。因为它扫描并读取了一堆 page，所有的这些 page 的时间戳都会比实际想要的那个 page 要新。因为要被移除的那些 page 应该是 最近 被使用的，而不是 最近最少 被使用的</p>
+<p>  例子</p>
+<p>  Q1 是一个点查询，它读取了 page0，并放入了 Buffer 池中</p>
+<p>  <img src="./49.png" alt></p>
+<p>  接着有另一个遍历查询 Q2，它会读取所有的 page</p>
+<p>  <img src="./50.png" alt></p>
+<p>  现在想要在 Buffer 池中给 page3 分配一个空间，如果用的是 LRU，那么它会指出 page0 是 Buffer 池中最近最少使用的 page，那么移除掉 page0，放入 page3</p>
+<p>  <img src="./51.png" alt></p>
+<p>  但是在 workload 中，会有不断地去执行类似于 Q1 那样的查询</p>
+<p>  <img src="./52.png" alt></p>
+<blockquote>
+<p>注意上图中，在 Disk Pages 上的红色 Q2 应为 Q3</p>
+</blockquote>
+<p>  不断的执行 Q3，它要读的是 page0。但是之前 page0 已经从 Buffer 池中被移除掉了，这样就 fucked up 了。</p>
+<p>  而真正应该要被移除的应该是 page1 和 page2，因为 Q2 会去读取更多的数据，而其他查询（Q1 和 Q3）并不会到 Buffer 池中读取这些数据（page 0 之后的 page）</p>
+</li>
+<li><p>更好的策略：LRU-K</p>
+<p>  <img src="./53.png" alt></p>
+<p>  思路是，将最近使用过 1 次的判断标准扩展为最近使用过 K 次，没有达到 K 次访问的数据并不会被缓存。访问记录不能无限记录，当访问次数达到 K 次后，将 数据索引 从 历史队列 移到 缓存队列 中</p>
+<p>  相比于 LRU 比较时间戳，LRU-K 看的是时间戳时间的间隔，统计哪一个 page 的上一次和下一次的访问的时间间隔最长，那么哪一个 page 就是最近最少使用的</p>
+</li>
+<li><p>更好的策略：本地化（Localization）</p>
+<p>  <img src="./54.png" alt></p>
+<p>  使用多个 Buffer 池，让每个查询本地化，即每个 Buffer 池能对应住一个查询，那么对于单个查询来讲，只会去移除对于这个查询而言最近最少使用的那个 page，而不是对于整个查询而言最近最少使用的那个 page</p>
+</li>
+<li><p>更好的策略：优先级提示（Priority Hints）</p>
+<p>  <img src="./55.png" alt></p>
+<p>  有索引时，就知道查询时如何进行扫描的，也能知道哪些不同的 page 被访问了，可以使用这个信息来判断该移除哪些 page</p>
+<p>  例子，假设有一个 Insert 的操作 Q1，对应的表里面有一个全局的计数器，每次 Insert 时，它就会加 1</p>
+<blockquote>
+<p>注意这里索引的存储结构一般是类似 B+ Tree 的结构</p>
+</blockquote>
+<p>  <img src="./56.png" alt></p>
+<p>  如果根据这个 id 从小到大排序，意味着遍历始终是沿着树的右侧往下走，去拿到这些 page 的</p>
+<p>  <img src="./57.png" alt></p>
+<p>  因此这个时候就应该提示 Buffer 管理器，这些被红色框圈起来的 page 就应该试着待在内存中</p>
+</li>
+<li><p>处理 Dirty Pages</p>
+<p>  <img src="./58.png" alt></p>
+<p>  在 page 上有一个 dirty bit，它表示自从上次它被放入 Buffer 池中后，是否还有查询对该 page 的内容做了修改。</p>
+<p>  快的方式：如果一个 page 在 Buffer 池中不是 dirty 的，直接 drop 掉它就好<br>  慢的方式：如果一个 page 在 Buffer 池中是 dirty 的话，在将该空间重新用于新的 page 之前，必须将这个 page 安全地写回磁盘</p>
+<p>  而这是有 trade-off 的，因为一大堆不是 dirty 的 page，可能最近需要用到它，所以直接 drop 掉会带来后面重新读取磁盘并写入内存的 I/O 影响。</p>
+<p>  而如果不想要 drop 掉这些不是 dirty 的 page，那就要花点代价将 dirty page 从 Buffer 池中移除掉，然后复用移除掉的这些空间。但是这么做就需要 2 次磁盘 I/O 了，一次 I/O 是用来写出 dirty page，从 Buffer 池中移除，另一次 I/O 则是读取那个想要的 page（感觉和上面那个 drop 非 dirty page 的情况差不多）</p>
+</li>
+<li><p>后台写操作（Background Writing）</p>
+<p>  <img src="./59.png" alt></p>
+<p>  为了避免 必须立即 将 page 写出以便在 Buffer 池中释放可用空间的问题，在数据库系统中有一条执行定时任务的线程，它会在 Buffer 池中找出那些被标记为 dirty 的 page，将它们写出到磁盘上，然后可以将这些 page 标记为 clean。那么当使用替换策略去决定该移除哪个 page 时，就有一堆 clean 的 page 可以 drop 掉了。</p>
+<p>  但是这个操作要小心，因为在该 dirty page 对应的修改操作写入日志之前，我们不希望将这些 dirty page 写出到磁盘</p>
+<p>  同样的，这也是 mmap 无法做到的事情</p>
+</li>
+</ul>
+</li>
+<li><p>其他内存池</p>
+<p>  <img src="./60.png" alt></p>
+</li>
+<li><p>结论</p>
+<p>  <img src="./61.png" alt></p>
+<p>  这节课的重点在于我们该如何去管理内存并做得比 OS 更好</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/" title="CMU-15-445-645-笔记-05-Buffer池与内存管理">https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Database
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/05/CMU-15-445-645-笔记-04-数据库存储-part2/" rel="next" title="CMU-15-445-645-笔记-04-数据库存储-part2">
+                <i class="fa fa-chevron-left"></i> CMU-15-445-645-笔记-04-数据库存储-part2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/';
+          this.page.identifier = '2022/06/05/CMU-15-445-645-笔记-05-Buffer池与内存管理/';
+          this.page.title = 'CMU-15-445-645-笔记-05-Buffer池与内存管理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
