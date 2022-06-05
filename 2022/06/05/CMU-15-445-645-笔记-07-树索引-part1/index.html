@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-07-树索引-part1">
+<meta name="keywords" content="Database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU-15-445-645-笔记-07-树索引-part1">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-07-树索引-part1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/Cover.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/11.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/12.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/13.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/14.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/15.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/16.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/17.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/18.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/19.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/20.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/21.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/22.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/23.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/24.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/25.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/26.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/27.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/28.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/29.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/30.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/31.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/32.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/33.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/34.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/35.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/36.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/37.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/38.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/39.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/40.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/41.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/42.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/43.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/44.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/45.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/46.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/47.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/48.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/49.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/50.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/51.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/52.png">
+<meta property="og:updated_time" content="2022-06-05T15:19:38.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMU-15-445-645-笔记-07-树索引-part1">
+<meta name="twitter:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-07-树索引-part1">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/Cover.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/">
+
+
+
+
+
+  <title>CMU-15-445-645-笔记-07-树索引-part1 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CMU-15-445-645-笔记-07-树索引-part1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-05T22:40:51+08:00">
+                2022-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index">
+                    <span itemprop="name">Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注: 本文首发我的 b 站专栏文章<a href="https://www.bilibili.com/read/cv14653694" target="_blank" rel="noopener">CMU 15-445/645-笔记-07-树索引-part1</a></p>
+</blockquote>
+<a id="more"></a>
+<p><img src="./Cover.png" alt></p>
+<ul>
+<li><p>课程目标</p>
+<p>  <img src="./1.png" alt></p>
+</li>
+<li><p>表索引</p>
+<p>  <img src="./2.png" alt></p>
+<p>  做一定范围扫描的查询需要用到表索引，在这种情况下，hash 表并不能满足要求，因为 hash 表只能用来进行单个 key 的查找</p>
+<p>  <img src="./3.png" alt></p>
+<p>  那么表索引是什么？</p>
+<p>  简单来讲，表索引就是 表中属性 的 子集 的一个 副本，它以一种更高效的方式存储，以方便能做更高效的查询操作（相比循序扫描来说）</p>
+<p>  注意，表索引是该表的一个副本，它必须和表保持同步。比如如果表中的某个 tuple 有更新，那么这个更新也应该反映到对应的索引上</p>
+<p>  表索引的操作对于应用开发人员来讲，是完全透明的</p>
+<p>  <img src="./4.png" alt></p>
+<p>  虽然大量的索引可以让查询变得更快，但维护这个表索引也需要一定的代价，所以就存在 trade-off。比如大量的索引会占用 page 和 Buffer 池的空间，将它写出到磁盘时，就会占用磁盘空间。如果表里面有 1000 条索引，现在要进行插入操作，那么就必须对这些索引更新 1000 次，直到这些索引被修改完成，这个插入操作才会被认为已经完成了。</p>
+<p>  在做查询操作时，DBMS 自己会去选择对于查询来讲最优的索引，即查询优化</p>
+</li>
+<li><p>B+ Tree</p>
+<p>  <img src="./5.png" alt></p>
+<p>  有一类数据结构叫做 B-Trees（B 树家族），在它里面，有一种特定的数据结构，叫做 B-Tree。</p>
+<p>  实际上 B-Tree 和 B+ Tree 是不同的数据结构</p>
+<p>  B-Tree 是在 1971 年提出的，2 年后的 1973 年提出的 B+ Tree，那个时候并没有什么 paper 去描述什么是 B+ Tree，不过 1979 年倒是有篇 paper 做了对 B+ Tree 和 B-Tree 的描述</p>
+<p>  顺便，IBM 在 1973 年发明了 B+ Tree</p>
+<p>  然后在 70-80 年代间，出现了它们的很多变种，比如 B* Tree 是 B-Tree 的变种，而 B^link - Tree 是在 1981 年出现的，由 CMU 首发</p>
+<p>  <img src="./6.png" alt></p>
+<p>  即 《Efficent Locking for Concurrent Operations on B-Trees》，作者 Philip Lehman，现在依然在 CMU</p>
+<p>  数据库系统一般用的是 B+ Tree 而不是 B-Tree，虽然 PostgreSQL 文档中写的是用 B-Tree，但实际上它用的就是 B+ Tree</p>
+<p>  <img src="./7.png" alt></p>
+<p>  B+ Tree 是一种自平衡的树形数据结构，B means Balance</p>
+<p>  基本思想是，往 B+ Tree 中插入数据时，它会保证数据的有序性，这允许我们可以沿着叶子节点进行高效的搜索或者循序扫描，插入和删除的时间复杂度都是 O(log n)，因为 B+ Tree 是平衡的，所以它的复杂度始终是 O(log n)，即对于一个叶子节点上的任何 key 来说，不管它距离根节点有多远，时间复杂度始终是 O(log n)</p>
+<p>  B+ Tree 是这样一种数据结构，它能在磁盘非常缓慢，并且内存有限的情况下，进行高效地索引查找</p>
+<p>  相比于 B-Tree，B+ Tree 有一个很棒的优势，就是当遍历到 B+ Tree 底部时，可以沿着叶子节点进行循序扫描，无须回过头再递归遍历。因为从上到下，按范围找到了树的父节点下指代的某段区域叶子节点，结果就在这个范围内，循序扫描就好了</p>
+<p>  一篇被很多人引用的 paper – 《The Ubiquitous B-Tree》</p>
+<p>  那么 B+ Tree 有哪些属性呢？</p>
+<p>  <img src="./8.png" alt></p>
+<p>  B+ Tree 被认为是一种多路查找树（Multi-way search tree），意味着在树中的每个节点处，它可以通过 M 条（也不完全总是 M 条）不同的路线到达其他节点</p>
+<p>  注意，这里的 平衡 指的是，任何叶子节点到根节点始终是 O(log n)</p>
+<p>  这里，每个节点必须保证至少是半满的，对于能存放自节点中 key 的数量来说，B+ Tree 中节点所管理的 key 的数量至少为 M/2 - 1 个（这里的 M 指树的高度），但 key 的数量必须小于 M - 1。删除的时候，如果节点不处于半满的状态，那么就得将周围得数据移到这个节点中，让它变成半满的状态</p>
+<p>  如果一个 inner node 中有 k 个 key，那么对于这个 inner node 来讲就有 k + 1 个非空 children 节点</p>
+<p>  例子</p>
+<p>  <img src="./9.png" alt></p>
+<p>  在任何 inner node 中，它们并没有 sibling pointer，但叶子节点有</p>
+<p>  <img src="./10.png" alt></p>
+<p>  inner node 是 key 和 指针 的结合体，inner node 里面的指针始终指向的是另一个节点，如果什么也没有就指向 null，key 就是在任意属性上构建的索引。当使用一个给定的 key 来进行搜索时，可以通过比对这些 inner node 中 key 的大小来决定该往哪边遍历</p>
+<p>  <img src="./11.png" alt></p>
+<p>  对于叶子节点，它有 key 也有 value，这个 value 可以是一个 tuple 的 record ID，也可以是 tuple 自身</p>
+<p>  inner node 主要保存的是指针，而叶子节点主要保存的是数据</p>
+<p>  <img src="./12.png" alt></p>
+<p>  每个 B+ Tree 的节点其实就是一个 key/value 对 数组。如果你是在叶子节点上，那么可以通过 key 来判断这是不是你要的东西；如果是在 inner node 上，那么可以通过 key 来判断你是往左走还是往右走</p>
+<p>  例子</p>
+<p>  <img src="./13.png" alt></p>
+<p>  图中可以看出，B+ Tree 中叶子节点里，key/value 对是分开存储的，但这里的 key/value 始终都在同一个 page 上，分开存的原因是它们的大小不一样</p>
+<p>  使用二分查找并不需要用到 value，只需要用到的是 key，分开来可以更高效地在 key 之间跳转，而 value 通常情况下是固定长度的，可能是 32/64 bit 长度的 record ID。</p>
+<p>  <img src="./14.png" alt></p>
+<p>  它的工作方式是，无论 key 数组中的 offset 值是什么，它始终对应了 value 数组中的某些 offset 值</p>
+<p>  <img src="./15.png" alt></p>
+<p>  叶子节点通常有 2 种值</p>
+<ol>
+<li>record ID</li>
+<li><p>Tuple 数据</p>
+<p>Tuple 数据实际上是存放在叶子节点上的，第二索引把 record ID 作为值存起来</p>
+<p>MySQL 和 SQLite 大概就是方案 2 存法，而 Oracle 和 SQL Server 默认情况下使用的是方案 1（也就是说它们也可以选择方案 2）</p>
+</li>
+</ol>
+</li>
+<li><p>B-Tree vs. B+ Tree</p>
+<p>  <img src="./16.png" alt></p>
+<p>  在 B-Tree 中，value 可以存放在树的任何位置，即任何 inner node 可以保存 record ID 或者 tuple 之类的 value</p>
+<p>  而在 B+ Tree 中，value 只能放在叶子节点中</p>
+<p>  那这意味着什么呢？</p>
+<ol>
+<li>在 B-Tree 中，不会有任何重复的 key</li>
+<li><p>在 B+ Tree 中，在 inner node 中会存放所有的路标，也就是说会有重复的 key。此外如果删除了 B+ Tree 上的一个 key，也是基本上是从叶子节点上移除，并且把这个 key 保存在 inner node 中。因为如果要查找其他的 key，还可以通过这条路线往下查找</p>
+<p>相比之下，B-Tree 更加经济，占用的空间也少。但当使用多个线程来进行更新操作时，代价会更加昂贵。比如修改/删除某个 inner node 里面相关指针的指向，在并发操作下是需要保护的</p>
+<p>在 B+ Tree 中，只会对叶子节点进行修改，可能需要将修改结果向上传播，那么只需要一个方向上的指针就可以做到</p>
+</li>
+</ol>
+</li>
+<li><p>B+ Tree 插入</p>
+<p>  <img src="./17.png" alt></p>
+<p>  插入就是先从 inner node 上根据二分查找对应的 key，小的走左边大的走右边，然后找到叶子节点中有空间的位置进行插入。如果这个叶子节点没空间了，那么就必须拆分这个叶子节点</p>
+<p>  怎么拆分呢？</p>
+<p>  找到叶子节点的中间位置，将中间位置左边的所有 key 放入一个节点，中间位置右边所有的 key 放入另一个节点，然后更新父节点，让它包含中间这个 key。接着让一个额外指针来指向刚刚添加的新节点</p>
+<p>  对于一次插入来说，可能就需要重新整理下整个树了</p>
+<p>  一个 B+ Tree 的可视化 demo</p>
+<p>  <a href="https://cmudb.io/btree" target="_blank" rel="noopener">https://cmudb.io/btree</a></p>
+<p>  注意这里 degree 的意思是，从节点处最多能出来几条路线，比如 degree = 3，对于 inner node 来讲，最多只能保存 2 个 key</p>
+<p>  插入是一个递归的过程，随着插入更多的元素，会继续对节点进行拆分，并将这些变化向上传递</p>
+<p>  如果有重复的 key 怎么办？</p>
+<p>  <img src="./18.png" alt></p>
+<p>  那么就会是如上图那样的结构，在真实的系统中，重复的 key 可以存在，只需要维护拥有同一个 key 下多个 entry 所对应的值，即每个 entry 对应一个唯一值即可</p>
+</li>
+<li><p>B+ Tree 删除</p>
+<p>  <img src="./19.png" alt></p>
+<p>  删除操作会导致节点上保存的 key 的数量小于半满的情况，这就会违反在 B+ Tree 中必须遵守的原则，因此就得做拆分的逆向操作，也就是 合并</p>
+<p>  一个简单技巧就是看下临近的其他叶子节点中的元素，并尝试从它们中抢一个 key 过来，以此让树变得平衡</p>
+<p>  只要兄弟节点和这个要抢别人 key 的节点有相同的父节点，那么就可以去抢，因为这就不需要对上面那些节点做任何重新平衡的操作了</p>
+<p>  合并的工作方式是，向下遍历，会维护一个 stack，里面包含了它向下遍历元素的记录。实际上在向下遍历时，会进行 latch crabbing 或者是 coupling 之类的事情。</p>
+</li>
+<li><p>B+ Tree in Practice</p>
+<p>  <img src="./20.png" alt></p>
+<p>  通常情况下，使用 B+ Tree 保存的数据，实际上只有大概 67% 是有用的，其他的都是初始数据或者未知数据</p>
+</li>
+<li><p>聚簇索引（Clustered Indexes）</p>
+<p>  <img src="./21.png" alt></p>
+<p>  一张表的数据堆在一起，就是 table heap，而 table heap 是无序的</p>
+<p>  当创建一张表时，可以定义一个索引，数据库系统会保证索引会对 page 中 tuple 的物理布局进行匹配排序，即对磁盘上实际数据重新组织以按指定的一个或多个列的值排序</p>
+<p>  这对于一些任务是有利的，比如一大堆根据主键来进行范围查找的任务，在这些任务中，如果知道 tuple 保存的顺序是跟主键一致的，那就只需要遍历某个叶子节点下所包含的一小部分 page，就可以找到要查找的数据。如果不一致，那么拿到的每个 record ID （表中每条数据）都有可能指向另一个 page，在读数据时就要进行大量的随机 I/O</p>
+<p>  注意，聚簇索引也会将 tuple 保存在索引中</p>
+<p>  在 MySQL 中，如果没有定义主键，那它会帮你定义一个，会使用 row ID 或者 record ID 之类的东西作为主键，对于调用 MySQL 的应用开发者来说，它们是透明的</p>
+<p>  在 PostgreSQL 中，在对表使用聚簇索引时，它并不会按照这个索引的顺序来维护，即磁盘上保存的表的数据一开始是排好序的，但随着时间的推移，它就会乱序</p>
+</li>
+<li><p>在 B+ Tree 上查找</p>
+<p>  <img src="./22.png" alt></p>
+<p>  如果一个查询条件包括 a、b、c 3 个，B+ Tree 支持除了 c 之外即只有 a 和 b 两个的查询，同时也支持只有 b 一个的查询，但这是 hash 索引做不到的，因为在不使用 c 的情况下，hash 索引对 a 和 b 进行 hash 后的位置会跳转到某个随机的位置上</p>
+<p>  不是所有数据库系统都支持这种查找，但有许多是支持前缀查找（即只查 a 和 b），所有的系统都支持中间的这个 b 类似的查找</p>
+<p>  例子</p>
+<p>  假设在 2 个列或者 2 个属性上定义一个索引，即复合键（composite key），注意这并不是在 1 列上定义索引，而是使用 2 列来进行索引定义</p>
+<p>  <img src="./23.png" alt></p>
+<p>  比如要找 （A，B） 这样的查询</p>
+<p>  <img src="./24.png" alt></p>
+<p>  用条件进行比对和二分查找，就能找到那个对应的 entry</p>
+<p>  但是如果要找 （A，*）这样的前缀查询</p>
+<p>  <img src="./25.png" alt></p>
+<p>  在找到对应的叶子节点后，需要对叶子节点进行循序扫描，直到找到第一个元素 &gt; A 的情况才停止查找</p>
+<p>  比较难实现的是找 （*，B）这样的后缀查询</p>
+<p>  需要尝试在根节点处弄清楚需要去查看这个树的哪一部分，然后通过替换 * 来进行查找</p>
+<p>  <img src="./26.png" alt></p>
+<blockquote>
+<p>注意上图中这里 C 中的列表也需要遍历</p>
+</blockquote>
+<p>  Oracle 把这种查找叫做 skip scan</p>
+<p>  一本 Goetz Graefe 写的关于 B+ Tree 的参考书</p>
+<p>  <img src="./27.png" alt></p>
+<p>  这本书写的所有关于 B+ Tree 的现代技术和优化方法，都可以在真实的系统或者是 B+ Tree 中进行使用</p>
+</li>
+<li><p>Node Size</p>
+<p>  <img src="./28.png" alt></p>
+<p>  一般来讲，可以将 B+ Tree 中的一个 node 当作是表中的 page 来看待，一个 node 的大小可能等于一个 page 的大小</p>
+<p>  如果使用的磁盘速度很慢，那么当构建树上的索引时，会希望这个节点 size 更大一点</p>
+<p>  但如果跳到不同节点间随机 I/O 的速度非常快，那么节点就可以使用更小的 size</p>
+<p>  注意寻址速度 内存 &gt; SSD &gt; HDD，寻址不需要加锁，但读写需要</p>
+<p>  对于叶子节点上的扫描来讲，由于用的是耗时长的循序扫描，那么这种就更适合 size 更大的节点</p>
+</li>
+<li><p>合并临界点</p>
+<p>  <img src="./29.png" alt></p>
+<p>  当节点没有达到半满状态的情况下，可能实际上不需要立即进行合并操作，因为可能下次操作是插入数据，之前做了合并现在又拆开来，那么就会有代价</p>
+<p>  然而合并操作的代价是高昂的，拆分的代价也同样昂贵</p>
+<p>  随着时间的推移，树可能变得不平衡，但可以在后台使用类似 GC 的东西来对它做重新平衡的操作，或者直接重建这个树</p>
+<p>  比如很多高端商用企业级数据库，周末时关闭数据库，重建它们所有的索引，简单来讲这就是它们重新平衡这个树的方式（草）</p>
+</li>
+<li><p>可变长度 key</p>
+<p>  在节点中保存可变长度的 key 是一个问题，下面是它的相对应的解决方法</p>
+<p>  <img src="./30.png" alt></p>
+<ol>
+<li>虽然保存指针的方式会使得保存的数据量变少，但是访问会很慢，在内存很贵的 1980 年代，人们尝试在内存型数据库中使用这个方法，但现在没人用了</li>
+<li>使用可变长度的节点的意思是，允许一个节点的大小根据它保存的东西来变化，这是一个 bad idea，因为在 Buffer 池和磁盘中 page 的大小应该始终保持一致，这样才无须担心该如何找到空闲的空间把数据放进去，同样现在也没人用这个方法了</li>
+<li>使用填充（padding），不管是什么 key，都使用 null 或者 0 对其填充，以此来适合节点大小。虽然有一些数据库系统采用了这个方法，然而这存在 trade-off，虽然数据能保存，但空间被浪费掉了，这也是为什么说确保 schema 的正确定义是非常重要的。</li>
+<li><p>更为常见的方法是使用一个间接映射，把 key 指针放在 key 数组中，注意，这里的指针指的是 2 个在该节点中对应的 offset 值，而不是指向其他任何 page，它看起来应该像下图</p>
+<p> <img src="./31.png" alt></p>
+<p> 注意这里的 key map 是有序的</p>
+<p> 布局和 slotted page 中的 tuple 很像</p>
+<p> 这里的 key + value 是从后往前存储，而 sorted key map 则是从前往后存储</p>
+<p> 如果这个节点没有足够的空间来存数据，那么可以使用一个 overflow page 接着存</p>
+<p> 那么如何优化才能让这个查找变得更快呢？</p>
+<p> 通常来讲，sorted key map 数组中只有 16bit 大小的空间，所以一个可能性的优化是，将每个字符串的首字母放在 sorted key map 中</p>
+<p> <img src="./32.png" alt></p>
+<p> 在查找时，如果 key 无法和这里的第一个字符准确匹配，那么也没有遍历下去的必要了</p>
+<p> 注意，这个优化都是在内存中做的，因为可以避免 cache miss，同时让二分查找或其他查找变得更快</p>
+</li>
+</ol>
+</li>
+<li><p>非唯一索引</p>
+<p>  <img src="./33.png" alt></p>
+<ol>
+<li><p>可以复制 key，复制的 key 会被拆分到另一个节点中，但必须要小心这种情况，而且也要确保读取了所需要的一切数据</p>
+<p> <img src="./34.png" alt></p>
+<p> 比如上图中有重复的 K1，如果要再插入一个 K1，就把 sorted key 中其他元素重新移动排序，那么就依然还能工作，因为里面存放的 offset 值没有发生改变</p>
+</li>
+<li><p>用一个 value 列表，只保存 key 一次，然后在节点中使用一个单独的区域来保存给定 key 的所有 value</p>
+<p> <img src="./35.png" alt></p>
+<p> 比如 K1 有其中一个对应的 value 列表，sorted key 中 K1 通过一个指针指向了该节点里某个 offset 处</p>
+<p>第 1 种方法更常用</p>
+</li>
+</ol>
+</li>
+<li><p>节点内的搜索方式</p>
+<p>  <img src="./36.png" alt></p>
+<p>  interpolation 的意思是指，如果知道要查找的 key 的大概的大小，同时也知道这些 key 的分布信息，就可以用简单的数学方法来进行处理（这里是不是存储的时候就要符合某些数学规律？）</p>
+<p>  <img src="./37.png" alt></p>
+<p>  比如，数组中存有 7 个 key，而 key 的值最大为 10，如果要找的是 8，那么就可以用上面的公式，因为这个数据的存储规律是单调递增的，所以可以这么算</p>
+<p>  但是这种情况，不适用于浮点数和字符串的查找</p>
+</li>
+<li><p>优化</p>
+<p>  <img src="./38.png" alt></p>
+<ol>
+<li><p>压缩数据</p>
+<p> <img src="./39.png" alt></p>
+<p> 前缀压缩（prefix compression），它是基于 key 都是有序排列的</p>
+<p> 在很多数据集中，很有可能会出现保存在同一节点上的 key 彼此之间会非常相似，因为被排过序了</p>
+<p> 比如例子中的 robbed/robing/robot，它们都有共同的前缀 rob，所以对于每一个 key 而言，没必要反复复制或存储这个冗余字符串 rob，而是将它提取出来</p>
+<p> <img src="./40.png" alt></p>
+<p> 这也被成为 Prefix Tree（也就是 Trie Tree）</p>
+<p> Meta 在它内部的 MySQL 中都做了这个优化，这引起了性能上的巨大差异，因为这样做节省了大量的空间，在数据库中，重复的数据实在是太多了</p>
+<p> 另一种类似的优化是在聚簇索引中，我们知道所有的 tuple 都放在磁盘或者 page 中，那么同样在索引中，它们是以排序存在的，那么 tuple 有可能在同一个节点上，它们的 record ID 会使用相同的 page ID，这个时候也没必要把这种情况下单个 tuple 的 page ID 反复存放在一个节点中，而是只保存一次 page ID，然后将它们的 offset 值或者 slot 分开存放</p>
+</li>
+<li><p>后缀截断（suffix truncation）</p>
+<p> <img src="./41.png" alt></p>
+<p> 基本思路是，无须在 inner node 中存储完整的 key 值，来判断向左走还是向右走，而是在 inner node 中存储能够区分 key 的唯一前缀即可，然后将剩余的后缀抛弃掉</p>
+<p> <img src="./42.png" alt></p>
+<p> 注意在下面的节点中，得依然存储整个 key</p>
+<p> 前缀压缩远比后缀截断常用</p>
+</li>
+<li><p>Bulk Insert</p>
+<p> <img src="./43.png" alt></p>
+<p> 很多时候，人们会这么做，打开所有索引，批量加载数据，并将数据插入表中，然后回过头来添加索引，但当你插入新数据时不应该去维护索引，因为这么做代价太高了</p>
+<p> 如果提前就有了所有的 key，就可以用一种很简单的优化方式来构建索引，不会像之前那样自上而下地去构建它，而是自下而上地去做这件事</p>
+<p> 怎么做呢？</p>
+<p> 对于一组已知的 key 来说，可以对其先排序</p>
+<p> <img src="./44.png" alt></p>
+<p> 然后将它们排列在叶子节点上，正确地填入到叶子节点中</p>
+<p> <img src="./45.png" alt></p>
+<p> 然后自下而上，只需要使用中间 key 来填充 inner node，并生成对应的指针</p>
+<p> <img src="./46.png" alt></p>
+<p> 这是任何主流数据库系统都支持的一种标准技术</p>
+<p> 使用批量插入（bulk insert）来构建索引，速度会非常快</p>
+</li>
+</ol>
+<ul>
+<li><p>Pointer Swizzling</p>
+<p>  <img src="./47.png" alt></p>
+<p>  实际上，在数据库实现的 B+ Tree 中，节点保存的指针并不是原始的内存指针，而是 page ID</p>
+<p>  比如查找 key &gt; 3 的数据，怎么去找上图中右下的节点找数据呢？</p>
+<p>  在根节点处，保存了该索引的 page ID</p>
+<p>  <img src="./48.png" alt></p>
+<p>  然后需要跑到下面的 Buffer 池中找 page #2，如果它不在内存中，Buffer 池应该返回一个指向它的指针</p>
+<p>  <img src="./49.png" alt></p>
+<p>  如果拿到了这个指针，就可以对节点进行遍历了</p>
+<p>  而对于兄弟节点的遍历也是一样的</p>
+<p>  <img src="./50.png" alt></p>
+<p>  但这样做的代价很高，因为必须使用 latch 来保护 Buffer 池中的 hash 表，要花很多步骤才能拿到这个指针</p>
+<p>  所以为了解决上述问题，pointer swizzling 的思路是（或者说假设是），如果内存中所有的 page 都是固定住的话，那么它们永远不会移动到另一个内存地址上去</p>
+<p>  比如下图中，节点不会保存 page ID，而是保存 page 指针</p>
+<p>  <img src="./51.png" alt></p>
+<p>  这样就不用访问 Buffer 池，也会避免上面的一些问题</p>
+<p>  当然这样做也要确保一件事情，那就是，如果要将它从内存中移除，也就是将它写出到磁盘上，那么就不要保存 page 指针，因为当它再放入内存时，地址就变了</p>
+<p>  所以这里也无须将 page ID 完全不要，可以通过一点额外的元数据来表示，这就是我们想要的指针，而不是 page ID</p>
+<p>  对于树的上层部分，比如根节点或者是树的第二层处的节点，它们的使用频率都非常高，因为都需要经过它们才能访问到下一级的节点的数据，所以将这些上层节点数据对应的 page 固定住可能并没有什么大问题，比起整个树的 size 来讲，这些上层节点所占的体积还是比较小的。那么针对这种情况就可以使用这种优化策略，因为 page 固定，指针始终有效</p>
+<p>  这种方式实际上非常普遍，很多主流数据库系统中都使用了这种方法</p>
+</li>
+</ul>
+</li>
+<li><p>结论</p>
+<p>  <img src="./52.png" alt></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/" title="CMU-15-445-645-笔记-07-树索引-part1">https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Database
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/05/CMU-15-445-645-笔记-06-Hash表/" rel="next" title="CMU-15-445-645-笔记-06-Hash表">
+                <i class="fa fa-chevron-left"></i> CMU-15-445-645-笔记-06-Hash表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/';
+          this.page.identifier = '2022/06/05/CMU-15-445-645-笔记-07-树索引-part1/';
+          this.page.title = 'CMU-15-445-645-笔记-07-树索引-part1';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
