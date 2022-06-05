@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="webpack,react,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注意：为了方便统一，本文中出现的安装包依赖的方式均使用 yarn 来安装">
+<meta name="keywords" content="webpack,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手踩坑react-template">
+<meta property="og:url" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注意：为了方便统一，本文中出现的安装包依赖的方式均使用 yarn 来安装">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/11.png">
+<meta property="og:updated_time" content="2022-06-04T08:13:29.428Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手踩坑react-template">
+<meta name="twitter:description" content="注意：为了方便统一，本文中出现的安装包依赖的方式均使用 yarn 来安装">
+<meta name="twitter:image" content="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/">
+
+
+
+
+
+  <title>手摸手踩坑react-template | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手摸手踩坑react-template</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-11-23T12:22:02+08:00">
+                2021-11-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web前端/" itemprop="url" rel="index">
+                    <span itemprop="name">web前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/11/23/手摸手踩坑react-template/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/11/23/手摸手踩坑react-template/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注意：为了方便统一，本文中出现的安装包依赖的方式均使用 <code>yarn</code> 来安装</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="采取最简便的方式"><a href="#采取最简便的方式" class="headerlink" title="采取最简便的方式"></a>采取最简便的方式</h2><p>如果说搭建一个 react template 最简便的方式，那便是使用官方的 cli，即 <code>create-react-app</code>，因为这边还需要使用 typescript 技术栈，所以在搭建的过程中可以加一个参数 <code>--template typescript</code>，表示使用的模板是 typescript 的模板</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn create react-app my-app --template typescript</span><br></pre></td></tr></table></figure>
+<p>然后在项目的目录中执行如下的命令安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add typescript @types/node @types/react @types/react-dom @types/jest</span><br></pre></td></tr></table></figure>
+<p>然后生成的目录结构基本上如下所示</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># my-app</span></span><br><span class="line">├── README.md</span><br><span class="line">├── package.json</span><br><span class="line">├── public</span><br><span class="line">│   ├── favicon.ico</span><br><span class="line">│   ├── index.html</span><br><span class="line">│   ├── logo192.png</span><br><span class="line">│   ├── logo512.png</span><br><span class="line">│   ├── manifest.json</span><br><span class="line">│   └── robots.txt</span><br><span class="line">├── src</span><br><span class="line">│   ├── App.css</span><br><span class="line">│   ├── App.test.tsx</span><br><span class="line">│   ├── App.tsx</span><br><span class="line">│   ├── index.css</span><br><span class="line">│   ├── index.tsx</span><br><span class="line">│   ├── logo.svg</span><br><span class="line">│   ├── react-app-env.d.ts</span><br><span class="line">│   ├── serviceWorker.ts</span><br><span class="line">│   └── setupTests.ts</span><br><span class="line">├── tsconfig.json</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure>
+<p>其中比较重要的就是 <code>src</code> 以及 <code>tsconfig.json</code> 文件，一个用来存放源码，一个用来定义 <code>tsconfig.json</code> 文件。但这两个文件并不是在最开始搭建的时候一个大障碍，一个比较大的障碍是，使用 cra 创建的项目，如果以后项目的需求变更，就必须使用 <code>config-overide.js</code> 去做一个覆盖原本默认 <code>webpack</code> 配置的配置文件。同时你还需要下载 <a href="https://github.com/timarney/react-app-rewired/blob/master/README_zh.md" target="_blank" rel="noopener"><code>react-app-rewired</code></a> 这个库来重新构建整个项目。考虑到 <code>react-app-rewired</code> 社区中维护的插件/包/库都不是特别的多，并且使用这种过度包装的 package 也比较黑盒，难于调试，所以最后决定使用 <code>yarn eject</code> 抛出该项目的 webpack 配置，手动实现真正自定义的配置和其他的操作(做注释以及方便后面的维护)</p>
+<h3 id="yarn-eject"><a href="#yarn-eject" class="headerlink" title="yarn eject"></a>yarn eject</h3><p>执行 <code>yarn eject</code> 之后，基本上就多了两个文件夹 <code>scripts</code> 以及 <code>config</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># scripts</span></span><br><span class="line">├── build.js</span><br><span class="line">├── start.js</span><br><span class="line">└── test.js</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>build.js</code>、<code>start.js</code>、<code>test.js</code> 分别对应 <code>package.json</code> 文件中的 <code>scripts</code> 脚本</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"node scripts/start.js"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"node scripts/build.js"</span>,</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"node scripts/test.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>道理我都明白，<code>start</code> 对应启动一个本地的 devServer 进行调试，而 <code>build</code> 对应打包最终的文件，<code>test</code> 对应代码的测试脚本，但是你特么的为啥要引入这么多个包啊？全部都是函数套函数的形式，你这谁看的懂啊？</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># config</span></span><br><span class="line">├── env.js</span><br><span class="line">├── getHttpsConfig.js</span><br><span class="line">├── jest</span><br><span class="line">│   ├── cssTransform.js</span><br><span class="line">│   └── fileTransform.js</span><br><span class="line">├── modules.js</span><br><span class="line">├── paths.js</span><br><span class="line">├── pnpTs.js</span><br><span class="line">├── webpack.config.js</span><br><span class="line">└── webpackDevServer.config.js</span><br></pre></td></tr></table></figure>
+<p>还有这个所谓的 eject 出来的 <code>webpack</code> 的配置，粗略看了下核心文件 <code>webpack.config.js</code> 中光是配置文件的行数就有 <code>670</code> 行，尽管中间参杂了各种英文的注释，但是对于一个需要配置的新人来说，还是过于繁杂了，光是看到它引入的各种插件也是头疼无比，其实到这个时候，就已经有不详的预感了(对于如此复杂的一个配置，任何修改和添加或者删除都将是灾难性的)</p>
+<h3 id="sass-loader-的-bug"><a href="#sass-loader-的-bug" class="headerlink" title="sass-loader 的 bug"></a>sass-loader 的 bug</h3><p>因为在之前的 xp 项目中(比如 <code>xp-homework</code>)，可以通过 <code>.env</code> 中的环境变量给一个 scss 变量赋值并追加到某个定义好的 scss 文件中，在 <code>xp-homework</code> 项目中的 <code>vue.config.js</code> 有这样的代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  ...</span><br><span class="line">  css: &#123;</span><br><span class="line">    loaderOptions: &#123;</span><br><span class="line">      sass: &#123;</span><br><span class="line">        data: <span class="string">`@import "@/styles/variables.scss"; $userSelect: <span class="subst">$&#123;process.env</span></span></span><br><span class="line"><span class="string"><span class="subst">          .VUE_APP_USER_SELECT || <span class="string">'none'</span>&#125;</span>;`</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考 <a href="https://webpack.js.org/loaders/sass-loader/#prependdata" target="_blank" rel="noopener">webpack 中有关 sassloader prependData 属性的文档</a>，里面的解释如下</p>
+<blockquote>
+<p>Prepends Sass/SCSS code before the actual entry file. In this case, the sass-loader will not override the data option but just append the entry’s content.</p>
+</blockquote>
+<p>This is especially useful when some of your Sass variables depend on the environment</p>
+<p>以及里面的函数配置的写法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    loader: <span class="string">'sass-loader'</span>,</span><br><span class="line">    options: &#123;</span><br><span class="line">      prependData: <span class="function">(<span class="params">loaderContext</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// More information about available properties https://webpack.js.org/api/loaders/</span></span><br><span class="line">        <span class="keyword">const</span> &#123; resourcePath, rootContext &#125; = loaderContext;</span><br><span class="line">        <span class="keyword">const</span> relativePath = path.relative(rootContext, resourcePath);</span><br><span class="line">        <span class="keyword">if</span> (relativePath === <span class="string">'styles/foo.scss'</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="string">'$value: 100px;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'$value: 200px;'</span>;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将项目中的 <code>webpack.config.js</code> 中如下的代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (preProcessor) &#123;</span><br><span class="line">  loaders.push(</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="built_in">require</span>.resolve(<span class="string">'resolve-url-loader'</span>),</span><br><span class="line">      options: &#123;</span><br><span class="line">        sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="built_in">require</span>.resolve(preProcessor),</span><br><span class="line">      options: &#123;</span><br><span class="line">        sourceMap: <span class="literal">true</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> loaders;</span><br></pre></td></tr></table></figure>
+<p>改写成</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (preProcessor) &#123;</span><br><span class="line">  <span class="keyword">const</span> loader = &#123;</span><br><span class="line">    loader: <span class="built_in">require</span>.resolve(preProcessor),</span><br><span class="line">    options: &#123;</span><br><span class="line">      sourceMap: <span class="literal">true</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (preProcessor === <span class="string">'sass-loader'</span>) &#123;</span><br><span class="line">    loader.options.prependData = <span class="function">(<span class="params">loaderContext</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; resourcePath, rootContext &#125; = loaderContext</span><br><span class="line">      <span class="keyword">const</span> relativePath = path.relative(rootContext, resourcePath)</span><br><span class="line">      <span class="keyword">if</span> (relativePath === <span class="string">'src/styles/base.scss'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">`$userSelect: <span class="subst">$&#123;process.env.REACT_APP_USER_SELECT || <span class="string">'none'</span>&#125;</span>`</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  loaders.push(</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="built_in">require</span>.resolve(<span class="string">'resolve-url-loader'</span>),</span><br><span class="line">      options: &#123;</span><br><span class="line">        sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    loader</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> loaders</span><br></pre></td></tr></table></figure>
+<p>使用 <code>yarn start</code> 后报如下的错误</p>
+<p><img src="./1.png" alt></p>
+<p>就非常的奇怪，一个比较 trick 的解决方式是，将所有需要引入到 .scss 文件的地方，都改为 .sass，并将其语法也改写成 sass 语法。编译通过。不过这并不是一个好的解决方式，因为定位的问题应该是 sass-loader，可能还有其他的配置，于是去 github 上找了 <a href="https://github.com/webpack-contrib/sass-loader" target="_blank" rel="noopener">sass-loader 的相关配置</a>，找到了这么一段话</p>
+<p><img src="./2.png" alt></p>
+<p>但是看了下，项目中其实是安装了 sass 的，按照道理来说应该会自动使用 sass 来 implementation 才对，但是这里又报错，于是尝试去掉 sass，直接安装 node-sass，问题居然解决了!!!所以如果以后需要用到 sass-loader 的地方，最好还是先安装 node-sass 比较稳妥</p>
+<h3 id="路径-alias-引入失败"><a href="#路径-alias-引入失败" class="headerlink" title="路径 alias 引入失败"></a>路径 alias 引入失败</h3><p>之前在搭建模板的过程中，只是在 <code>tsconfig.json</code> 文件中设置了 <code>baseUrl</code> 以及 <code>paths</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"baseUrl"</span>: <span class="string">"./src"</span>, <span class="comment">// 解析非相对模块名的基准目录</span></span><br><span class="line">  <span class="attr">"paths"</span>: &#123; <span class="comment">// 这个属性就是用来填写编译时对应的 alias 用的</span></span><br><span class="line">    <span class="attr">"@"</span>: [<span class="string">"./src"</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是在 webpack 中不做设置，那么在编译时 webpack 会报错，所以在该项目中的 <code>webpack.config.js</code> 中也需要做 alias 的配置</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">alias: &#123;</span><br><span class="line">  <span class="string">'@'</span>: path.resolve(__dirname, <span class="string">'../src'</span>),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是设置完后编译，typescript 表示依然找不到模块，这个时候就是 <code>tsconfig.json</code> 配置的问题了。如果你的 <code>baseUrl</code> 中已经写了 <code>./src</code>，那么 <code>paths</code> 应该这么写</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"baseUrl"</span>: <span class="string">"./src"</span>, <span class="comment">// 解析非相对模块名的基准目录</span></span><br><span class="line">  <span class="attr">"paths"</span>: &#123; <span class="comment">// 这个属性就是用来填写编译时对应的 alias 用的</span></span><br><span class="line">    <span class="attr">"@/*"</span>: [<span class="string">"."</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@/*</code> 表示匹配代码中的以 <code>@/xxx/yyy</code> 这种形式引入模块，由于已经设置了 <code>baseUrl</code>，所以这里 <code>paths</code> 中的配置就自动加上了 <code>baseUrl</code>了。比如引入一个包 <code>import XXX from &#39;@/xxx/yyy&#39;</code>，而你的配置为 <code>&quot;@/*&quot;: [&quot;.&quot;]</code> 的话，它会自动在 <code>./src/xxx/yyy</code> 下去寻找这个模块。另外为了保持格式，我将对应的 webpack 的 alias 以及 tsconfig 的 alias 都做了一一对应，如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">alias: &#123;</span><br><span class="line">  <span class="comment">// 设置 webpack 编译时的 alias</span></span><br><span class="line">  <span class="comment">// ../ 目录的原因是因为当前 src 目录相当于当前 webpack.config.js 的就是上级目录</span></span><br><span class="line">  <span class="string">'@'</span>: path.resolve(__dirname, <span class="string">'../src'</span>),</span><br><span class="line">  <span class="string">'@api'</span>: path.resolve(__dirname, <span class="string">'../src/api'</span>),</span><br><span class="line">  <span class="string">'@assets'</span>: path.resolve(__dirname, <span class="string">'../src/assets'</span>),</span><br><span class="line">  <span class="string">'@components'</span>: path.resolve(__dirname, <span class="string">'../src/components'</span>),</span><br><span class="line">  <span class="string">'@router'</span>: path.resolve(__dirname, <span class="string">'../src/router'</span>),</span><br><span class="line">  <span class="string">'@styles'</span>: path.resolve(__dirname, <span class="string">'../src/styles'</span>),</span><br><span class="line">  <span class="string">'@utils'</span>: path.resolve(__dirname, <span class="string">'../src/utils'</span>),</span><br><span class="line">  <span class="string">'@views'</span>: path.resolve(__dirname, <span class="string">'../src/views'</span>),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"baseUrl"</span>: <span class="string">"."</span>, <span class="comment">// 解析非相对模块名的基准目录</span></span><br><span class="line">  <span class="attr">"paths"</span>: &#123; <span class="comment">// 这个属性就是用来填写编译时对应的 alias 用的</span></span><br><span class="line">     <span class="attr">"@/*"</span>: [<span class="string">"./src/*"</span>],</span><br><span class="line">     <span class="attr">"@api/*"</span>: [<span class="string">"./src/api/*"</span>],</span><br><span class="line">     <span class="attr">"@assets/*"</span>: [<span class="string">"./src/assets/*"</span>],</span><br><span class="line">     <span class="attr">"@components/*"</span>: [<span class="string">"./src/components/*"</span>],</span><br><span class="line">     <span class="attr">"@router/*"</span>: [<span class="string">"./src/router/*"</span>],</span><br><span class="line">     <span class="attr">"@styles/*"</span>: [<span class="string">"./src/styles/*"</span>],</span><br><span class="line">     <span class="attr">"@utils/*"</span>: [<span class="string">"./src/utils/*"</span>],</span><br><span class="line">     <span class="attr">"@views/*"</span>: [<span class="string">"./src/views/*"</span>],</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="引入-svg-报错"><a href="#引入-svg-报错" class="headerlink" title="引入 svg 报错"></a>引入 svg 报错</h3><p>虽然现在能够以 img 标签 src 方式引入 svg，如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react</span></span><br><span class="line"><span class="string">import logoPng from '</span>@assets/logo.png<span class="string">'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class Demo extends React.Component &#123;</span></span><br><span class="line"><span class="string">    return (</span></span><br><span class="line"><span class="string">      &lt;div&gt;</span></span><br><span class="line"><span class="string">        &lt;img src=&#123;logoPng&#125; alt="logo" /&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>但是我们更希望能将 svg 当成一个组件的方式引入，如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react</span></span><br><span class="line"><span class="string">import Logo from '</span>../../assets/logo.svg<span class="string">'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class Demo extends React.Component &#123;</span></span><br><span class="line"><span class="string">    return (</span></span><br><span class="line"><span class="string">      &lt;div&gt;</span></span><br><span class="line"><span class="string">        &lt;Logo /&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>最开始是参考 <a href="https://create-react-app.dev/docs/adding-images-fonts-and-files/" target="_blank" rel="noopener">Adding SVGs</a> 这篇文章，它的解决方案如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ReactComponent <span class="keyword">as</span> Logo &#125; <span class="keyword">from</span> <span class="string">'./logo.svg'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;<span class="comment">/* Logo is an actual React component */</span>&#125;</span><br><span class="line">      &lt;Logo /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>试了下发现是不行的，然后继续搜集线索，发现有个 babel 的插件可以解决这个问题，即 <code>babel-plugin-inline-react-svg</code>，而这是需要在 <code>babel-loader</code> 的 <code>options.plugins</code> 进行配置，如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">oneOf: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.(js|mjs|jsx|ts|tsx)$/</span>,</span><br><span class="line">    ...</span><br><span class="line">    loader: <span class="built_in">require</span>.resolve(<span class="string">'babel-loader'</span>),</span><br><span class="line">    options: &#123;</span><br><span class="line">      ...</span><br><span class="line">      plugins: [</span><br><span class="line">        <span class="built_in">require</span>.resolve(<span class="string">'babel-plugin-inline-react-svg'</span>), <span class="comment">// 这里只是需要添加这个插件即可</span></span><br><span class="line">        [</span><br><span class="line">          <span class="built_in">require</span>.resolve(<span class="string">'babel-plugin-named-asset-import'</span>),</span><br><span class="line">          &#123;</span><br><span class="line">            loaderMap: &#123;</span><br><span class="line">              svg: &#123;</span><br><span class="line">                ReactComponent:</span><br><span class="line">                  <span class="string">'@svgr/webpack?-svgo,+titleProp,+ref![path]'</span></span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">     ],</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>在说 <code>babel-plugin-inline-react-svg</code> 这个插件的原理之前，先说下 <code>babel-plugin-named-asset-import</code> 的原理，这个插件本质上会将如下的语句</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; url <span class="keyword">as</span> logoUrl &#125; <span class="keyword">from</span> <span class="string">'./logo.png'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; ReactComponent <span class="keyword">as</span> Icon &#125; <span class="keyword">from</span> <span class="string">'./icon.svg'</span>;</span><br></pre></td></tr></table></figure>
+<p>转换成</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> logoUrl <span class="keyword">from</span> <span class="string">'url-loader!./logo.png'</span>;</span><br><span class="line"><span class="keyword">import</span> Icon <span class="keyword">from</span> <span class="string">'svgr/webpack?-svgo,+titleProp,+ref!./icon.svg'</span>;<span class="string">"</span></span><br></pre></td></tr></table></figure>
+<p>但是由于这个插件对 svg 的处理，只能是通过 img 的 src 标签引入，所以才需要 <code>babel-plugin-inline-react-svg</code> 这个插件，能把 svg 自动封装成一个组件来使用，原理应该是 babel-loader 在对文件进行处理时，对源码做了一些修改导致的</p>
+<h3 id="新的问题"><a href="#新的问题" class="headerlink" title="新的问题"></a>新的问题</h3><p>但是紧接着又带来了新的问题，<strong>在使用 alias 的方式引入 svg 时，会报错，即 svg 文件对应的路径找不到</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Logo <span class="keyword">from</span> <span class="string">'@assets/logo.svg'</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><img src="./3.png" alt></p>
+<p>出现这个问题的原因，可能在于 babel-loader 的 plugin 那里，之前我有提到过 <code>babel-plugin-named-asset-import</code> 这个插件的工作原理，有可能是 webpack 在处理 alias 之前，<strong>优先</strong>被这个插件做了处理了，即以上的代码会被转换成</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Logo <span class="keyword">from</span> <span class="string">'svgr/webpack?-svgo,+titleProp,+ref!@assets/logo.svg'</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这个时候 svgr/webpack 这个 loader 自然就找不到路径为 <code>@assets/logo.svg</code> 的这个模块，于是编译就会报错了。</p>
+<h2 id="所以更好的方式？"><a href="#所以更好的方式？" class="headerlink" title="所以更好的方式？"></a>所以更好的方式？</h2><p>由以上的方式，我们就懂得了一个道理，最 easy 的方式，有的时候往往也是最 hard 的。且不说上面的 svg 引入的问题没有得到完美的解决，要是以后项目逐渐的变得复杂了，需要对项目的基建做修改和升级呢？出了问题之后要怎么维护呢？连现在这个简单的问题的解决方案都如此麻烦的情况下，那万一以后出了更加匪夷所思的问题需要将项目基建整体重构呢? …etc</p>
+<p>基于以上的风险考虑，从项目的可读性和可维护性着想的话，也许最好的方式，就是自己手撸一个 template 出来</p>
+<h3 id="重构-config"><a href="#重构-config" class="headerlink" title="重构 config"></a>重构 config</h3><p>进行重构的操作之前，可以先将依赖包进行删除(包括 package.json 中的)，然后执行如下安装基础包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 typesript</span></span><br><span class="line">yarn add -D typescript</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 react 相关包</span></span><br><span class="line">yarn add react react-dom react-router-dom</span><br><span class="line">yarn add -D @types/react-router-dom @types/react-dom @types/react</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 babel 相关包</span></span><br><span class="line">yarn add -D</span><br><span class="line">@babel/core <span class="comment"># babel 核心</span></span><br><span class="line">@babel/plugin-proposal-class-properties <span class="comment"># 支持 class xxx &#123; a = 'xxx' &#125; 这样在类中定义属性</span></span><br><span class="line">@babel/plugin-proposal-decorators <span class="comment"># 支持使用装饰器</span></span><br><span class="line">@babel/plugin-syntax-dynamic-import <span class="comment"># 支持异步加载(improt (xxx))</span></span><br><span class="line">@babel/preset-react  @babel/preset-typescript <span class="comment"># 支持将 react 以及 ts 编译成 js</span></span><br><span class="line">babel-loader</span><br><span class="line">babel-plugin-import <span class="comment"># 若是需要 antd 的包，可以安装这个进行按需加载</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 html-webpack-plugin</span></span><br><span class="line">yarn add -D html-webpack-plugin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 sass 以及 style 配置相关包</span></span><br><span class="line">yarn add -D sass-loader node-sass style-loader css-loader css-modules-typescript-loader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 url-loader</span></span><br><span class="line">yarn add -D url-loader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 @svgr/webpack</span></span><br><span class="line">yarn add -D @svgr/webpack</span><br></pre></td></tr></table></figure>
+<p>然后需要做的就是删除 config 文件夹下的各种 js 文件，然后新建几个文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># config</span></span><br><span class="line">├── devServerConfig.js <span class="comment"># webpack devServer 相关配置</span></span><br><span class="line">├── devServerProxyConfig.js <span class="comment"># webpack devServer proxy 相关配置</span></span><br><span class="line">├── pluginsConfig.js <span class="comment"># webpack plugins 相关配置</span></span><br><span class="line">├── resolveConfig.js <span class="comment"># webpack resolve 相关配置</span></span><br><span class="line">├── rules <span class="comment"># webpack rules 相关配置</span></span><br><span class="line">│   ├── assetsRules.js <span class="comment"># assets 资源文件相关 rules</span></span><br><span class="line">│   ├── fileRules.js <span class="comment"># file 文件相关 rules</span></span><br><span class="line">│   ├── jsRules.js <span class="comment"># js 相关 rules</span></span><br><span class="line">│   └── styleRules.js <span class="comment"># style 相关 rules</span></span><br><span class="line">├── utils.js <span class="comment"># 工具库 js，将一些可能用到公共的函数放到这个里面</span></span><br><span class="line">└── webpack.config.js <span class="comment"># webpack 配置</span></span><br></pre></td></tr></table></figure>
+<p>从整体上看，<code>webpack.config.js</code> 的配置文件只有寥寥几行</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">'./utils'</span>)</span><br><span class="line"><span class="keyword">const</span> jsRules = <span class="built_in">require</span>(<span class="string">'./rules/jsRules'</span>)</span><br><span class="line"><span class="keyword">const</span> styleRules = <span class="built_in">require</span>(<span class="string">'./rules/styleRules'</span>)</span><br><span class="line"><span class="keyword">const</span> fileRules = <span class="built_in">require</span>(<span class="string">'./rules/fileRules'</span>)</span><br><span class="line"><span class="keyword">const</span> assetsRules = <span class="built_in">require</span>(<span class="string">'./rules/assetsRules'</span>)</span><br><span class="line"><span class="keyword">const</span> pluginsConfig = <span class="built_in">require</span>(<span class="string">'./pluginsConfig'</span>)</span><br><span class="line"><span class="keyword">const</span> resolveConfig = <span class="built_in">require</span>(<span class="string">'./resolveConfig'</span>)</span><br><span class="line"><span class="keyword">const</span> devServerConfig = <span class="built_in">require</span>(<span class="string">'./devServerConfig'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@type <span class="type">&#123;import('webpack').Configuration&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: resolve(<span class="string">'src/index.tsx'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: resolve(<span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'[name].js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  devServer: devServerConfig,</span><br><span class="line">  resolve: resolveConfig,</span><br><span class="line">  plugins: [...pluginsConfig],</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      ...jsRules,</span><br><span class="line">      ...styleRules,</span><br><span class="line">      ...fileRules,</span><br><span class="line">      ...assetsRules</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结构非常清晰了，相信大家应该都对这个配置挺熟悉了，所以下面就重点来详细说说这几个文件</p>
+<h4 id="utils-js"><a href="#utils-js" class="headerlink" title="utils.js"></a>utils.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>utils.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>这个文件是为了方便路径处理用的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"></span><br><span class="line">exports.resolve = <span class="function"><span class="params">dir</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> path.join(__dirname, <span class="string">'./../'</span>, dir)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为这里是用 node 启动的，所以我们可以将其当成一个 commonjs 模块，<code>exports.resolve</code> 表示暴露出一个叫 <code>resolve</code> 的模块给外部，里面的逻辑就是将一个 dir 的名字拼凑成上级目录并返回。因为很多地方会用到，所以这里封装成一个模块比较好</p>
+<h4 id="jsRules-js"><a href="#jsRules-js" class="headerlink" title="jsRules.js"></a>jsRules.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>jsRules.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>定义 js 规则</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">'../utils'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 这里编写 babel 对 .tsx 文件编译的配置</span></span><br><span class="line">    test: <span class="regexp">/\.(j|t)sx?$/</span>, <span class="comment">// 正则匹配以 .jsx 或者 .tsx 结尾的文件</span></span><br><span class="line">    include: resolve(<span class="string">'src'</span>), <span class="comment">// 表示限定范围在 src 目录下</span></span><br><span class="line">    use: [</span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          babelrc: <span class="literal">false</span>, <span class="comment">// 这里不用 babelrc 文件</span></span><br><span class="line">          presets: [<span class="string">'@babel/preset-typescript'</span>, <span class="string">'@babel/preset-react'</span>],</span><br><span class="line">          plugins: [</span><br><span class="line">            [<span class="string">'@babel/plugin-proposal-decorators'</span>, &#123; <span class="attr">legacy</span>: <span class="literal">true</span> &#125;], <span class="comment">// 支持使用装饰器语法</span></span><br><span class="line">            [<span class="string">'@babel/plugin-proposal-class-properties'</span>, &#123; <span class="attr">loose</span>: <span class="literal">false</span> &#125;], <span class="comment">// 非宽松模式，类属性编译成赋值表达式，而不是 Object.defineProperty 这种形式</span></span><br><span class="line">            <span class="string">'@babel/plugin-syntax-dynamic-import'</span> <span class="comment">// 支持动态引入 import</span></span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><a href="https://juejin.im/post/5c822e426fb9a04a0a5ffb49" target="_blank" rel="noopener">为什么不使用 ts-loader 以及 awesome-typescript-loader? 是因为 babel 的编译速度更快</a></p>
+<h4 id="styleRules-js"><a href="#styleRules-js" class="headerlink" title="styleRules.js"></a>styleRules.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>styleRules.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>定义 style 规则</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">'../utils'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 支持 scss/sass</span></span><br><span class="line">    test: <span class="regexp">/\.(scss|sass)$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      <span class="string">'style-loader'</span>,</span><br><span class="line">      <span class="string">'css-modules-typescript-loader'</span>, <span class="comment">// 在编写或改动了scss文件后，这个插件会自动生成 xxx.scss.d.ts 文件</span></span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'css-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          modules: &#123; <span class="comment">// 支持 css-module</span></span><br><span class="line">            localIdentName: <span class="string">'[local]_[hash:base64:10]'</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'sass-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          includePaths: [ <span class="comment">// 添加公共样式文件路径，这里 sass-loader 的版本为 7.3.1，请勿瞎升级！！！</span></span><br><span class="line">            resolve(<span class="string">'src/styles'</span>)</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; <span class="comment">// 支持 less</span></span><br><span class="line">    test: <span class="regexp">/\.less$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      <span class="string">'style-loader'</span>,</span><br><span class="line">      <span class="string">'css-loader'</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'less-loader'</span>,</span><br><span class="line">        options: &#123; <span class="comment">// 这里 javascriptEnabled 一定要为 true</span></span><br><span class="line">          javascriptEnabled: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是，如果不做特殊的设置，webpack 的调用 loader 的顺序是从右往左的，即对于上面的支持 sass 的 loader 来说，它的执行顺序如下</p>
+<ol>
+<li>sass-loader: 将 sass|scss 文件编译成 css</li>
+<li>css-loader: 将 css 转化为 commonjs 模块，比如 css 中有 <code>url(./xxx)</code> 的将其转化成 <code>require(./xxx)</code></li>
+<li>css-modules-typescript-loader: 在编写或改动了scss文件后，这个插件会自动生成 xxx.scss.d.ts 文件</li>
+<li>style-loader: 将经过 css-loader 转化成的 js 字符串转化成 style 的内容然后挂在 dom 上</li>
+</ol>
+<p>为什么需要 <code>css-modules-typescript-loader</code> 这个 loader 呢，因为对于 react 来说，我们一般通过这种方式使用一个 css 文件的类</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// index.tsx</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> style <span class="keyword">from</span> <span class="string">'./index.scss'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> App = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;style.xxx&#125;</span>&gt;</span>你好<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App</span><br></pre></td></tr></table></figure>
+<p>这个时候不做设置，<code>index.tsx</code> 文件会报错说找不到这个 <code>index.scss</code> 模块。这是因为 ts 不认识这个 <code>index.scss</code> 文件，这个时候就需要加 <code>.d.ts</code> 写对应的类型文件才行(毕竟是 ts 的项目。。。)</p>
+<p>可以自己在 <code>src/types</code> 目录下新建这个文件，然后写上</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">declare <span class="built_in">module</span> <span class="string">'*.scss'</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> content: any</span><br><span class="line">  <span class="keyword">export</span> = content</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个时候就可以了，当然我们可以想，不可能每个 scss 文件都这样做，能不能做的自动化一点，可以的，就使用 <code>css-modules-typescript-loader</code> 这个 loader 来帮我们做事情</p>
+<p>那么这里做的 <code>css-module</code> 有什么好处呢？就是 react 中的 <strong>css 的模块化</strong>，<code>local</code> 表示 <strong>类名</strong>，<code>[hash:base64:10]</code> 表示这是一串由 base64 码生成的 hash，并且这个码的长度有 10 位。那么在浏览器上对应的 dom 上就会生成对应的类，这个对应的类下就有对应的 css 了，就形成来 css 的模块化，也就是自行隔离</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xxx_1oiiefdai &#123;</span><br><span class="line">  background: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="fileRules-js"><a href="#fileRules-js" class="headerlink" title="fileRules.js"></a>fileRules.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>fileRules.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>定义 file 输出文件的规则</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> imageInlineSizeLimit = <span class="built_in">parseInt</span>(</span><br><span class="line">  process.env.IMAGE_INLINE_SIZE_LIMIT || <span class="string">'10000'</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.(png|jpe?g|gif|bmp)(\?.*)?$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      &#123;</span><br><span class="line">        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          limit: imageInlineSizeLimit,</span><br><span class="line">          <span class="comment">// 在任意操作系统上使用 POSIX 文件路径时获得一致的结果</span></span><br><span class="line">          name: path.posix.join(<span class="string">'static/media'</span>, <span class="string">'[name].[hash:8].[ext]'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>这里主要是对 png 等图片格式的处理，这里注意 <code>limit</code> 属性配置，这个属性配置是用来指定文件的最大的 byte 也就是字节数的，若文件的大小超过定义的字节数，那么 webpack 就会使用 file-loader 去处理文件，并且所有的查询参数都会传递给 file-loader。这里在使用 url-loader 时不需要安装 file-loader，因为它本身就依赖 file-loader。<code>name</code> 属性配置表示最终生成的目标资源文件的路径以及名字</p>
+<h4 id="assetsRules-js"><a href="#assetsRules-js" class="headerlink" title="assetsRules.js"></a>assetsRules.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>assetsRules.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>定义资源的规则</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 支持本地 svg 导入</span></span><br><span class="line">    test: <span class="regexp">/\.svg$/</span>,</span><br><span class="line">    use: [<span class="string">'@svgr/webpack'</span>],</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>终于来了！只要单纯使用这个 loader，便可以解决上文中提到的本地以组件方式引入 svg 的问题！没有其他任何的幺蛾子！非常简单的配置!!!(这里当然也顺便解决了 alias 引入的问题)</p>
+<h4 id="pluginsConfig-js"><a href="#pluginsConfig-js" class="headerlink" title="pluginsConfig.js"></a>pluginsConfig.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>plugins.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>这个文件是为了存放 webpack 插件用的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">'./utils'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = [</span><br><span class="line">  <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    template: resolve(<span class="string">'public/index.html'</span>),</span><br><span class="line">    inject: <span class="literal">true</span> <span class="comment">// script 注入到 template 的 body 下</span></span><br><span class="line">  &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><code>html-webpack-plugin</code> 一个耳熟能详的插件了，本质上的作用就是将生成的 js 生成 script 标签并且注入到模板页面的 body 中</p>
+<p>当然在这个文件中统一做插件的处理，这样就能够方便的管理配置</p>
+<h4 id="resolveConfig-js"><a href="#resolveConfig-js" class="headerlink" title="resolveConfig.js"></a>resolveConfig.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>aliases.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>webpack 中需要配置的 alias</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">'./utils'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  extensions: [<span class="string">'.js'</span>, <span class="string">'.jsx'</span>, <span class="string">'.ts'</span>, <span class="string">'.tsx'</span>], <span class="comment">// 定义了文件的下标之后，以后 import js 模块的时候可以不用加后缀</span></span><br><span class="line">  alias: &#123; <span class="comment">// 定义 alias</span></span><br><span class="line">    <span class="string">'@'</span>: resolve(<span class="string">'src'</span>),</span><br><span class="line">    <span class="string">'@api'</span>: resolve(<span class="string">'src/api'</span>),</span><br><span class="line">    <span class="string">'@assets'</span>: resolve(<span class="string">'src/assets'</span>),</span><br><span class="line">    <span class="string">'@components'</span>: resolve(<span class="string">'src/components'</span>),</span><br><span class="line">    <span class="string">'@router'</span>: resolve(<span class="string">'src/router'</span>),</span><br><span class="line">    <span class="string">'@styles'</span>: resolve(<span class="string">'src/styles'</span>),</span><br><span class="line">    <span class="string">'@utils'</span>: resolve(<span class="string">'src/utils'</span>),</span><br><span class="line">    <span class="string">'@views'</span>: resolve(<span class="string">'src/views'</span>),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个文件的配置也很简单，基本就是配置了下 <code>extensions</code> 以及 <code>alias</code> 属性，都是为了方便写代码做的配置。不过这里需要注意的是，对于 <code>extensions</code> 配置，如果引入的是同名的文件，比如在某个文件夹下有两个文件 <code>xxx.js</code>、<code>xxx.jsx</code>，你这边做引入了 <code>import xxx from &#39;xxx&#39;</code>，那么这个时候 webpack 就会采用你 <code>extensions</code> 中配置的第一个后缀名，剩下的不要，也就是说你最终引入的就是 <code>xxx.js</code></p>
+<h4 id="devServerConfig-js"><a href="#devServerConfig-js" class="headerlink" title="devServerConfig.js"></a>devServerConfig.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>devServerConfig.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>devServer 配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="built_in">require</span>(<span class="string">'./devServerProxyConfig'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> host = process.env.HOST || <span class="string">'0.0.0.0'</span></span><br><span class="line"><span class="keyword">const</span> port = process.env.PORT || <span class="number">3000</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  compress: <span class="literal">true</span>, <span class="comment">// 为所有 served 的文件启用 gzip 压缩</span></span><br><span class="line">  clientLogLevel: <span class="string">'debug'</span>, <span class="comment">// 设置 log 等级，可设置为 'silent' | 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'none' | 'warning'</span></span><br><span class="line">  hot: <span class="literal">true</span>, <span class="comment">// 开启热重载</span></span><br><span class="line">  host,</span><br><span class="line">  overlay: <span class="literal">false</span>, <span class="comment">// 出现编译器错误或警告时，在浏览器中显示全屏覆盖。 如果只想显示编译器错误就置为 true</span></span><br><span class="line">  port,</span><br><span class="line">  proxy,</span><br><span class="line">  quiet: <span class="literal">false</span>, <span class="comment">// 允许 errors 或者 warnings log</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注释都写的很清楚了，其实都是些基本的配置</p>
+<h4 id="devServerProxyConfig-js"><a href="#devServerProxyConfig-js" class="headerlink" title="devServerProxyConfig.js"></a>devServerProxyConfig.js</h4><p>源码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>devServerProxyConfig.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>devServer proxy 代理配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="string">'/xhb_api'</span>: &#123;</span><br><span class="line">    target: <span class="string">'https://demo.xxx.cn'</span>,</span><br><span class="line">    changeOrigin: <span class="literal">true</span>, <span class="comment">// 默认情况下，代理时会保留主机头的来源，您可以将 changeOrigin 设置为 true 来覆盖此行为。</span></span><br><span class="line">    pathRewrite: &#123;</span><br><span class="line">      <span class="string">'^/xhb_api'</span>: <span class="string">'/api'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'/api'</span>: &#123;</span><br><span class="line">    target: process.env.REACT_APP_API_DOMAIN,</span><br><span class="line">    changeOrigin: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代理配置，跟之前 <code>vue.config.js</code> 中的代理配置很像的，上面第一个代理配置表示 <strong>请求 /xhb_api/users/xxx 类似的接口时，请求本来会被代理到 <a href="https://demo.xxx.cn/xhb_api/user/xxx" target="_blank" rel="noopener">https://demo.xxx.cn/xhb_api/user/xxx</a> 这个上面来，但是因为你写了 pathRewrite，中间的 /xhb_api 会被替换成 /api，也就是说最终的代理地址为 <a href="https://demo.xxx.cn/api/user/xxx" target="_blank" rel="noopener">https://demo.xxx.cn/api/user/xxx</a></strong></p>
+<h3 id="微小的总结"><a href="#微小的总结" class="headerlink" title="微小的总结"></a>微小的总结</h3><p>至此为止，一个基本的基于 react 以及 typescript 的项目就搭建完成了，后续的部分就是对模板进行些许优化的步骤了。不过总体来看，比之前使用 cra eject 的配置清爽了不少，并且由于配置的模块化(而不是函数嵌套似的模块化)，也使得项目本身易于阅读和拓展</p>
+<h3 id="优化配置"><a href="#优化配置" class="headerlink" title="优化配置"></a>优化配置</h3><h4 id="构建加速与构建缓存"><a href="#构建加速与构建缓存" class="headerlink" title="构建加速与构建缓存"></a>构建加速与构建缓存</h4><p>首先需要安装两个 loader</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D cache-loader thread-loader</span><br></pre></td></tr></table></figure>
+<p>一般使用 <code>cache-loader</code> 构建缓存，用 <code>thread-loader</code> 构建加速。首先创建 <code>config/loaders.js</code> 文件。然后源码如下所示</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"> * @description 这个文件是为了设置构建缓存和构建加速用的</span><br><span class="line"> *<span class="regexp">/</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const &#123; resolve &#125; = require('./u</span>tils<span class="string">')</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 构建缓存</span></span><br><span class="line"><span class="string">const cacheLoader = &#123;</span></span><br><span class="line"><span class="string">  loader: '</span>cache-loader<span class="string">',</span></span><br><span class="line"><span class="string">  options: &#123;</span></span><br><span class="line"><span class="string">    // 缓存文件路径</span></span><br><span class="line"><span class="string">    cacheDirectory: resolve('</span>.cache-loader<span class="string">')</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 构建加速，多线程编译</span></span><br><span class="line"><span class="string">const threadLoader = workerParallelJobs =&gt; &#123;</span></span><br><span class="line"><span class="string">  const options = &#123; workerParallelJobs &#125;</span></span><br><span class="line"><span class="string">  Object.assign(options, &#123;</span></span><br><span class="line"><span class="string">    poolTimeout: 2000</span></span><br><span class="line"><span class="string">  &#125;)</span></span><br><span class="line"><span class="string">  return &#123;</span></span><br><span class="line"><span class="string">    loader: '</span>thread-loader<span class="string">',</span></span><br><span class="line"><span class="string">    options</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">module.exports = &#123;</span></span><br><span class="line"><span class="string">  cacheLoader,</span></span><br><span class="line"><span class="string">  threadLoader</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>构建缓存的原理就是在本地有一个 .cache-loader 的文件夹，所有的需要缓存的玩意儿都放在这个里面，这样每次构建的时候若变化不大就直接取缓存里面的东西输出，可以加快构建的速度。而构建加速就是开启多线程编译。</p>
+<p>因为平常在编译时，需要编译的主要是 js 以及 css 文件，所以应当在 <code>jsRules</code> 以及 <code>styleRules</code> 里引入</p>
+<p><img src="./4.png" alt><br><img src="./5.png" alt></p>
+<p>这里 <code>less-loader</code> 就没有用到 <code>thread-loader</code> 了，因为会报错</p>
+<h4 id="优化打包和抽离-css"><a href="#优化打包和抽离-css" class="headerlink" title="优化打包和抽离 css"></a>优化打包和抽离 css</h4><p>优化打包方面主要用到了两个插件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D terser-webpack-plugin optimize-css-assets-webpack-plugin</span><br></pre></td></tr></table></figure>
+<ul>
+<li>terser-webpack-plugin 是用来优化 js 的压缩过程的，这里没有用到 <code>webpack.optimize.UglifyJsPlugin</code> 的原因是该插件不支持 es6 语法，为了方便就直接使用它了</li>
+<li>optimize-css-assets-webpack-plugin 是用来优化 css 的压缩过程的</li>
+</ul>
+<p>再加上 webpack 本身有对代码分割的 <code>optimization</code> 配置，那么一个优化配置文件 <code>config/optimizationConfig.js</code> 的源码就是如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title </span>optimizationConfig.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description </span>定义 webpack 优化配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> TerserPlugin = <span class="built_in">require</span>(<span class="string">'terser-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> OptimizeCSSAssetsPlugin = <span class="built_in">require</span>(<span class="string">'optimize-css-assets-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">// 将部分清单代码单独打包出来并命名为 manifest</span></span><br><span class="line">  runtimeChunk: &#123;</span><br><span class="line">    name: <span class="string">'manifest'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  splitChunks: &#123; <span class="comment">// 这是 webpack optimization 的优化配置，具体可以参考官网，本质上就是配置需要分离的包</span></span><br><span class="line">    cacheGroups: &#123;</span><br><span class="line">      <span class="keyword">default</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="comment">// 抽离 node_modules 下的公共代码</span></span><br><span class="line">      <span class="comment">// TODO 这里还可以继续抽离代码，待优化</span></span><br><span class="line">      commons: &#123;</span><br><span class="line">        test: <span class="regexp">/[\\/]node_modules[\\/]/</span>,</span><br><span class="line">        name: <span class="string">'commons'</span>,</span><br><span class="line">        chunks: <span class="string">'initial'</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 这里还可以为一些其他的包做单独打包的配置，比如</span></span><br><span class="line">      <span class="comment">// antd: &#123;</span></span><br><span class="line">      <span class="comment">//   name: 'antd',</span></span><br><span class="line">      <span class="comment">//   test: /[\\/]node_modules[\\/](antd)[\\/]/,</span></span><br><span class="line">      <span class="comment">//   chunks: 'all',</span></span><br><span class="line">      <span class="comment">//   priority: 9</span></span><br><span class="line">      <span class="comment">// &#125;,</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  minimizer: [</span><br><span class="line">    <span class="comment">// 优化 js 压缩过程</span></span><br><span class="line">    <span class="keyword">new</span> TerserPlugin(&#123;</span><br><span class="line">      <span class="comment">// 开启缓存</span></span><br><span class="line">      cache: <span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 开启多线程</span></span><br><span class="line">      parallel: <span class="literal">true</span>,</span><br><span class="line">      extractComments: <span class="literal">false</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// 优化 css 压缩过程</span></span><br><span class="line">    <span class="keyword">new</span> OptimizeCSSAssetsPlugin(&#123;</span><br><span class="line">      <span class="comment">// 使用 cssnano 压缩，插件自带</span></span><br><span class="line">      cssProcessor: <span class="built_in">require</span>(<span class="string">'cssnano'</span>),</span><br><span class="line">      cssProcessorOptions: &#123;</span><br><span class="line">        safe: <span class="literal">true</span>,</span><br><span class="line">        autoprefixer: <span class="literal">false</span>,</span><br><span class="line">        discardComments: &#123;</span><br><span class="line">          removeAll: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 将压缩过程输出到控制台</span></span><br><span class="line">      canPrint: <span class="literal">true</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>css 文件若是都堆积在一坨也会变的很大，所以需要 <code>mini-css-extract-plugin</code> 来对 css 进行抽离</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">yarn add -D mini-css-extract-plugin</span><br></pre></td></tr></table></figure>
+<p>在 <code>config/pluginsConfig.js</code> 中加上这个插件配置</p>
+<p><img src="./6.png" alt></p>
+<p>然后在 <code>styleRules.js</code> 中加上这个 MiniCssExtractPluginLoader（是的，本身这个插件是包含一个 loader 和一个 plugin 的）</p>
+<p><img src="./7.png" alt></p>
+<p>这里为啥要对 <code>style-loader</code> 做一个替换呢，因为我们知道在 <code>style-loader</code> 是在页面上添加一个 style 节点的，而分离 css 的步骤应该发生在 <code>css-loader</code> 之后，所以需要做一个替换(也就是说 minicss extract 这个插件内部帮我们做了 style-loader 的事情)</p>
+<p>这里需要注意几个 hash 值所表达的意思</p>
+<ol>
+<li>hash: hash 和整个项目的配置有关，只要项目中有代码改变，那么所有打包出来的 hash 值都会变，并且所有文件共用一个 hash 值</li>
+<li>chunkhash: chunkhash 和 hash 不同点在于，它根据入口文件进行依赖文件解析，然后构建对应的 hash 值，也就是每个打包出来的文件 hash 值都是不一样的，每次修改代码时候，他会根据依赖关系自动修改相关模块的 hash 值，但是打包出来对应的 js 和 css 文件的 hash 会相同。</li>
+<li>contenthash: 在打包代码的时候，一般会将 css 文件分离出来，然后我们通常会在组件中引入 css 文件，这时候如果使用的是 chunkhash，在只修改组件 js 代码的情况下因为对应的 css 文件的 hash 值相同，打包出来的 css 文件的 hash 值也会跟着变，这时候就可以使用 contenthash了，他会针对每个文件的内容来计算 hash 值</li>
+</ol>
+<h4 id="将-config-json-拷贝到-dist-目录"><a href="#将-config-json-拷贝到-dist-目录" class="headerlink" title="将 config.json 拷贝到 dist 目录"></a>将 config.json 拷贝到 dist 目录</h4><p>这个很简单，只需要装一个插件 <code>copy-webpack-plugin</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D copy-webpack-plugin</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>config/pluginsConfig.js</code> 中配置这个插件</p>
+<p><img src="./8.png" alt></p>
+<h4 id="支持在代码中使用环境变量"><a href="#支持在代码中使用环境变量" class="headerlink" title="支持在代码中使用环境变量"></a>支持在代码中使用环境变量</h4><p>可以使用 <code>dotenv-webpack</code> 这个插件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D dotenv-webpack</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>config/pluginsConfig.js</code> 中引入这个插件</p>
+<p><img src="./9.png" alt></p>
+<p><code>path</code> 属性表示引入的是哪个文件</p>
+<h4 id="支持-px-向-vw-的单位转换"><a href="#支持-px-向-vw-的单位转换" class="headerlink" title="支持 px 向 vw 的单位转换"></a>支持 px 向 vw 的单位转换</h4><p>这个配置是直接从 xp 的项目拷贝过来的，即 <code>postcss.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins: &#123;</span><br><span class="line">    autoprefixer: &#123;&#125;,</span><br><span class="line">    <span class="string">'postcss-px-to-viewport'</span>: &#123;</span><br><span class="line">      viewportWidth: <span class="string">'375'</span>, <span class="comment">// 视窗的宽度，对应的是我们设计稿的宽度，一般是750</span></span><br><span class="line">      unitPrecision: <span class="number">3</span>, <span class="comment">// 指定`px`转换为视窗单位值的小数位数（很多时候无法整除）</span></span><br><span class="line">      viewportUnit: <span class="string">'vw'</span>, <span class="comment">// 指定需要转换成的视窗单位，建议使用vw</span></span><br><span class="line">      <span class="comment">// propList: ['*', '!background-image'],</span></span><br><span class="line">      selectorBlackList: [</span><br><span class="line">        <span class="comment">// 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名</span></span><br><span class="line">        <span class="string">'ignore'</span>,</span><br><span class="line">      ],</span><br><span class="line">      minPixelValue: <span class="number">1</span>, <span class="comment">// 小于或等于`1px`不转换为视窗单位</span></span><br><span class="line">      mediaQuery: <span class="literal">false</span>, <span class="comment">// 允许在媒体查询中转换`px`</span></span><br><span class="line">      <span class="comment">// exclude: /(\/|\\)(node_modules)(\/|\\)/</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是这里需要安装两个东西</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D postcss-loader postcss-px-to-viewport</span><br></pre></td></tr></table></figure>
+<p>因为是对 css 做一个预处理，所以应该是在 sass-loader 转换为 css 之后应该执行这个 loader，所以直接在 sass-loader 后添加这个 loader 即可</p>
+<p><img src="./10.png" alt></p>
+<h4 id="提交自动检查-commit"><a href="#提交自动检查-commit" class="headerlink" title="提交自动检查 commit"></a>提交自动检查 commit</h4><p>在 <code>pre-commit</code> 之前要能够自动检查代码以及 commit，首先需要安装 husky</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D husky</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>package.json</code> 中做配置</p>
+<p><img src="./11.png" alt></p>
+<p>要规范 commit 提交，就必须安装如下的库</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add -D @commitlint/cli @commitlint/config-conventional</span><br></pre></td></tr></table></figure>
+<p>然后新建一个 <code>commitlint.config.js</code>，自定义 commit 提交规则</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// commitlint.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  extends: [<span class="string">'@commitlint/config-conventional'</span>],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'type-enum'</span>: [</span><br><span class="line">      <span class="number">2</span>,</span><br><span class="line">      <span class="string">'always'</span>,</span><br><span class="line">      [</span><br><span class="line">        <span class="string">'chore'</span>,</span><br><span class="line">        <span class="string">'feat'</span>,</span><br><span class="line">        <span class="string">'fix'</span>,</span><br><span class="line">        <span class="string">'test'</span>,</span><br><span class="line">        <span class="string">'perf'</span>,</span><br><span class="line">        <span class="string">'style'</span>,</span><br><span class="line">        <span class="string">'merge'</span>,</span><br><span class="line">        <span class="string">'config'</span>,</span><br><span class="line">        <span class="string">'improvement'</span>,</span><br><span class="line">      ],</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样每次提交时都会先检查代码，然后再检查提交，提交的规则可以<a href="https://github.com/conventional-changelog/commitlint" target="_blank" rel="noopener">参考</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上基本就是搭建模板中踩过的坑以及一系列的搭建步骤了，总的来说，还是手撸一遍项目比较香，不仅比当初的 cra eject 项目简单，而且也更利于后续人员的优化和配置</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/" title="手摸手踩坑react-template">https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag">
+            <i class="fa fa-tag"></i>
+            webpack
+            </a>
+          
+            <a href="/tags/react/" rel="tag">
+            <i class="fa fa-tag"></i>
+            react
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/28/从Promise本质开始-三-TDD方式实现基于Promises-A-规范的复杂Promise/" rel="next" title="从Promise本质开始(三):TDD方式实现基于Promises/A+规范的复杂Promise">
+                <i class="fa fa-chevron-left"></i> 从Promise本质开始(三):TDD方式实现基于Promises/A+规范的复杂Promise
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/11/23/Elements-kinds-in-V8-翻译/" rel="prev" title="Elements-kinds-in-V8-(翻译)">
+                Elements-kinds-in-V8-(翻译) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#采取最简便的方式"><span class="nav-number">1.</span> <span class="nav-text">采取最简便的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yarn-eject"><span class="nav-number">1.1.</span> <span class="nav-text">yarn eject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sass-loader-的-bug"><span class="nav-number">1.2.</span> <span class="nav-text">sass-loader 的 bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径-alias-引入失败"><span class="nav-number">1.3.</span> <span class="nav-text">路径 alias 引入失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引入-svg-报错"><span class="nav-number">1.4.</span> <span class="nav-text">引入 svg 报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的问题"><span class="nav-number">1.5.</span> <span class="nav-text">新的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#所以更好的方式？"><span class="nav-number">2.</span> <span class="nav-text">所以更好的方式？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重构-config"><span class="nav-number">2.1.</span> <span class="nav-text">重构 config</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#utils-js"><span class="nav-number">2.1.1.</span> <span class="nav-text">utils.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jsRules-js"><span class="nav-number">2.1.2.</span> <span class="nav-text">jsRules.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#styleRules-js"><span class="nav-number">2.1.3.</span> <span class="nav-text">styleRules.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fileRules-js"><span class="nav-number">2.1.4.</span> <span class="nav-text">fileRules.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#assetsRules-js"><span class="nav-number">2.1.5.</span> <span class="nav-text">assetsRules.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pluginsConfig-js"><span class="nav-number">2.1.6.</span> <span class="nav-text">pluginsConfig.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#resolveConfig-js"><span class="nav-number">2.1.7.</span> <span class="nav-text">resolveConfig.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#devServerConfig-js"><span class="nav-number">2.1.8.</span> <span class="nav-text">devServerConfig.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#devServerProxyConfig-js"><span class="nav-number">2.1.9.</span> <span class="nav-text">devServerProxyConfig.js</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微小的总结"><span class="nav-number">2.2.</span> <span class="nav-text">微小的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化配置"><span class="nav-number">2.3.</span> <span class="nav-text">优化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构建加速与构建缓存"><span class="nav-number">2.3.1.</span> <span class="nav-text">构建加速与构建缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化打包和抽离-css"><span class="nav-number">2.3.2.</span> <span class="nav-text">优化打包和抽离 css</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将-config-json-拷贝到-dist-目录"><span class="nav-number">2.3.3.</span> <span class="nav-text">将 config.json 拷贝到 dist 目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支持在代码中使用环境变量"><span class="nav-number">2.3.4.</span> <span class="nav-text">支持在代码中使用环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支持-px-向-vw-的单位转换"><span class="nav-number">2.3.5.</span> <span class="nav-text">支持 px 向 vw 的单位转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提交自动检查-commit"><span class="nav-number">2.3.6.</span> <span class="nav-text">提交自动检查 commit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2021/11/23/手摸手踩坑react-template/';
+          this.page.identifier = '2021/11/23/手摸手踩坑react-template/';
+          this.page.title = '手摸手踩坑react-template';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

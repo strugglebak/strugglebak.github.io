@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="javascript,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="背景 1991年,李爵士发明 www 1992年，同事发明 CSS 1993年，创建 W3C 1995年，网景浏览器 Netscape —&amp;gt; Navigator 脚本 Branden Eich JS 之父，推出 Mocha 脚本语言，看起来像 Java 语言的转变 Mocha —&amp;gt; LiveScript —&amp;gt; JavaScript  这个时候 Unicode UTF-8 发布,这">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS里的数据">
+<meta property="og:url" content="https://strugglebak.github.io/2019/02/19/JS里的数据/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="背景 1991年,李爵士发明 www 1992年，同事发明 CSS 1993年，创建 W3C 1995年，网景浏览器 Netscape —&amp;gt; Navigator 脚本 Branden Eich JS 之父，推出 Mocha 脚本语言，看起来像 Java 语言的转变 Mocha —&amp;gt; LiveScript —&amp;gt; JavaScript  这个时候 Unicode UTF-8 发布,这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-06-04T08:13:28.902Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS里的数据">
+<meta name="twitter:description" content="背景 1991年,李爵士发明 www 1992年，同事发明 CSS 1993年，创建 W3C 1995年，网景浏览器 Netscape —&amp;gt; Navigator 脚本 Branden Eich JS 之父，推出 Mocha 脚本语言，看起来像 Java 语言的转变 Mocha —&amp;gt; LiveScript —&amp;gt; JavaScript  这个时候 Unicode UTF-8 发布,这">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2019/02/19/JS里的数据/">
+
+
+
+
+
+  <title>JS里的数据 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2019/02/19/JS里的数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JS里的数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-19T16:44:08+08:00">
+                2019-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web前端/" itemprop="url" rel="index">
+                    <span itemprop="name">web前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/19/JS里的数据/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/19/JS里的数据/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ol>
+<li>1991年,李爵士发明 www</li>
+<li>1992年，同事发明 CSS</li>
+<li>1993年，创建 W3C</li>
+<li>1995年，网景浏览器 Netscape —&gt; Navigator 脚本</li>
+<li>Branden Eich JS 之父，推出 Mocha 脚本语言，看起来像 Java</li>
+<li><p>语言的转变 Mocha —&gt; LiveScript —&gt; JavaScript</p>
+</li>
+<li><p>这个时候 Unicode UTF-8 发布,这个时候 JS 已经有 bug 了，主要在于编码方面的</p>
+</li>
+<li><p>1996年, MS IE 想要抢占浏览器市场，发明 JScript</p>
+</li>
+<li>ECMAScript (申报标准)&lt;—-网景开源 —-&gt; firefox</li>
+<li>IE5.5 MS推出 JS发请求</li>
+<li>2004年, Gmail 网页上的程序</li>
+<li>后端—&gt;前端 Front-end(以 JS 为生)</li>
+<li>2010年左右，中国开始逐渐有前端开发这类职位</li>
+</ol>
+<p>然而，JS 这个时候</p>
+<ol>
+<li>全局变量(没有模块化)</li>
+<li>标准化(内置代码少)</li>
+</ol>
+<p>这个时候 ECMAScript 进行一次代码升级 从 ES3 —&gt; ES5(ES4 死了)，但是步子太小<br>Rails 社区 Ruby —&gt; CoffeeScript JS 改良版<br>添加了 类、箭头函数、opiond chain 语法<br>ECMAScript6 步子合适,JS 终于成为一个现代编程语言</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>JS 一共有 7 种数据类型</p>
+<ul>
+<li>数字/字符串/布尔/symbol(符号)/null/undefined/对象</li>
+<li>即 number/string/boolean/symbol/null/undefined/object(array,function…)</li>
+<li>所以你看，”JS 一切皆对象” 这句话严格意义上来说是错的</li>
+</ul>
+<h3 id="number"><a href="#number" class="headerlink" title="number"></a>number</h3><p>十进制<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span>      <span class="string">//</span> <span class="number">1</span></span><br><span class="line"><span class="number">1.1</span>    <span class="string">//</span> <span class="number">1.1</span></span><br><span class="line"><span class="number">.1</span>     <span class="string">//</span> <span class="number">0.1</span></span><br><span class="line"><span class="number">1.23e2</span> <span class="string">//</span> <span class="number">123</span></span><br></pre></td></tr></table></figure></p>
+<p>二进制(以 0b 开头)<br><figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line"><span class="number">0b11</span> // <span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>八进制(0 开头)<br><figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">011 </span>// <span class="number">9</span></span><br></pre></td></tr></table></figure></p>
+<p>十六进制(0x 开头)<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="number">0x11</span> <span class="string">//</span> <span class="number">17</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="字符串-String"><a href="#字符串-String" class="headerlink" title="字符串(String)"></a>字符串(String)</h3><figure class="highlight scheme"><table><tr><td class="code"><pre><span class="line"><span class="symbol">'你好</span>' <span class="string">"你好"</span> '' <span class="string">""</span>(<span class="name">空字符串</span>)</span><br></pre></td></tr></table></figure>
+<p>转义符号 “\” 用于多行字符串(不是字符串里有回车)<br><figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">var s = '<span class="number">1234</span>5 \            // 坑人语法</span><br><span class="line">            <span class="number">6789</span>0'</span><br><span class="line">var s2 = '<span class="number">1234</span>5' +          <span class="comment">//好读的语法</span></span><br><span class="line">            '<span class="number">6789</span>0'</span><br><span class="line"></span><br><span class="line">var s3 = '<span class="number">1234</span>5 ' (这里有空格) <span class="comment">// 而这里有报错</span></span><br><span class="line">        '<span class="number">6789</span>0'</span><br></pre></td></tr></table></figure></p>
+<p>因为上面，所以 ES 6 做了升级处理,如下<br><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 注意这里是反引号</span></span><br><span class="line"><span class="comment">// 这里也是包含有回车的</span></span><br><span class="line"><span class="keyword">var</span> s4 = <span class="string">` 12345</span></span><br><span class="line"><span class="string">67890`</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="布尔-boolean"><a href="#布尔-boolean" class="headerlink" title="布尔(boolean)"></a>布尔(boolean)</h3><ul>
+<li>true</li>
+<li>false</li>
+<li>&amp;&amp; 与</li>
+<li>|| 或</li>
+</ul>
+<h3 id="symbol"><a href="#symbol" class="headerlink" title="symbol"></a>symbol</h3><h4 id="symbol-来源"><a href="#symbol-来源" class="headerlink" title="symbol 来源"></a>symbol 来源</h4><p>symbol 就是那个对象<strong>全局的唯一的值</strong>,这其实很像数据库中的唯一识别 id，这个唯一识别的 id 对应一条完整的数据<br>而这个是用来干嘛的，简单来说就是<strong>这个值是用来标识一个对象的属性的</strong>,好了，为什么需要标识这个对象的属性呢?<br>想像一下你需要用别人提供的一个对象，然后你想在这个对象里面加个方法，但是假设你加的方法名跟对象里面的方法名一样，就会对原有对象方法进行了<br>修改，这样就污染了原对象。那么能不能有一种机制来起到报警/提示/避免的作用呢? 有，ES6 就引入了这种新的<strong>原始数据类型</strong>叫 symbol</p>
+<h4 id="理解-symbol"><a href="#理解-symbol" class="headerlink" title="理解 symbol"></a>理解 symbol</h4><p>引入 symbol 前<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = options.name;</span><br><span class="line">        <span class="keyword">this</span>.age = options.age;</span><br><span class="line">    &#125;</span><br><span class="line">    getAge() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> xxx = <span class="keyword">new</span> person(&#123;</span><br><span class="line">    name: <span class="string">'xxx'</span>,</span><br><span class="line">    age: <span class="number">1</span></span><br><span class="line">&#125;);</span><br><span class="line">xxx.getAge() <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> GetAge =  &#123; <span class="comment">// mixin</span></span><br><span class="line">    getAge() &#123; <span class="built_in">console</span>.log(<span class="string">'xxx'</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里就修改了原对象方法</span></span><br><span class="line"><span class="built_in">Object</span>.assign(person.prototype, GetAge);</span><br><span class="line">xxx.getAge() <span class="comment">// 'xxx'</span></span><br></pre></td></tr></table></figure></p>
+<p>引入 symbol 后<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> getAge = <span class="built_in">Symbol</span>();</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = options.name;</span><br><span class="line">        <span class="keyword">this</span>.age = options.age;</span><br><span class="line">    &#125;</span><br><span class="line">    [getAge]() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> xxx = <span class="keyword">new</span> person(&#123;</span><br><span class="line">    name: <span class="string">'xxx'</span>,</span><br><span class="line">    age: <span class="number">1</span></span><br><span class="line">&#125;);</span><br><span class="line">xxx[getAge]() <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// let getAge = Symbol(); // 报错 重复定义</span></span><br><span class="line">getAge = <span class="built_in">Symbol</span>();</span><br><span class="line"><span class="keyword">const</span> GetAge =  &#123; <span class="comment">// mixin</span></span><br><span class="line">    [getAge]() &#123; <span class="built_in">console</span>.log(<span class="string">'xxx'</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// getAge 是一个新的 Symbol 值，所以这里就没有覆盖掉以前的</span></span><br><span class="line"><span class="built_in">Object</span>.assign(person.prototype, GetAge);</span><br><span class="line">xxx[getAge]() <span class="comment">// 'xxx'</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="symbol-实例"><a href="#symbol-实例" class="headerlink" title="symbol 实例"></a>symbol 实例</h4><p>假如有一个函数是这样的<br><figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">(type)</span> &#123;</span></span><br><span class="line">    <span class="keyword">switch</span>(<span class="built_in">type</span>) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'xxx'</span>:</span><br><span class="line">            console.<span class="built_in">log</span>(<span class="string">'1'</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在调用它<br><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">var demo = &#123;</span><br><span class="line">    xxx: <span class="string">'xxx'</span>,</span><br><span class="line">    yyy: <span class="string">'yyy'</span></span><br><span class="line">&#125;</span><br><span class="line">test(<span class="string">'xxx'</span>); <span class="regexp">//</span> <span class="string">'1'</span></span><br><span class="line"><span class="regexp">//</span> 或者</span><br><span class="line">test(demo.xxx); <span class="regexp">//</span> <span class="string">'1'</span></span><br></pre></td></tr></table></figure></p>
+<p>但是这么做不好，因为字符串可能有些有拼写错误会造成一些 bug，可以这么改<br><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"><span class="keyword">type</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(<span class="keyword">type</span>) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="keyword">type</span>.xxx:</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'1'</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> demo = &#123;</span><br><span class="line">    xxx: <span class="string">'xxx'</span>,</span><br><span class="line">    yyy: <span class="string">'yyy'</span></span><br><span class="line">&#125;</span><br><span class="line">test(demo.xxx); <span class="comment">// '1'</span></span><br></pre></td></tr></table></figure></p>
+<p>但是我们发现，此时不管 <code>demo.xxx</code> 里的值为何值它都是会执行 <code>console.log(&#39;1&#39;)</code><br><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">demo.xxx = <span class="string">'demo'</span>;</span><br><span class="line">test(demo.xxx); <span class="regexp">//</span> <span class="string">'1'</span></span><br></pre></td></tr></table></figure></p>
+<p>只要不冲突，那干什么都行的话，那为什么不用 Symbol ???<br><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> demo = &#123;</span><br><span class="line">    xxx: <span class="built_in">Symbol</span>(),</span><br><span class="line">    yyy: <span class="built_in">Symbol</span>()</span><br><span class="line">&#125;</span><br><span class="line">test(demo.xxx); <span class="comment">// '1'</span></span><br></pre></td></tr></table></figure></p>
+<p>另外需要强调的是，Symbol 可以创建一个独一无二的值，<strong>但它并不是字符串!!!</strong><br>也可以给 Symbol 传参，但是这个只是起到一个’注释’的作用，如下<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a1 = <span class="built_in">Symbol</span>(<span class="string">'a'</span>);</span><br><span class="line"><span class="keyword">var</span> a2 = <span class="built_in">Symbol</span>(<span class="string">'a'</span>);</span><br><span class="line">a1 === a2; <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(a1); <span class="comment">// Symbol(a)</span></span><br><span class="line"><span class="built_in">console</span>.log(a2); <span class="comment">// Symbol(a)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="null-与-undefined"><a href="#null-与-undefined" class="headerlink" title="null 与 undefined"></a>null 与 undefined</h3><p>如果一个值为 null 或者 undefined 则它都表示什么也没有，这也是 JS 的原创 bug</p>
+<p>区别:</p>
+<p>i.(规范)如果一个变量没有被赋值，那么这个变量的值就是 <strong>undefined</strong></p>
+<p>ii.(大家都认为)如果你想<strong>表示一个没有赋值的 String/Number/Boolean/Symbol</strong>,就用 <strong>undefined</strong></p>
+<p>iii.(大家都认为)如果你想<strong>表示一个没有赋值的对象</strong>,就用 <strong>null</strong></p>
+<h3 id="object"><a href="#object" class="headerlink" title="object"></a>object</h3><p>前面说的都是<strong>基本类型或者说是简单类型</strong>,而 object 是<strong>复杂类型</strong>,但是所谓的复杂类型也是由简单类型组成的<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'frank'</span></span><br><span class="line"><span class="keyword">var</span> age = <span class="number">18</span></span><br><span class="line"><span class="keyword">var</span> gender = <span class="string">'male'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">    <span class="string">'name'</span>: <span class="string">'frank'</span>,</span><br><span class="line">    <span class="string">'age'</span>: <span class="number">18</span>,</span><br><span class="line">    <span class="string">'gender'</span>: <span class="string">'male'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">语法</span><br><span class="line"><span class="comment">// 声明定义</span></span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">    name: <span class="string">'frank'</span>,</span><br><span class="line">    age: <span class="string">'18'</span>,</span><br><span class="line">    <span class="keyword">self</span>: person,</span><br><span class="line">    <span class="string">''</span>: <span class="string">'frank'</span>, <span class="comment">// 这个是可以成立的</span></span><br><span class="line">    <span class="number">9</span>a: <span class="string">'frank'</span>, <span class="comment">// 这样写不行</span></span><br><span class="line">    <span class="string">'9a'</span>: <span class="string">'frank'</span>, <span class="comment">// 这样是行的</span></span><br><span class="line">    <span class="string">'a b'</span>: <span class="string">'frank'</span>, <span class="comment">// 这样也是可以的</span></span><br><span class="line">    <span class="string">'中文'</span>: <span class="string">'frank'</span>,<span class="comment">// 中文是可以的</span></span><br><span class="line">    <span class="comment">// 如果不加引号，那么就 按照标识符来判断是否符合语法</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">person[<span class="string">'name'</span>]</span><br><span class="line"><span class="comment">// 下面的语法成立么</span></span><br><span class="line">person.<span class="keyword">self</span>.<span class="keyword">self</span>.<span class="keyword">self</span>.<span class="keyword">self</span>.name</span><br><span class="line"><span class="comment">// 调用空字符串成立</span></span><br><span class="line">person[<span class="string">''</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="其他操作符"><a href="#其他操作符" class="headerlink" title="其他操作符"></a>其他操作符</h3><h4 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h4><table>
+<thead>
+<tr>
+<th>xxx 的类型</th>
+<th>string</th>
+<th>number</th>
+<th>boolean</th>
+<th>null</th>
+<th>undefined</th>
+<th>symbol</th>
+<th>object</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>typeof xxx</td>
+<td>‘string’</td>
+<td>‘number’</td>
+<td>‘boolean’</td>
+<td><strong>‘object’</strong></td>
+<td>‘undefined’</td>
+<td>‘symbol’</td>
+<td>‘object’</td>
+<td>‘function’</td>
+</tr>
+</tbody>
+</table>
+<h4 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h4><p>delete 操作符用来删除对象的某个属性，若没有指向这个属性的引用，那它最终会被释放<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> Employee = &#123;</span><br><span class="line">  age: <span class="number">28</span>,</span><br><span class="line">  name: <span class="string">'abc'</span>,</span><br><span class="line">  designation: <span class="string">'developer'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">delete</span> Employee.name);   <span class="comment">// returns true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">delete</span> Employee.age);    <span class="comment">// returns true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当试着删除一个不存在的属性时</span></span><br><span class="line"><span class="comment">// 同样会返回true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">delete</span> Employee.salary); <span class="comment">// returns true</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="in"><a href="#in" class="headerlink" title="in"></a>in</h4><p>若指定的属性在其指定的对象或原型链中，则 in 运算符返回 true<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 数组</span></span><br><span class="line"><span class="keyword">var</span> trees = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">"redwood"</span>, <span class="string">"bay"</span>, <span class="string">"cedar"</span>, <span class="string">"oak"</span>, <span class="string">"maple"</span>);</span><br><span class="line"><span class="number">0</span> <span class="keyword">in</span> trees        <span class="comment">// 返回true</span></span><br><span class="line"><span class="number">3</span> <span class="keyword">in</span> trees        <span class="comment">// 返回true</span></span><br><span class="line"><span class="number">6</span> <span class="keyword">in</span> trees        <span class="comment">// 返回false</span></span><br><span class="line"><span class="string">"bay"</span> <span class="keyword">in</span> trees    <span class="comment">// 返回false (必须使用索引号,而不是数组元素的值)</span></span><br><span class="line"></span><br><span class="line"><span class="string">"length"</span> <span class="keyword">in</span> trees <span class="comment">// 返回true (length是一个数组属性)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Symbol</span>.iterator <span class="keyword">in</span> trees <span class="comment">// 返回true (数组可迭代，只在ES2015+上有效)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内置对象</span></span><br><span class="line"><span class="string">"PI"</span> <span class="keyword">in</span> <span class="built_in">Math</span>          <span class="comment">// 返回true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义对象</span></span><br><span class="line"><span class="keyword">var</span> mycar = &#123;<span class="attr">make</span>: <span class="string">"Honda"</span>, <span class="attr">model</span>: <span class="string">"Accord"</span>, <span class="attr">year</span>: <span class="number">1998</span>&#125;;</span><br><span class="line"><span class="string">"make"</span> <span class="keyword">in</span> mycar  <span class="comment">// 返回true</span></span><br><span class="line"><span class="string">"model"</span> <span class="keyword">in</span> mycar <span class="comment">// 返回true</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="for-in"><a href="#for-in" class="headerlink" title="for in"></a>for in</h4><p>for…in 语句可以以任意顺序遍历一个<strong>对象的可枚举属性</strong>,对于每个不同的属性，语句都会执行<br><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;a:1, b:2, c:3&#125;;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> <span class="keyword">prop</span> <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  console.<span class="built_in">log</span>(<span class="string">"obj."</span> + <span class="keyword">prop</span> + <span class="string">" = "</span> + obj[<span class="keyword">prop</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Output:</span></span><br><span class="line"><span class="comment">// "obj.a = 1"</span></span><br><span class="line"><span class="comment">// "obj.b = 2"</span></span><br><span class="line"><span class="comment">// "obj.c = 3"</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="for-of"><a href="#for-of" class="headerlink" title="for of"></a>for of</h4><p>for…of 语句在可迭代的对象 (array, string, map, set…) 上创建一个迭代循环，也是为不同的属性值执行语句<br><figure class="highlight ceylon"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> iterable = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> <span class="keyword">value</span> <span class="keyword">of</span> iterable) &#123;</span><br><span class="line">    <span class="keyword">value</span> += <span class="number">1</span>;</span><br><span class="line">    console.log(<span class="keyword">value</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 11</span></span><br><span class="line"><span class="comment">// 21</span></span><br><span class="line"><span class="comment">// 31</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="for-in-和-for-of-的区别"><a href="#for-in-和-for-of-的区别" class="headerlink" title="for in 和 for of 的区别"></a>for in 和 for of 的区别</h4><p>首先，上代码!<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.objCustom = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;; </span><br><span class="line"><span class="built_in">Array</span>.prototype.arrCustom = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> iterable = [<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>];</span><br><span class="line">iterable.foo = <span class="string">'hello'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> iterable) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i); <span class="comment">// logs 0, 1, 2, "foo", "arrCustom", "objCustom"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> iterable) &#123;</span><br><span class="line">  <span class="keyword">if</span> (iterable.hasOwnProperty(i)) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// logs 0, 1, 2, "foo"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">of</span> iterable) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i); <span class="comment">// logs 3, 5, 7</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码我们可以看到区别了</p>
+<ul>
+<li>‘hello’ 3 5 7 这些是属性对应的值，它<strong>不是可枚举属性</strong><br>-<code>for in</code> 在遍历对象时，若不加条件，它会一直<strong>沿着原型链</strong>遍历这个对象<strong>新加的可枚举属性</strong><br>-<code>for of</code> 在遍历对象时，它会遍历该对象定义的<strong>迭代值</strong>,<strong>而不是任何对象的属性</strong></li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zhuanlan.zhihu.com/p/22652486" target="_blank" rel="noopener">知乎 JS 中的 Symbol 是什么？</a><br><a href="http://es6.ruanyifeng.com/#docs/symbol" target="_blank" rel="noopener">阮一峰 Symbol</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2019/02/19/JS里的数据/" title="JS里的数据">https://strugglebak.github.io/2019/02/19/JS里的数据/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">
+            <i class="fa fa-tag"></i>
+            javascript
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/19/一些常见排序算法/" rel="next" title="一些常见排序算法">
+                <i class="fa fa-chevron-left"></i> 一些常见排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/19/JS里的类型/" rel="prev" title="JS里的类型">
+                JS里的类型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">2.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#number"><span class="nav-number">2.1.</span> <span class="nav-text">number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串-String"><span class="nav-number">2.2.</span> <span class="nav-text">字符串(String)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布尔-boolean"><span class="nav-number">2.3.</span> <span class="nav-text">布尔(boolean)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#symbol"><span class="nav-number">2.4.</span> <span class="nav-text">symbol</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#symbol-来源"><span class="nav-number">2.4.1.</span> <span class="nav-text">symbol 来源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解-symbol"><span class="nav-number">2.4.2.</span> <span class="nav-text">理解 symbol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#symbol-实例"><span class="nav-number">2.4.3.</span> <span class="nav-text">symbol 实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null-与-undefined"><span class="nav-number">2.5.</span> <span class="nav-text">null 与 undefined</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#object"><span class="nav-number">2.6.</span> <span class="nav-text">object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他操作符"><span class="nav-number">2.7.</span> <span class="nav-text">其他操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#typeof"><span class="nav-number">2.7.1.</span> <span class="nav-text">typeof</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delete"><span class="nav-number">2.7.2.</span> <span class="nav-text">delete</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#in"><span class="nav-number">2.7.3.</span> <span class="nav-text">in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-in"><span class="nav-number">2.7.4.</span> <span class="nav-text">for in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-of"><span class="nav-number">2.7.5.</span> <span class="nav-text">for of</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-in-和-for-of-的区别"><span class="nav-number">2.7.6.</span> <span class="nav-text">for in 和 for of 的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2019/02/19/JS里的数据/';
+          this.page.identifier = '2019/02/19/JS里的数据/';
+          this.page.title = 'JS里的数据';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

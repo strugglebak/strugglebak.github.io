@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="webpack,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写一个 webpack">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Webpack本质开始(一):手写一个Webpack">
+<meta property="og:url" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写一个 webpack">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/1.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/2.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/3.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/4.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/5.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/6.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/7.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/8.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/9.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/10.jpg">
+<meta property="og:updated_time" content="2022-06-04T08:13:29.247Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Webpack本质开始(一):手写一个Webpack">
+<meta name="twitter:description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写一个 webpack">
+<meta name="twitter:image" content="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/">
+
+
+
+
+
+  <title>从Webpack本质开始(一):手写一个Webpack | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从Webpack本质开始(一):手写一个Webpack</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-23T17:57:56+08:00">
+                2020-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端工程化/" itemprop="url" rel="index">
+                    <span itemprop="name">前端工程化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/23/从Webpack本质开始-一-手写一个Webpack/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/23/从Webpack本质开始-一-手写一个Webpack/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写一个 webpack</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h2><p>项目的目录如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">|-bin</span><br><span class="line">|  |-st-pack.js</span><br><span class="line">|-package-lock.json</span><br><span class="line">|-package.json</span><br><span class="line">|-README.md</span><br></pre></td></tr></table></figure>
+<p>在 <code>package.json</code> 文件中追加</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">"bin": &#123;</span><br><span class="line">  "st-pack": "./bin/st-pack.js"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个是方便在执行 <code>st-pack</code> 命令时 node 去找对应的 js 执行</p>
+<p>然后是 <code>st-pack.js</code> 文件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// st-pack.js</span></span><br><span class="line"><span class="meta">#! /usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+<p>开头的 shebang 表示是在 node 环境下执行 js 代码</p>
+<p>然后在项目的主目录执行 <code>npm link</code>, 就会看到如下的信息</p>
+<p><img src="./1.jpg" alt></p>
+<p>这个就是方便你在调试的时候，在别的项目中执行 <code>npx st-pack</code> 时，系统会去对应的 <code>st-pack</code> 目录下去寻找 <code>st-pack.js</code> 文件，并用 node 去执行它，本质上来说就是建立了一个软链接</p>
+<p>然后你在随便一个目录执行 <code>npx st-pack</code>，出现 <code>hello world</code> 就算项目初始化成功</p>
+<p><img src="./2.jpg" alt></p>
+<h2 id="webpack-分析以及处理"><a href="#webpack-分析以及处理" class="headerlink" title="webpack 分析以及处理"></a>webpack 分析以及处理</h2><p>首先说下流程，一般来说，我们在使用 webpack 时，webpack 会解析对应项目下的 <code>webpack.config.js</code> 文件，抽取里面的配置信息传递给一个 <strong>Compiler</strong> 编译，由这个 <strong>Compiler</strong> 来执行之后的代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// st-pack.js</span></span><br><span class="line"><span class="meta">#! /usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(path.resolve(<span class="string">'webpack.config.js'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到项目目录下的 webpack.config.js 然后通过一个 compiler 解析它</span></span><br><span class="line"><span class="keyword">const</span> Complier = <span class="built_in">require</span>(<span class="string">'../lib/compiler.js'</span>)</span><br><span class="line"><span class="keyword">const</span> complier = <span class="keyword">new</span> Complier(config)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 compiler 的 run 方法执行代码</span></span><br><span class="line">complier.run()</span><br></pre></td></tr></table></figure>
+<h2 id="创建依赖关系"><a href="#创建依赖关系" class="headerlink" title="创建依赖关系"></a>创建依赖关系</h2><p>新建一个 <code>lib</code> 目录，在这个目录下新建一个 <code>compiler.js</code> 文件<br>这个里面主要是构造一个 <code>Compiler</code> 的类，然后里面主要有两个方法: <code>bindModule</code>(创建模块间的依赖关系) 以及 <code>emitFile</code>(完成后发送最终的文件到某个目录下)</p>
+<p><code>bindModule</code> 的逻辑是这样的，首先需要获取到模块的源码和名字，然后再将模块的源码和该模块的 <strong>父级路径</strong> 传给一个 <code>parse</code> 函数，由这个 <code>parse</code> 函数来解决源码以及依赖的问题。本质上就是将模块的源码进行改造，然后返回一个依赖的列表。比如将 <code>require(&#39;./a.js&#39;)</code> 变成 <code>_webpack_require_(&#39;./src/a.js&#39;)</code>，如果 <code>a.js</code> 中还有其他的依赖，则需要<strong>递归的去查找对应的包然后做 parse</strong>，最后再把模块的路径和模块中被改造后的源码对应起来</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// lib/complier.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Complier</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(config) &#123;</span><br><span class="line">    <span class="comment">// 需要保存的入口文件的路径，如 ./src/index.js</span></span><br><span class="line">    <span class="keyword">this</span>.entryId </span><br><span class="line">    <span class="comment">// 需要保存的所有模块的依赖</span></span><br><span class="line">    <span class="keyword">this</span>.modules = &#123;&#125;</span><br><span class="line">    <span class="keyword">this</span>.config = config</span><br><span class="line">    <span class="keyword">this</span>.entry = config.entry <span class="comment">// 入口路径</span></span><br><span class="line">    <span class="keyword">this</span>.root = process.cwd() <span class="comment">// 项目工作的全局路径</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  run() &#123;</span><br><span class="line">    <span class="keyword">this</span>.bindModule(path.resolve(<span class="keyword">this</span>.root, <span class="keyword">this</span>.entry), <span class="literal">true</span>)</span><br><span class="line">    <span class="keyword">this</span>.emitFile()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 创建模块间的依赖关系</span></span><br><span class="line">  bindModule(modulePath, isEntry) &#123;</span><br><span class="line">    <span class="keyword">const</span> moduleSource = <span class="keyword">this</span>.getModuleSource(modulePath)</span><br><span class="line">    <span class="keyword">const</span> moduleName = <span class="string">'./'</span> + path.relative(<span class="keyword">this</span>.root, modulePath)</span><br><span class="line">    isEntry &amp;&amp; (<span class="keyword">this</span>.entryId = moduleName)</span><br><span class="line">    <span class="comment">// 将模块的源码进行改造，并且返回一个依赖的列表</span></span><br><span class="line">    <span class="comment">// 主要是将 require 变成 __webpack_require__</span></span><br><span class="line">    <span class="comment">// 然后将 require('./a.js') 变成 __webpack_require__('./src/a.js')</span></span><br><span class="line">    <span class="keyword">const</span> &#123; newModuleSource, dependencies &#125; = </span><br><span class="line">      <span class="keyword">this</span>.parse(moduleSource, path.dirname(moduleName))</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 把相对路径和模块中的内容对应起来</span></span><br><span class="line">    <span class="keyword">this</span>.modules[moduleName] = newModuleSource</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发射一个打包后的文件</span></span><br><span class="line">  emitFile() &#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getModuleSource(modulePath) &#123;</span><br><span class="line">    <span class="keyword">return</span> fs.readFileSync(modulePath, <span class="string">'utf8'</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 解析模块源码</span></span><br><span class="line">  parse(moduleSource, parentPath) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(moduleSource, parentPath)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = Complier</span><br></pre></td></tr></table></figure>
+<h2 id="AST-递归解析"><a href="#AST-递归解析" class="headerlink" title="AST 递归解析"></a>AST 递归解析</h2><p>如果要从头开始自己写一个 ast 编译工具未免太麻烦了，这里直接用如下几个工具库</p>
+<ul>
+<li>babylon 主要将 code 转换成 ast</li>
+<li>@babel/traverse 截取并更新 ast node</li>
+<li>@babel/types 一个类似于 lodash 的用于处理 ast 的工具包</li>
+<li>@babel/generator 将 ast node 转换成 code</li>
+</ul>
+<p>直接安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add babylon @babel/traverse @babel/types @babel/generator</span><br></pre></td></tr></table></figure>
+<p>由于 <code>traverse</code> 和 <code>generator</code> 是 es6 模块，所以这里用 <code>require</code> 引入时需要在后面加 <code>default</code> 才能拿到这个函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// babylon 主要将源码转成 AST</span></span><br><span class="line"><span class="keyword">const</span> babylon = <span class="built_in">require</span>(<span class="string">'babylon'</span>) </span><br><span class="line"><span class="comment">// 用来遍历以及更新 AST node</span></span><br><span class="line"><span class="keyword">const</span> traverse = <span class="built_in">require</span>(<span class="string">'@babel/traverse'</span>).default <span class="comment">// es6 模块</span></span><br><span class="line"><span class="comment">// 类似 lodash 的一个用于处理 AST node 的工具库</span></span><br><span class="line"><span class="keyword">const</span> t = <span class="built_in">require</span>(<span class="string">'@babel/types'</span>)</span><br><span class="line"><span class="comment">// 将 AST node 转换成 code</span></span><br><span class="line"><span class="keyword">const</span> generator = <span class="built_in">require</span>(<span class="string">'@babel/generator'</span>).default <span class="comment">// es6 模块</span></span><br></pre></td></tr></table></figure>
+<p>这里递归解析的目的就是<strong>改名字</strong>，所以逻辑的流程就是</p>
+<ol>
+<li>将模块源码转成 ast</li>
+<li>在 ast 内部修改 <code>require</code>，并且收集依赖关系</li>
+<li>将修改过后的 ast 转换成新的 code</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// lib/compiler.js </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析模块源码</span></span><br><span class="line">parse(moduleSource, parentPath) &#123;</span><br><span class="line">  <span class="comment">// 将源码转换成 AST</span></span><br><span class="line">  <span class="keyword">let</span> ast = babylon.parse(moduleSource)</span><br><span class="line">  <span class="comment">// 遍历以及修改 AST node</span></span><br><span class="line">  <span class="keyword">const</span> dependencies = []</span><br><span class="line">  traverse(ast, &#123;</span><br><span class="line">    CallExpression(p) &#123; <span class="comment">// 调用表达式</span></span><br><span class="line">      <span class="keyword">const</span> &#123; node &#125; = p</span><br><span class="line">      <span class="keyword">let</span> &#123; name &#125; = node.callee</span><br><span class="line">      <span class="comment">// 修改调用名，即将 require -&gt; __webpack_require__</span></span><br><span class="line">      <span class="keyword">if</span> (name === <span class="string">'require'</span>) &#123;</span><br><span class="line">        node.callee.name = <span class="string">'__webpack_require__'</span></span><br><span class="line">        <span class="comment">// 修改模块名，将其变成 ./src/a.js</span></span><br><span class="line">        <span class="keyword">let</span> moduleName = node.arguments[<span class="number">0</span>].value</span><br><span class="line">        <span class="comment">// 自动添加后缀名</span></span><br><span class="line">        moduleName += path.extname(moduleName) ? <span class="string">''</span> : <span class="string">'.js'</span></span><br><span class="line">        <span class="comment">// 添加父级路径</span></span><br><span class="line">        moduleName = <span class="string">'./'</span> + path.join(parentPath, moduleName)</span><br><span class="line">        <span class="comment">// 添加进依赖列表</span></span><br><span class="line">        dependencies.push(moduleName)</span><br><span class="line">        <span class="comment">// 构建 Literal 对象</span></span><br><span class="line">        node.arguments = [t.stringLiteral(moduleName)]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 将 AST 转换成源码</span></span><br><span class="line">  <span class="keyword">const</span> newModuleSource = generator(ast).code</span><br><span class="line">  <span class="keyword">return</span> &#123; newModuleSource, dependencies &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>bindModule</code> 函数中递归的建立依赖</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 模块里面还有依赖的就要递归建立依赖关系</span></span><br><span class="line">dependencies.forEach(<span class="function"><span class="params">dp</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.bindModule(path.join(<span class="keyword">this</span>.root, dp), <span class="literal">false</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>在 <code>bindModule</code> 函数中打印 <code>newModuleSource</code> 和 <code>dependencies</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'code : '</span>, newModuleSource)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'denp : '</span>, dependencies)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'---------------------------'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>在其他项目目录执行<code>npx st-pack</code> 结果可看到</p>
+<p><img src="./3.jpg" alt></p>
+<h2 id="生成打包结果"><a href="#生成打包结果" class="headerlink" title="生成打包结果"></a>生成打包结果</h2><p>在生成打包结果之前，必须先要一个模板，如果只是手动拼字符串太麻烦了，所以这里使用 <code>ejs</code> 来用于这次的模板工具</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add ejs</span><br></pre></td></tr></table></figure>
+<p>然后是模板代码, 在项目下新建目录 <code>template</code>，里面存放的是 <code>main.ejs</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// main.ejs</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123; <span class="comment">// webpackBootstrap</span></span><br><span class="line">  <span class="comment">// The module cache</span></span><br><span class="line">  <span class="keyword">var</span> installedModules = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The require function</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if module is in cache</span></span><br><span class="line">    <span class="keyword">if</span>(installedModules[moduleId]) &#123;</span><br><span class="line">      <span class="keyword">return</span> installedModules[moduleId].exports;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Create a new module (and put it into the cache)</span></span><br><span class="line">    <span class="keyword">var</span> <span class="built_in">module</span> = installedModules[moduleId] = &#123;</span><br><span class="line">      i: moduleId,</span><br><span class="line">      l: <span class="literal">false</span>,</span><br><span class="line">      exports: &#123;&#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Execute the module function</span></span><br><span class="line">    modules[moduleId].call(<span class="built_in">module</span>.exports, <span class="built_in">module</span>, <span class="built_in">module</span>.exports, __webpack_require__);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Flag the module as loaded</span></span><br><span class="line">    <span class="built_in">module</span>.l = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return the exports of the module</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">module</span>.exports;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Load entry module and return exports</span></span><br><span class="line">  <span class="keyword">return</span> __webpack_require__(__webpack_require__.s = <span class="string">"&lt;%-entryId%&gt;"</span>);</span><br><span class="line">&#125;)</span><br><span class="line">(&#123;</span><br><span class="line">  &lt;%<span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> modules) &#123;%&gt;</span><br><span class="line">  <span class="string">"&lt;%-key%&gt;"</span>:</span><br><span class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">eval</span>(<span class="string">`&lt;%-modules[key]%&gt;`</span>)</span><br><span class="line">  &#125;),</span><br><span class="line">  &lt;%&#125;%&gt;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里顺便说下 <code>ejs</code> 的一点语法，它是用 <code>&lt;%%&gt;</code> 来包裹代码块的, 如果要换行就要加上去，其中 <code>&lt;%-xxx%&gt;</code> 这种形式表示 <code>xxx</code> 是里面的一个 <strong>变量</strong>，需要注意前面的 <code>-</code> 号</p>
+</blockquote>
+<p>可以看到这里的原理是，我们构建了一个 <code>ejs</code> 的模板，然后在这个模板里面插入了变量 <code>entryId</code> 以及 <code>modules</code>。代码从整体上是一个 IIFE(立即执行函数)，代码最开始的 <code>modules</code> 这个 <strong>参数</strong> 被传入时是一个 <code>{&#39;模块路径&#39;: &#39;模块执行代码&#39;}</code> 的 hash，它经历了如下的步骤</p>
+<ol>
+<li>声明一个模块的缓存</li>
+<li>定义一个 <code>__webpack_require__</code> 的函数<ul>
+<li>检查模块是否有缓存，有缓存就直接返回 </li>
+<li>没有缓存就直接创建一个模块，然后把它添加进缓存</li>
+<li>执行模块里面的代码</li>
+<li>标致模块已经加载</li>
+<li>返回该模块的 exports 对象</li>
+</ul>
+</li>
+<li>加载模块并返回 exports 对象</li>
+</ol>
+<p>比较需要注意的是两段代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">  <span class="comment">// 执行 module 对应的代码，并传一个 __webpack_require__ 这个参数过去</span></span><br><span class="line">  modules[moduleId].call(<span class="built_in">module</span>.exports, <span class="built_in">module</span>, <span class="built_in">module</span>.exports, __webpack_require__);</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// 最开始的传的参数是一个入口文件</span></span><br><span class="line">  <span class="keyword">return</span> _webpack_require__(__webpack_require__.s = <span class="string">"&lt;%-entryId%&gt;"</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这两句代码应该来说是最核心的，因为有一个入口文件，它执行了对应入口文件的代码时，会首先去找依赖，传一个 <code>__webpack_require__</code> 回调函数过去，然后这个再次执行了 <code>__webpack_require__</code> 回调函数后，再去寻找依赖，相当于就是一个递归的过程，当所有的递归完成后，所有的代码包括有依赖关系的都将执行完成</p>
+<p>接下来需要补充的就是代码的输出了，即 <code>emitFile</code> 函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// lib/complier.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 发射一个打包后的文件</span></span><br><span class="line">emitFile() &#123;</span><br><span class="line">  <span class="comment">// 输出文件路径</span></span><br><span class="line">  <span class="keyword">const</span> &#123; filename &#125; = <span class="keyword">this</span>.config.output</span><br><span class="line">  <span class="keyword">const</span> &#123; entryId, modules &#125; = <span class="keyword">this</span></span><br><span class="line">  <span class="keyword">const</span> outputFilePath = path.join(<span class="keyword">this</span>.config.output.path, filename)</span><br><span class="line">  <span class="keyword">const</span> template = <span class="keyword">this</span>.getModuleSource(path.join(__dirname, <span class="string">'../template/main.ejs'</span>))</span><br><span class="line">  <span class="keyword">const</span> outputFileCode = ejs.render(template, &#123; entryId, modules &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 保存输出文件路径</span></span><br><span class="line">  <span class="keyword">this</span>.assert[outputFilePath] = outputFileCode</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 写入对应路径</span></span><br><span class="line">  fs.writeFileSync(outputFilePath, <span class="keyword">this</span>.assert[outputFilePath])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的逻辑很简单，就是 <strong>找出配置中的 <code>path</code> 和 <code>filename</code>，使用 ejs 渲染模板，将真正的 code 代码输出到指定的目录中</strong></p>
+<p>完成后，到有配置 <code>webpack.config.js</code> 项目中执行 <code>npx st-pack</code>，出现如下效果</p>
+<p><img src="./4.jpg" alt></p>
+<h2 id="增加-loader-的解析机制"><a href="#增加-loader-的解析机制" class="headerlink" title="增加 loader 的解析机制"></a>增加 loader 的解析机制</h2><blockquote>
+<p>为了简明扼要，这里用 css 的 loader 来做解析工作</p>
+</blockquote>
+<p>在测试项目的 <code>webpack.config.js</code> 配置文件中加上</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  rules: [&#123;</span><br><span class="line">    test: <span class="regexp">/\.less$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">      path.resolve(__dirname, <span class="string">'loader'</span>, <span class="string">'style-loader'</span>),</span><br><span class="line">      path.resolve(__dirname, <span class="string">'loader'</span>, <span class="string">'less-loader'</span>)</span><br><span class="line">    ]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是 <code>loader</code> 的执行顺序是 <strong>先添加进去的后执行</strong>，所以这里的顺序是 <code>less-loader</code> 先于 <code>style-loader</code> 执行</p>
+<p>然后在项目根目录新建目录 <code>loader</code>, 里面添加两个文件 <code>less-loader.js</code> 以及 <code>style-loader.js</code>，这两个 <code>loader</code> 可以自己写，由于 <code>less-loader</code> 文件需要 <code>less</code>，所以在那之前先执行</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">yarn <span class="keyword">add</span><span class="bash"> less</span></span><br></pre></td></tr></table></figure>
+<p>执行完成后可以写 <code>less-loader</code> 了</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> less = <span class="built_in">require</span>(<span class="string">'less'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loader</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> css = <span class="string">''</span></span><br><span class="line">  less.render(source, (err, c) =&gt; &#123;</span><br><span class="line">    <span class="comment">// source 转成 c.css</span></span><br><span class="line">    css = c.css</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 将 css code 中的 \n 字符转换成 \\n ，不然浏览器会报错</span></span><br><span class="line">  css = css.replace(<span class="regexp">/\n/g</span>, <span class="string">'\\n'</span>)</span><br><span class="line">  <span class="keyword">return</span> css</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = loader</span><br></pre></td></tr></table></figure>
+<p>这个 <code>loader</code> 的逻辑很简单，就是利用 <code>less</code> 将传入的 css 代码进行 <code>render</code>。这里要注意的是需要将代码中的 <code>\n</code> 字符转换成 <code>\\n</code>，不然浏览器会报错</p>
+<p>然后是 <code>style-loader</code> 的代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loader</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> style = <span class="string">`</span></span><br><span class="line"><span class="string">    let style = document.createElement('style')</span></span><br><span class="line"><span class="string">    style.innerHTML = <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(source)&#125;</span></span></span><br><span class="line"><span class="string">    document.head.appendChild(style)</span></span><br><span class="line"><span class="string">  `</span></span><br><span class="line">  <span class="keyword">return</span> style</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = loader</span><br></pre></td></tr></table></figure>
+<p>逻辑也很简单，就是简单插入一段 <code>style</code> 标签</p>
+<blockquote>
+<p>同时这里也可以看到，所谓的 <code>loader</code> 不过也只是一个 <strong>函数</strong> 而已。它只是个利用了其他的 <code>node</code> 的工具解析 code，然后再返回解析后的结果的这么一个 <strong>加载器</strong></p>
+</blockquote>
+<p>写好了 <code>loader</code> 之后，就应该在 <code>st-pack</code> 项目中的 <code>lib/compiler.js</code> 的 <code>getModuleSource</code> 函数中做处理了。为什么是这个函数？因为它是做 code 解析的时候会用到的啊</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">getModuleSource(modulePath) &#123;</span><br><span class="line">  <span class="keyword">let</span> source = fs.readFileSync(modulePath, <span class="string">'utf8'</span>)</span><br><span class="line">  <span class="keyword">const</span> &#123; rules &#125; = <span class="keyword">this</span>.config.module</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; rules.length; i++) &#123;</span><br><span class="line">    <span class="comment">// 处理对应 test 下的 use</span></span><br><span class="line">    <span class="keyword">const</span> rule = rules[i]</span><br><span class="line">    <span class="keyword">const</span> &#123; test, use &#125; = rule</span><br><span class="line">    <span class="keyword">let</span> len = use.length - <span class="number">1</span></span><br><span class="line">    <span class="comment">// 先匹配 test 正则</span></span><br><span class="line">    <span class="keyword">if</span> (test.test(modulePath)) &#123;</span><br><span class="line">      <span class="comment">// 匹配对了就处理 loader， 这个是倒着处理的</span></span><br><span class="line">      <span class="function"><span class="keyword">function</span> <span class="title">normalLoader</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 获取对应 loader</span></span><br><span class="line">        <span class="keyword">const</span> loader = <span class="built_in">require</span>(use[len--])</span><br><span class="line">        <span class="comment">// 转化代码</span></span><br><span class="line">        source = loader(source)</span><br><span class="line">        <span class="comment">// loader 没调用完之前就继续递归调用 loader 来解析代码</span></span><br><span class="line">        len &gt;= <span class="number">0</span> &amp;&amp; normalLoader()</span><br><span class="line">      &#125;</span><br><span class="line">      normalLoader()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> source</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的逻辑就是如下</p>
+<ol>
+<li>解析配置文件中的 <code>rules</code></li>
+<li>处理每个 <code>rules</code> 中的规则</li>
+<li>如果规则(test)匹配，说明找到对应的后缀的文件了，这个时候就可以拿出其 <code>use</code>，用 <code>loader</code> 去解析代码了</li>
+<li>从 <code>use</code> 数组倒序加载 <code>loader</code> 去做解析，并且这个过程是递归的</li>
+</ol>
+<p>最后在测试项目的 <code>src</code> 目录下新建 <code>index.less</code>，内容为</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并且在 <code>index.js</code> 中引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> str = <span class="built_in">require</span>(<span class="string">'./foo.js'</span>)</span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./index.less'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(str)</span><br></pre></td></tr></table></figure>
+<p>这个时候执行 <code>npx st-pack</code>，查看 <code>bundle.js</code></p>
+<p><img src="./5.jpg" alt></p>
+<p>然后在 <code>dist</code> 目录新建 <code>index.html</code>，引入 <code>bundle.js</code>，用浏览器打开 <code>index.html</code></p>
+<p><img src="./6.jpg" alt></p>
+<h2 id="增加-plugin-解析机制"><a href="#增加-plugin-解析机制" class="headerlink" title="增加 plugin 解析机制"></a>增加 plugin 解析机制</h2><p>webpack 的插件机制其实很简单，就是在对应的生命周期的位置<strong>发布</strong>信息，而原来<strong>订阅</strong>到这些信息的插件收到这些信息时，就会<strong>执行对应的回调</strong>，本质上就是利用 <strong>发布订阅模式</strong>来实现 webpack 到对应的生命周期时执行对应的代码</p>
+<p>首先为了方便这里使用 <code>tapable</code> 这个库，<code>tapble</code> 是一个用于为 plugins 创建钩子的库，它里面暴露了很多 hooks 类，目前这里使用 <code>SyncHook</code> 这个类来进行开发</p>
+<p>先是安装 <code>tapable</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add tapable</span><br></pre></td></tr></table></figure>
+<p>在 <code>lib/complier.js</code> 文件中引入 <code>tapable</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; SyncHook &#125; = <span class="built_in">require</span>(<span class="string">'tapable'</span>)</span><br></pre></td></tr></table></figure>
+<p>在 <code>Compiler</code> 类中，增加了 <code>hooks</code> 钩子</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 插件的生命周期钩子，这里为了方便统一使用同步的方式</span></span><br><span class="line"><span class="keyword">this</span>.hooks = &#123;</span><br><span class="line">  entryOptions: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  afterPlugins: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  run: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  compile: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  afterCompile: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  emit: <span class="keyword">new</span> SyncHook(),</span><br><span class="line">  done: <span class="keyword">new</span> SyncHook()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后将 <code>config</code> 中的 <code>plugins</code> 配置中的 <code>plugin</code> 的 <code>apply</code> 函数中的 <code>this</code> 也就是 <code>Compiler</code> 传入，让插件可以得到 <code>Compiler</code> 对象并订阅事件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; plugins &#125; = <span class="keyword">this</span>.config</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(plugins)) &#123;</span><br><span class="line">    plugins.forEach(<span class="function"><span class="params">plugin</span> =&gt;</span> &#123;</span><br><span class="line">      plugin.apply(<span class="keyword">this</span>) <span class="comment">// 将 Compiler 这个类传入</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后 <code>call</code> 对应的生命周期钩子发布事件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">#! /usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(path.resolve(<span class="string">'webpack.config.js'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到项目目录下的 webpack.config.js 然后通过一个 compiler 解析它</span></span><br><span class="line"><span class="keyword">const</span> Complier = <span class="built_in">require</span>(<span class="string">'../lib/compiler.js'</span>)</span><br><span class="line"><span class="keyword">const</span> complier = <span class="keyword">new</span> Complier(config)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 run 之前发布一个 entryOptions 的钩子</span></span><br><span class="line">complier.hooks.entryOptions.call()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 compiler 的 run 方法执行代码</span></span><br><span class="line">complier.run()</span><br></pre></td></tr></table></figure>
+<p><img src="./7.jpg" alt></p>
+<p>在测试项目目录创建 <code>plugins</code> 目录，然后写两个 <code>plugin</code> 插件</p>
+<p><code>demo1-plugin.js</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo1Plugin</span> </span>&#123;</span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    compiler.hooks.emit.tap(<span class="string">'emit'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'emit'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = Demo1Plugin</span><br></pre></td></tr></table></figure>
+<p><code>demo2-plugin.js</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo2Plugin</span> </span>&#123;</span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    compiler.hooks.afterPlugins.tap(<span class="string">'afterPlugins'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'afterPlugins'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = Demo2Plugin</span><br></pre></td></tr></table></figure>
+<p>在其 <code>webpack.config.js</code> 文件中引入并使用</p>
+<p><img src="./8.jpg" alt></p>
+<p><img src="./9.jpg" alt></p>
+<p>这里要强调的一点是，对于同步的钩子(如 <code>SyncHook</code>) 而言, <code>tap</code> 是添加 <code>plugin</code> 的唯一有效的方法，当然还有其他的异步钩子，这里不详细说，详情可以去看 <a href="https://www.npmjs.com/package/tapable" target="_blank" rel="noopener">tapble 官方文档说明</a></p>
+<p>在测试项目根目录执行 <code>npx st-pack</code> 可以看到</p>
+<p><img src="./10.jpg" alt></p>
+<p>可以看到其正确的打印出了生命周期的顺序</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由以上的分析可以看到，一个最基本的 webpack 的流程是这样的</p>
+<ol>
+<li><code>webpack</code> 在拿到配置文件后，将文件的配置传给一个 <code>Compiler</code> 对象，由这个对象 <code>run</code> 来处理对应的打包逻辑</li>
+<li><code>Compiler</code> 主要做的就是两件事，<strong>递归创建依赖关系</strong> 和 <strong>生成打包后的文件</strong></li>
+<li>在创建依赖关系的过程中，需要将模块的源码转成 ast，然后再遍历这个 ast node, 在遍历的过程中修改源码，最后再生成源码返回，此时返回的是一个修改过后的模板，用 <code>ejs</code> 渲染</li>
+<li>模板本身就是 IIFE(立即执行函数)，也就是一个闭包，它通过这个函数去递归的执行对应模块的源码，直到最后输出结果</li>
+<li>在解析 <code>loader</code> ，越靠后的越先执行。<code>loader</code> 本质上也是解析对应的 <code>loader</code> 源码执行的产物，不同的地方在于<strong><code>loader</code>中的参数即源码 <code>source</code> 是一个接着一个传递下去的</strong>，即 <code>loader</code> 之间是有一个传承的关系，他们的参数是相关联的。所以 <code>loader</code> 作为加载器，它的目的就是 <strong>加载代码 -&gt; 修改代码 -&gt; 执行代码</strong></li>
+<li>在解析 <code>plugin</code> 时，本质上就是通过 <code>webpack</code> 暴露出来的事件，<code>plugin</code> 监听这些事件，在截获到这些事件的时候就可以做事情了。主要利用了<strong>发布订阅</strong>这样的一种设计模式</li>
+</ol>
+<p>另，<a href="https://github.com/strugglebak/webpack-resource-test-demo.git" target="_blank" rel="noopener">👉项目测试仓库戳这里</a>，以及<a href="https://github.com/strugglebak/st-pack.git" target="_blank" rel="noopener">👉手写 webpack 源码仓库戳这里</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/" title="从Webpack本质开始(一):手写一个Webpack">https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag">
+            <i class="fa fa-tag"></i>
+            webpack
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/17/Vue全家桶之Vue-Router/" rel="next" title="Vue全家桶之Vue-Router">
+                <i class="fa fa-chevron-left"></i> Vue全家桶之Vue-Router
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/24/从Webpack本质开始-二-手写loader/" rel="prev" title="从Webpack本质开始(二):手写loader">
+                从Webpack本质开始(二):手写loader <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化项目"><span class="nav-number">1.</span> <span class="nav-text">初始化项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack-分析以及处理"><span class="nav-number">2.</span> <span class="nav-text">webpack 分析以及处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建依赖关系"><span class="nav-number">3.</span> <span class="nav-text">创建依赖关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AST-递归解析"><span class="nav-number">4.</span> <span class="nav-text">AST 递归解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成打包结果"><span class="nav-number">5.</span> <span class="nav-text">生成打包结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加-loader-的解析机制"><span class="nav-number">6.</span> <span class="nav-text">增加 loader 的解析机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加-plugin-解析机制"><span class="nav-number">7.</span> <span class="nav-text">增加 plugin 解析机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2020/02/23/从Webpack本质开始-一-手写一个Webpack/';
+          this.page.identifier = '2020/02/23/从Webpack本质开始-一-手写一个Webpack/';
+          this.page.title = '从Webpack本质开始(一):手写一个Webpack';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

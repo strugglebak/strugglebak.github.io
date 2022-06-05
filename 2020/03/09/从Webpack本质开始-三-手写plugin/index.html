@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="webpack,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写 plugin">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Webpack本质开始(三):手写plugin">
+<meta property="og:url" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写 plugin">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/1.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/2.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/3.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/console.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/4.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/5.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/6.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/7.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/8.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/9.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/10.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/11.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/12.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/13.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/14.jpg">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/15.jpg">
+<meta property="og:updated_time" content="2022-06-04T08:13:29.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Webpack本质开始(三):手写plugin">
+<meta name="twitter:description" content="这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写 plugin">
+<meta name="twitter:image" content="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/">
+
+
+
+
+
+  <title>从Webpack本质开始(三):手写plugin | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从Webpack本质开始(三):手写plugin</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-09T17:14:27+08:00">
+                2020-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端工程化/" itemprop="url" rel="index">
+                    <span itemprop="name">前端工程化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/09/从Webpack本质开始-三-手写plugin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/09/从Webpack本质开始-三-手写plugin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这个是探究 Webpack 本质的系列文章，会详细讲解如何手写一些源码如 Webpack, loader, plugin 等等，本文主要讲解的是如何手写 plugin</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="webpack-流程"><a href="#webpack-流程" class="headerlink" title="webpack 流程"></a>webpack 流程</h2><p>在手写 webpack <code>plugin</code> 之前，需要了解一下的是 webpack 整个流程是怎么样的，为了方便起见，这里用几张图来概括下</p>
+<ul>
+<li>整体的流程图<br>  <img src="./1.jpg" alt></li>
+<li><code>compilation</code> 对象<br>  <img src="./2.jpg" alt></li>
+</ul>
+<p>为什么只是用这两张图呢，因为这是 webpack 运行流程中最重要的两个部分。我们对 webpack 的印象是什么，基本上 webpack 是以下这么个大致的流程</p>
+<ol>
+<li>整合配置 <code>options</code></li>
+<li>实例化 <code>compiler</code> 对象</li>
+<li>实例化所有的插件(这里包括内置的以及自己配置的)，调用其 <code>apply</code> 方法</li>
+<li>返回 <code>compiler</code> 对象</li>
+<li>执行 <code>complier</code> 对象的 <code>run</code> 方法</li>
+</ol>
+<p>而在 webpack 的内部(这里主要说它的 <code>compiler</code> 对象做了啥事)，它会经历大致如下的流程(以 <code>SingleEntryPlugin</code> 为例)</p>
+<ol>
+<li>调用 <code>beforeRun</code> 钩子</li>
+<li>调用 <code>run</code> 钩子</li>
+<li>调用 <code>compile</code> 方法(调用 <code>beforeCompiler</code> 钩子 -&gt; 调用 <code>compile</code> 钩子 -&gt; 实例化 <code>compilation</code> 对象 -&gt; 调用 <code>thisCompilation</code> 以及 <code>compliation</code> 钩子 -&gt; 执行 <code>make</code> 钩子 -&gt; <code>seal</code> 封装 -&gt; 调用 <code>afterCompile</code> 钩子)</li>
+<li>编译结束后会 <code>run</code> 方法会执行 <code>onCompiled</code> 回调，在这个回调中会先调用 <code>shouldEmit</code> 钩子做判断，成功执行 <code>emitAssets</code> 然后调用 <code>emit</code> 钩子输出文件，失败则调用 <code>done</code> 钩子结束</li>
+</ol>
+<p>再细一点，我们深入到 <code>compilation</code> 里，看看在实例化 <code>compilation</code> 对象里面做了啥</p>
+<ol>
+<li>调用 <code>addEntry</code> 钩子，调用完毕后执行其回调通知 <code>make</code> 钩子插件编译完成</li>
+<li>调用 <code>addEntry</code> 钩子时会执行 <code>_addModuleChain</code> 方法(根据 <code>dep</code> 拿到 <code>moduleFactory</code> -&gt; 调用 <code>moduleFactory.create</code> 拿到 <code>module</code> -&gt; 调用 <code>buildModule</code> 方法构建模块依赖 -&gt; 调用 <code>afterBuild</code> 方法<strong>递归</strong>用模块工厂创建依赖的模块)</li>
+</ol>
+<p>从以上的描述我们可以看到，webpack 的一个基本流程就是 <strong>读取配置， 实例化 compiler 时会调用各种钩子以及回调函数, 最后再去挂载相应的插件</strong></p>
+<h2 id="所以插件是怎么回事"><a href="#所以插件是怎么回事" class="headerlink" title="所以插件是怎么回事"></a>所以插件是怎么回事</h2><p>webpack 中，如果要写自己的插件，其实就是利用 <strong>发布订阅模式</strong>来写的。因为在 webpack 里面有很多的事件，我们通过 “监听” 这些事件后去执行相应的回调就好，这样说是不是很像前端页面中的交互逻辑呢。是的，基本上原理是相似的。所以插件一般都是这么写</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestPlugin</span> </span>&#123;</span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    compiler.hooks.compilation.tap(<span class="string">'TestPlugin'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">compilation</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'compilation'</span>, compilation);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导出 Plugin</span></span><br><span class="line"><span class="built_in">module</span>.exports = TestPlugin;</span><br></pre></td></tr></table></figure>
+<p>在 webpack 使用的钩子中，很大部分都是依赖 <code>tapable</code> 这个库，而这个库的作用就是为 <code>plugin</code> 创建钩子用的，它里面会有类似 <code>XXXHook</code> 类型的钩子，有同步的也有异步的。里面的 <code>tap</code> 方法就是用于 <strong>订阅事件</strong>。代码 <code>compiler.hooks.compilation.tap()</code> 就是当 <code>compilation</code> 这个钩子被触发时就会去执行 <code>tap</code> 里面的回调。</p>
+<h2 id="手写文件列表插件"><a href="#手写文件列表插件" class="headerlink" title="手写文件列表插件"></a>手写文件列表插件</h2><p>这个插件主要就是将 webpack 最后 <code>emit</code> 时输出到终端的内容做一个 “拦截”，然后将其输出到一个设置的 <code>filename</code> 文件中。</p>
+<blockquote>
+<p>注意这里还要安装 <code>html-webpack-plugin</code> 插件</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileListPlugin</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(&#123; filename &#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.filename = filename</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    <span class="comment">// 在发射文件这个时候截取</span></span><br><span class="line">    compiler.hooks.emit.tap(<span class="string">'FileListPlugin'</span>, (compilation) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 当前打包的资源会放在 assets 属性上</span></span><br><span class="line">      <span class="keyword">const</span> &#123; assets &#125; = compilation</span><br><span class="line">      <span class="keyword">let</span> content = <span class="string">`## 文件名    大小 \r\n`</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> [filename, stat] <span class="keyword">of</span> <span class="built_in">Object</span>.entries(assets)) &#123;</span><br><span class="line">        content += <span class="string">`- <span class="subst">$&#123;filename&#125;</span>    <span class="subst">$&#123;stat.size()&#125;</span>\r\n`</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 为 assets 添加一个 filename 的字段，在 webpack 接下来的处理中为输出相应的文件做准备</span></span><br><span class="line">      assets[<span class="keyword">this</span>.filename] = &#123;</span><br><span class="line">        source() &#123; <span class="keyword">return</span> content &#125;,</span><br><span class="line">        size() &#123; <span class="keyword">return</span> content.length &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = FileListPlugin</span><br></pre></td></tr></table></figure>
+<p>这里我们就知道了为什么要知道 webpack 的流程才能写插件了，如果要做一个文件列表的插件，那么就应该是在 <strong>文件发射之前做</strong>，而不是在 webpack 调用其他的钩子的时候做</p>
+<h2 id="手写内联-webpack-插件"><a href="#手写内联-webpack-插件" class="headerlink" title="手写内联 webpack 插件"></a>手写内联 webpack 插件</h2><p>这个所谓的内联插件实际上的功能就是将外链的标签变成内联的，主要体现在</p>
+<ul>
+<li>将 <code>link</code> 标签变成 <code>style</code> 标签，然后里面填充的是引入的 css 的内容</li>
+<li>将 <code>script</code> 标签填充引入的 <code>script</code> 文件内容</li>
+<li>删除掉已经生成的没必要引入的文件</li>
+</ul>
+<p>首先还需要安装三个插件 <code>css-loader</code> 、<code>mini-css-extract-plugin</code> 以及 <code>html-webpack-plugin/next</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add css-loader mini-css-extract-plugin html-webpack-plugin/next</span><br></pre></td></tr></table></figure>
+<p>webpack 配置如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> MiniCssExtractPlugin = <span class="built_in">require</span>(<span class="string">'mini-css-extract-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> InlineSourcePlugin = <span class="built_in">require</span>(<span class="string">'./plugins/inlineSource-plugin'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  mode: <span class="string">'development'</span>,</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [MiniCssExtractPlugin.loader, <span class="string">'css-loader'</span>]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> MiniCssExtractPlugin(&#123;</span><br><span class="line">      filename: <span class="string">'main.css'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> InlineSourcePlugin(&#123;</span><br><span class="line">      test: <span class="regexp">/\.(js|css)/</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      template: <span class="string">'./src/index.html'</span></span><br><span class="line">    &#125;),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是关键的 <code>InlineSourcePlugin</code> 插件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 因为最后是改变 html 的 tag 然后插入到 html 中的，所以这里会使用到</span></span><br><span class="line"><span class="comment">// html-webpack-plugin 提供的一些 hooks 来供我们使用</span></span><br><span class="line"><span class="comment">// 在 html-webpack-plugin 的基础上开发插件</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InlineSourcePlugin</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(&#123; test &#125;) &#123;</span><br><span class="line">    <span class="comment">// 用于匹配文件的正则，这里主要寻找以 js 或 css 结尾的文件</span></span><br><span class="line">    <span class="keyword">this</span>.reg = test</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理一个 tag 的数据</span></span><br><span class="line">  processTag(tag, compilation) &#123;</span><br><span class="line">    <span class="keyword">let</span> newTag, url</span><br><span class="line">    <span class="keyword">const</span> &#123; tagName, attributes &#125; = tag</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (tagName === <span class="string">'link'</span> &amp;&amp; <span class="keyword">this</span>.reg.test(attributes.href)) &#123;</span><br><span class="line">      newTag = &#123;</span><br><span class="line">        tagName: <span class="string">'style'</span>,</span><br><span class="line">        attributes: &#123; <span class="attr">type</span>: <span class="string">'text/css'</span> &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      url = attributes.href</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (tagName === <span class="string">'script'</span> &amp;&amp; <span class="keyword">this</span>.reg.test(attributes.src)) &#123;</span><br><span class="line">      newTag = &#123;</span><br><span class="line">        tagName: <span class="string">'script'</span>,</span><br><span class="line">        attributes: &#123; <span class="attr">type</span>: <span class="string">'application/javascript'</span> &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      url = attributes.src</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (url) &#123;</span><br><span class="line">      <span class="comment">// 标签里面插入对应文件的源码</span></span><br><span class="line">      newTag.innerHTML = compilation.assets[url].source()</span><br><span class="line">      <span class="comment">// 既然都把源码怼 html 上了，就应该删除对应的文件</span></span><br><span class="line">      <span class="keyword">delete</span> compilation.assets[url]</span><br><span class="line">      <span class="keyword">return</span> newTag</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tag</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理引入 tags 的数据</span></span><br><span class="line">  processTags(data, compilation) &#123;</span><br><span class="line">    <span class="keyword">const</span> headTags = []</span><br><span class="line">    data.headTags.forEach(<span class="function"><span class="params">headTag</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 处理引入 css 的 link 标签</span></span><br><span class="line">      headTags.push(<span class="keyword">this</span>.processTag(headTag, compilation))</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> bodyTags = []</span><br><span class="line">    data.bodyTags.forEach(<span class="function"><span class="params">bodyTag</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 处理引入 script 标签</span></span><br><span class="line">      bodyTags.push(<span class="keyword">this</span>.processTag(bodyTag, compilation))</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123; ...data, headTags, bodyTags &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  apply (compiler) &#123;</span><br><span class="line">    compiler.hooks.compilation.tap(<span class="string">'InlineSourcePlugin'</span>, (compilation) =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'The compiler is starting a new compilation...'</span>)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 静态插件接口 | compilation | HOOK NAME | register listener</span></span><br><span class="line">      <span class="comment">// 使用 alterAssetTagGroups 这个 hooks</span></span><br><span class="line">      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(</span><br><span class="line">        <span class="string">'alterPlugin'</span>, <span class="comment">// 为堆栈取名</span></span><br><span class="line">        (data, cb) =&gt; &#123;</span><br><span class="line">          <span class="comment">// 处理 html 的某些 tags, 这里需要做处理的是 css 和 js</span></span><br><span class="line">          <span class="keyword">const</span> newData = <span class="keyword">this</span>.processTags(data, compilation)</span><br><span class="line">          <span class="comment">// 返回 data</span></span><br><span class="line">          cb(<span class="literal">null</span>, newData)</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = InlineSourcePlugin</span><br></pre></td></tr></table></figure>
+<p>其实这里整体的逻辑很简单，就是找出 <code>index.html</code> 中的 <code>link</code> 标签以及 <code>script</code> 标签，将其的 <code>innerHTML</code> 替换为对应文件的源码而已。从 <code>compliation</code> 这个对象里面找对应的字段然后做对应的修改即可。但是这里的重点是，应该在哪里或者说是哪个钩子里面去用？这里就用到了 <code>html-webpack-plugin</code> 这个插件了，众所周知这个插件的作用是 <strong>简化 html 文件的创建的</strong>，而且这个插件本身也提供了一些钩子给开发者在基于这个插件的基础上再开发插件。去看 <a href="https://github.com/jantimon/html-webpack-plugin" target="_blank" rel="noopener">html-webpack-plugin 的官方文档</a>，在 <code>plugin.js</code> 这个小标题下可以找到对应插件的写法，上面就是它说明的提供的一些钩子。不过这里不是用 <code>beforeEmit</code> 这个钩子，因为我们想要的是要修改标签，理所当然的就是跟 <code>tag</code> 相关的 hooks 了。这里有两个 <code>tag</code>，一个是 <code>alterAssetTags</code>，另一个是 <code>alterAssetTagGroups</code>，这里我们选择的是 <code>alterAssetTagGroups</code>，因为我们重点是在 <code>head</code> 以及 <code>body</code> 上找标签，而且为了之后能修改更多的标签，选这个比较靠谱。选择了之后将 <code>beforeEmit</code> 改为 <code>alterAssetTagGroups</code> 就可以整活了, 后面就是根据 <code>data</code> 的属性去做相应的修改， <code>processTags</code> 完成之后调用 <code>cb</code> 回调，代码修改执行完毕。</p>
+<p>这里还有一张 <code>html-webpack-plugin</code> hooks 图，以供参考</p>
+<p><img src="./3.jpg" alt></p>
+<h2 id="手写打包自动发布插件"><a href="#手写打包自动发布插件" class="headerlink" title="手写打包自动发布插件"></a>手写打包自动发布插件</h2><p>这个插件的主要功能就是将打包后的文件(就是 <code>dist</code> 目录下的)放到 cdn 服务器上。然后页面中就直接引用 cdn 的文件就可以了。这里使用免费的 <strong>七牛云</strong> 来做</p>
+<p>首先需要安装 <code>qiniu</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add qiniu</span><br></pre></td></tr></table></figure>
+<p>webpack 配置文件设置 <code>output</code> 的 <code>publicPath</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">output: &#123;</span><br><span class="line">    filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    publicPath: <span class="string">'http://test.strugglebak.com'</span> <span class="comment">// 在你的七牛云的 bucket 上设置的外链域名</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>然后写一个 <code>upload-plugin.js</code> 在 <code>plugin</code> 目录，webpack 配置文件引入和使用</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> UploadPlugin = <span class="built_in">require</span>(<span class="string">'./plugins/upload-plugin'</span>)</span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">...</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> UploadPlugin(&#123;</span><br><span class="line">            bucket: <span class="string">'ststatic'</span>, <span class="comment">// 你的七牛云对象存储中创建的 bucket 名字</span></span><br><span class="line">            domain: <span class="string">'test.strugglebak.com'</span> <span class="comment">// 在你的七牛云的 bucket 上设置的外链域名</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是 <code>upload-plugin.js</code> 文件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> qiniu = <span class="built_in">require</span>(<span class="string">'qiniu'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadPlugin</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(&#123;bucket, domain&#125;) &#123;</span><br><span class="line">    <span class="comment">// 初始化七牛云参数以及内部变量</span></span><br><span class="line">    <span class="keyword">this</span>.init(&#123;bucket, domain&#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  apply(compiler) &#123;</span><br><span class="line">    <span class="comment">// 上传文件是多个，且返回的是 promise，所以这里用 tapPromise</span></span><br><span class="line">    compiler.hooks.afterEmit.tapPromise(</span><br><span class="line">      <span class="string">'UploadPlugin'</span>,</span><br><span class="line">      (compliation) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; assets &#125; = compliation</span><br><span class="line">        <span class="keyword">const</span> promises = []</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> [filename, stat] <span class="keyword">of</span> <span class="built_in">Object</span>.entries(assets)) &#123;</span><br><span class="line">          promises.push(<span class="keyword">this</span>.upload(filename))</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promises)</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 上传文件</span></span><br><span class="line">  upload(filename) &#123;</span><br><span class="line">    <span class="comment">// 代码参考在 https://developer.qiniu.com/kodo/sdk/1289/nodejs#form-upload-file</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resovle, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 要上传的本地文件目录为 dist 目录下的</span></span><br><span class="line">      <span class="keyword">const</span> localFile = path.resolve(__dirname, <span class="string">'../dist'</span>, filename)</span><br><span class="line">      <span class="comment">// 使用表单方式上传本地文件</span></span><br><span class="line">      <span class="keyword">this</span>.formUploader.putFile(</span><br><span class="line">        <span class="keyword">this</span>.uploadToken, filename, localFile, <span class="keyword">this</span>.putExtra,</span><br><span class="line">        (respErr, respBody, respInfo) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (respErr) &#123;</span><br><span class="line">          reject(respErr)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (respInfo.statusCode == <span class="number">200</span>) &#123;</span><br><span class="line">          resovle(respBody)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  init(&#123;bucket, domain&#125;) &#123;</span><br><span class="line">    <span class="comment">// 读取本地的 qiniu 的密钥文件，这样比较安全</span></span><br><span class="line">    <span class="keyword">const</span> keyJSON = fs.readFileSync(</span><br><span class="line">      path.resolve(__dirname, <span class="string">'../'</span>, <span class="string">'qiniu-key.json'</span>),</span><br><span class="line">      <span class="string">'utf8'</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">const</span> &#123; accessKey, secretKey &#125; = <span class="built_in">JSON</span>.parse(keyJSON)</span><br><span class="line">    <span class="keyword">const</span> mac = <span class="keyword">new</span> qiniu.auth.digest.Mac(accessKey, secretKey)</span><br><span class="line">    <span class="keyword">const</span> putPolicy = <span class="keyword">new</span> qiniu.rs.PutPolicy(&#123; <span class="attr">scope</span>: bucket &#125;)</span><br><span class="line">    <span class="keyword">const</span> config = <span class="keyword">new</span> qiniu.conf.Config()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.uploadToken = putPolicy.uploadToken(mac)</span><br><span class="line">    <span class="keyword">this</span>.formUploader = <span class="keyword">new</span> qiniu.form_up.FormUploader(config)</span><br><span class="line">    <span class="keyword">this</span>.putExtra = <span class="keyword">new</span> qiniu.form_up.PutExtra()</span><br><span class="line">    <span class="keyword">this</span>.domain = domain</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = UploadPlugin</span><br></pre></td></tr></table></figure>
+<p>这里的整体逻辑很简单，就是先初始化 <code>qiniu</code> 的一些参数，然后利用其 <code>formUploader</code> 对象进行<strong>表单方式的文件上传</strong>。而因为是在 <strong>发射文件之后</strong> 才采取的操作，所以这里就使用 <code>afterEmit</code> 这个 hooks，传的参数里面 <code>compilation</code> 对象的 <code>assets</code> 属性有对应的文件名和其对应的内容。拿到这个文件路径之后就将其 <code>push</code> 到一个 <code>promise</code> 数组里面，最后再整体返回(因为这里使用的是 <code>tapPromise</code>)。在文件上传代码的核心部分，就是利用 <a href="https://developer.qiniu.com/kodo/sdk/1289/nodejs#form-upload-file" target="_blank" rel="noopener">qiniu 表单上传代码</a> 来做的，本质上就是返回了一个 <code>promise</code>。在 <code>formUploader.putFile</code> 这个函数中，有几个参数</p>
+<ul>
+<li>uploadToken: upload 的 token，主要根据 <code>accessKey</code> 和 <code>secretKey</code> 生成的，用于身份的验证</li>
+<li>filename: 这个相当于文件的 <code>key</code></li>
+<li>localFile: 这个要上传的本地文件的 <code>value</code>，就是文件路径，与上面的 <code>filename</code> 对应</li>
+<li>putExtra: qiniu.form_up.PutExtra() 对象(意义不明)</li>
+</ul>
+<p>这里主要 <code>resolve</code> 的是 <code>respBody</code> 这个数据。这样整体的逻辑就算完成。</p>
+<h2 id="补充-在七牛云添加-cdn"><a href="#补充-在七牛云添加-cdn" class="headerlink" title="补充(在七牛云添加 cdn)"></a>补充(在七牛云添加 cdn)</h2><p>这里可能有些小伙伴不知道如何在七牛云添加 cdn 域名。下面我来说下步骤</p>
+<ul>
+<li><p>首先你需要有一个七牛云账号，在注册完账号后，点击主页的 <code>管理控制台</code> 进入控制台<br><img src="./console.jpg" alt></p>
+</li>
+<li><p>进入 <code>管理控制台</code> 后，点击左边的 <code>cdn</code><br>  <img src="./4.jpg" alt></p>
+</li>
+<li><p>然后点击 <code>域名管理</code><br>  <img src="./5.jpg" alt></p>
+</li>
+<li><p>再点击 <code>添加域名</code><br>  <img src="./6.jpg" alt></p>
+</li>
+<li><p>然后在 <code>加速域名</code> 那块输入要加速的域名<br>  <img src="./7.jpg" alt></p>
+<p>  这里需要注意的是，你目前的域名已经<strong>注册并且备过案了!!!</strong>，比如我的 <code>strugglebak.com</code> 这个域名是备过案的才能用。<br>  我这里输入的要加速的域名是 <code>test.strugglebak.com</code>，其中 <code>test</code> 表示 <strong>主机记录</strong>，你也可以随便取啥名</p>
+</li>
+<li><p>再点击 <code>创建</code><br>  <img src="./8.jpg" alt></p>
+</li>
+<li><p>跳回到 <code>域名管理</code> 上，鼠标悬浮到你刚创建的域名上(<code>test.strugglebak.com</code>)，复制 <code>CNAME</code><br>  <img src="./9.jpg" alt></p>
+</li>
+<li><p>然后在自己的服务器在对应的域名上添加 <code>解析记录</code>(因为我这里通常就是用腾讯云小程序搞的，所以截图是小程序的手机截图)<br>  <img src="./10.jpg" alt></p>
+<p>  点击 <code>域名解析</code></p>
+<p>  <img src="./11.jpg" alt></p>
+<p>  点击 <code>添加解析记录</code></p>
+<p>  <img src="./12.jpg" alt></p>
+<p>  然后填写 <code>主机记录</code> 以及 <code>记录值</code></p>
+<p>  <img src="./13.jpg" alt></p>
+<p>  其中 <code>test</code> 对应你设置的七牛云 <code>bucket</code> 的外链，而 <code>记录值</code> 就是 <code>CNAME</code></p>
+</li>
+<li><p>最后在你的七牛云 <code>对象存储</code> 中，在对应的 <code>bucket</code> 中设置外链<br>  <img src="./14.jpg" alt></p>
+</li>
+</ul>
+<p>如果最后看到 cdn 外链的下面的图，则说明设置成功</p>
+<p><img src="./15.jpg" alt></p>
+<p>所以当你在访问 <code>test.strugglebak.com/xxx文件</code>时，就相当于在访问 <code>test-strugglebak-com-idva9dm.qiniudns.com/xxx文件</code>，效果就是会先访问你的服务器，然后再转到七牛的服务器上访问文件。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由以上的内容我们知道了，在写一个 webpack 的插件之前，最重要的是要了解一个流程是怎么走的，都是利用 webpack 的钩子或者其他插件本身的钩子来进行编写。注意 webpack 插件的本质是利用了 <strong>发布订阅</strong> 的模式。我们订阅了这个事件后，执行对应的回调，并将执行回调的结果再传回给 webpack，最终结果会体现在打包的文件上。这样 webpack 就完成了对插件的加载以及处理。</p>
+<p>另，<a href="https://github.com/strugglebak/webpack-plugin-test.git" target="_blank" rel="noopener">👉项目测试仓库戳这里</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://juejin.im/post/5d418879f265da03af19b03f" target="_blank" rel="noopener">Webpack 源码研究</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/" title="从Webpack本质开始(三):手写plugin">https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag">
+            <i class="fa fa-tag"></i>
+            webpack
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/24/从Webpack本质开始-二-手写loader/" rel="next" title="从Webpack本质开始(二):手写loader">
+                <i class="fa fa-chevron-left"></i> 从Webpack本质开始(二):手写loader
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/09/从Webpack本质开始-四-手写tapable/" rel="prev" title="从Webpack本质开始(四):手写tapable">
+                从Webpack本质开始(四):手写tapable <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack-流程"><span class="nav-number">1.</span> <span class="nav-text">webpack 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#所以插件是怎么回事"><span class="nav-number">2.</span> <span class="nav-text">所以插件是怎么回事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手写文件列表插件"><span class="nav-number">3.</span> <span class="nav-text">手写文件列表插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手写内联-webpack-插件"><span class="nav-number">4.</span> <span class="nav-text">手写内联 webpack 插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手写打包自动发布插件"><span class="nav-number">5.</span> <span class="nav-text">手写打包自动发布插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充-在七牛云添加-cdn"><span class="nav-number">6.</span> <span class="nav-text">补充(在七牛云添加 cdn)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2020/03/09/从Webpack本质开始-三-手写plugin/';
+          this.page.identifier = '2020/03/09/从Webpack本质开始-三-手写plugin/';
+          this.page.title = '从Webpack本质开始(三):手写plugin';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

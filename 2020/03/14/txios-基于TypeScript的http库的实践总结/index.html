@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Txios,Promise,TypeScript-Http,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本次项目是对自己用 TypeScript 造的一个轮子的总结，麻雀虽小，但已经尽量五脏俱全，希望各位能多多 star(摩多摩多~)，毕竟项目地址都在这儿了各位 QAQ">
+<meta name="keywords" content="Txios,Promise,TypeScript-Http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="txios-基于TypeScript的http库的实践总结">
+<meta property="og:url" content="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="本次项目是对自己用 TypeScript 造的一个轮子的总结，麻雀虽小，但已经尽量五脏俱全，希望各位能多多 star(摩多摩多~)，毕竟项目地址都在这儿了各位 QAQ">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/2.png">
+<meta property="og:updated_time" content="2022-06-04T08:13:29.071Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="txios-基于TypeScript的http库的实践总结">
+<meta name="twitter:description" content="本次项目是对自己用 TypeScript 造的一个轮子的总结，麻雀虽小，但已经尽量五脏俱全，希望各位能多多 star(摩多摩多~)，毕竟项目地址都在这儿了各位 QAQ">
+<meta name="twitter:image" content="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/">
+
+
+
+
+
+  <title>txios-基于TypeScript的http库的实践总结 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">txios-基于TypeScript的http库的实践总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-14T00:06:28+08:00">
+                2020-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TypeScript/" itemprop="url" rel="index">
+                    <span itemprop="name">TypeScript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TypeScript/Axios/" itemprop="url" rel="index">
+                    <span itemprop="name">Axios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/14/txios-基于TypeScript的http库的实践总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/14/txios-基于TypeScript的http库的实践总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本次项目是对自己用 TypeScript 造的一个轮子的总结，麻雀虽小，但已经尽量五脏俱全，希望各位能多多 star(摩多摩多~)，<a href="https://github.com/strugglebak/txios" target="_blank" rel="noopener">毕竟项目地址都在这儿了各位 QAQ</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><h3 id="使用的工具库"><a href="#使用的工具库" class="headerlink" title="使用的工具库"></a>使用的工具库</h3><p>这里罗列下使用到的一些工具库吧</p>
+<ul>
+<li><p>rollupjs</p>
+<p>  这是一个帮助 txios 项目打包的库，打包方面没有选择 Webpack 的原因是因为这个比较好配置, <strong>API 简单</strong>。并且由于其<strong>基于 ES2015 模块</strong>，比 Webpack 使用的 CommonJS 模块机制更加高效，同时也更加容易执行 <strong><code>tree-shaking</code></strong></p>
+</li>
+<li><p>prettier/tslint</p>
+<p>  这两个是比较重要的代码风格检查工具库了，在写一些工具库的时候尤其需要注意配合使用的</p>
+</li>
+<li><p>typeDoc</p>
+<p>  文档生成工具，毕竟写一个库需要自动生成文档给开发者看，并且这个库也能帮忙部署到 Github page 上</p>
+</li>
+<li><p>commitizen</p>
+<p>  主要用来规范 commit 提交信息，这个是很有好处的，清晰和规范的提交可以看出你对修改过的文件做了什么，这个是很重要的</p>
+</li>
+<li><p>Semantic-release</p>
+<p>  这个库主要用来处理自动化版本管理和包发布用的。</p>
+</li>
+<li><p>husky</p>
+<p>  使用这个工具，可以在每次的 git commit 之前执行已经定义好的 hook 脚本，可以用来自动化的检查代码质量</p>
+</li>
+<li><p>conventional-changelog</p>
+<p>  当写完一个工具库，你做了啥修改，使用这个配合 Commitizen ，在生成 release 包时会自动将你所修改的 changeLog 发布出来</p>
+</li>
+<li><p>jest</p>
+<p>  著名的测试工具库，主要是用于一些工具库或者 UI 组件库的测试。一般而言是配合 <code>chai</code>、<code>sion</code> 使用</p>
+</li>
+</ul>
+<blockquote>
+<p>⚠: 1.如果搭建环境过程中碰到了 <code>permission denied</code> 之类的字样，请<strong>关闭 vscode 试试</strong></p>
+</blockquote>
+<blockquote>
+<p>⚠: 2.如果在项目中执行 <code>semantic-release</code> 时遇到了类似这样的错误 <code>SemanticReleaseError: No GitHub token specified</code>，请首先去你的 github 账号的 settings 那里的 Developer settings 里新建一个 Personal access tokens ( <a href="https://strugglebak.github.io/2020/03/11/%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%A0%81%E8%A6%86%E7%9B%96%E7%8E%87%E5%BE%BD%E6%A0%87%E7%9A%84%E9%97%AE%E9%A2%98/">具体可参考我写的一篇博客</a> )，然后再到<strong>本地</strong>执行 <code>export GITHUB_TOKEN=&quot;你的 token&quot;</code>，最后再执行 <code>semantic-release</code> 即可。我想了下这可能是由于 <code>semantic-release</code> 是读取系统当前用户的环境变量所导致的，本地的 travis 并没有将其设置进环境变量中，而只是设置到项目的 <code>.travis.yml</code> 配置文件中了</p>
+</blockquote>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><p>一般来说，这里是先建立 <code>src</code> 以及 <code>test</code> 文件夹，<code>src</code> 就存放源码部分，<code>test</code> 就存放测试代码部分, <code>examples</code> 就存放代码的用例，当然这个用例跟测试用例是不一样的，这个只是方便写出了功能做调试用。你可以理解为 <code>examples</code> 就是这个库的一个应用了，可以在 <code>examples</code> 目录下新建一个 <code>webpack.config.js</code>，里面利用 webpack 的 <code>HotModuleReplacementPlugin</code> 插件建立模块热替换，当更改了模块之后就可以进行局部更新了。</p>
+<p>这里还要强调的部分是对 <code>entry</code> 做了处理，因为 <code>examples</code> 下面有多个 demo 目录，而每个 demo 目录下都有 <code>app.ts</code> 文件作为这个 webpack 的入口文件, 因此 <code>entries</code> 需要收集 <code>examples</code> 下的这些个 <code>app.ts</code>，因为每个入口又引入了一个用于热更新的文件，所以看到的 <code>entry</code> 的配置基本如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">entry: fs.readdirSync(__dirname).reduce(<span class="function">(<span class="params">entries, dir</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> fullDir = path.join(__dirname, dir);</span><br><span class="line">  <span class="keyword">const</span> entryFile = path.join(fullDir, <span class="string">'app.ts'</span>);</span><br><span class="line">  <span class="keyword">if</span> (fs.statSync(fullDir).isDirectory() &amp;&amp; fs.existsSync(entryFile)) &#123;</span><br><span class="line">    entries[dir] = [<span class="string">'webpack-hot-middleware/client'</span>, entryFile];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> entries;</span><br><span class="line">&#125;, &#123;&#125;),</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>而基本上可以看到这里就是典型的多入口配置，代码的逻辑其实很简单</p>
+<ul>
+<li>读取当前目录下的各个 demo 目录的 <code>app.ts</code></li>
+<li>构建诸如 <code>{&#39;demo&#39;: [&#39;webpack-hot-middleware/client&#39;, &#39;./demo/app.ts&#39;]}</code> 这样的 <code>entries</code> 对象</li>
+<li>返回这个 <code>entries</code> 对象</li>
+</ul>
+<p>那么为何要加上这个 <code>webpack-hot-middleware/client</code> 呢？先别急，我们先在 <code>examples</code> 目录下构建这样一个 <code>server.js</code> 文件，然后引入 <code>webpack</code> 以及 <code>webpack.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> middleware = <span class="built_in">require</span>(<span class="string">'webpack-dev-middleware'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> complier = webpack(webpackConfig);</span><br><span class="line"></span><br><span class="line">app.use(</span><br><span class="line">  middleware(compiler, &#123;</span><br><span class="line">    <span class="comment">// webpack-dev-middleware options</span></span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!'</span>));</span><br></pre></td></tr></table></figure>
+<p>这里我们是通过 <code>node server.js</code> 来启动这个应用，然后引入 <code>webpack</code> 以及 <code>webpack.config.js</code> 来打包这个应用，然而这里我们还要引入一个包叫 <code>webpack-hot-middleware</code>，如果需要做热更新的话，需要在每个入口文件处引入 <code>hot middleware client</code>，具体的做法就是上面说的，在入口文件处添加 <code>webpack-hot-middleware/client</code> 就好</p>
+<p>添加完后，在 <code>server.js</code> 中添加</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> webpackHotMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-hot-middleware'</span>);</span><br><span class="line">...</span><br><span class="line">app.use(webpackHotMiddleware(complier));</span><br></pre></td></tr></table></figure>
+<p><code>examples</code> 目录下应用 <code>demo</code> 的目录基本是这样的形式，<code>demo</code> 有两个文件</p>
+<ul>
+<li><code>app.ts</code></li>
+<li><code>index.html</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// demo/app.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> txios <span class="keyword">from</span> <span class="string">'../../src/index'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行 txios 相关的操作</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">// demo/index.html</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Demo example<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  // 注意这里引入了生成好的 demo.js，也就是被编译好的当前目录下的 app.ts !!!</span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/__build__/demo.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="其他工具的配置"><a href="#其他工具的配置" class="headerlink" title="其他工具的配置"></a>其他工具的配置</h3><p>说几个比较重要的</p>
+<h4 id="非工作流工具配置"><a href="#非工作流工具配置" class="headerlink" title="非工作流工具配置"></a>非工作流工具配置</h4><ul>
+<li><p>编辑器的配置，用于规范团队代码、文档在 vscode 上的统一编辑以及显示的 <code>.editorconfig</code></p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">// .editorconfig</span><br><span class="line"><span class="comment">#root = true</span></span><br><span class="line">[*] <span class="comment"># 表示匹配所有文件</span></span><br><span class="line">end_of_line = lf <span class="comment">#  当一行文字被回车时，对应的回车字符为 lf</span></span><br><span class="line">charset = utf-8 <span class="comment"># 使用 utf-8 编码</span></span><br><span class="line">trim_trailing_whitespace = <span class="literal">false</span> <span class="comment"># 不从行尾删除空白</span></span><br><span class="line">insert_final_newline = <span class="literal">true</span> <span class="comment"># 文件以换行结束</span></span><br><span class="line">indent_style = space <span class="comment"># 以空格作为 tab</span></span><br><span class="line">indent_size = 2 <span class="comment"># tab 间距为 2 个 space 宽度</span></span><br><span class="line"></span><br><span class="line">[&#123;*.yml,*.json&#125;] <span class="comment"># 匹配 .yml .json 文件</span></span><br><span class="line">indent_style = space <span class="comment"># 以空格作为 tab</span></span><br><span class="line">indent_size = 2 <span class="comment"># tab 间距为 2 个 space 宽度</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查正在编辑的代码的语法的 <code>.eslintrc</code></p>
+  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .eslintrc</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"parserOptions"</span>: &#123; <span class="comment">// 解析选项</span></span><br><span class="line">    <span class="attr">"ecmaVersion"</span>: <span class="number">2017</span> <span class="comment">// 使用 es2017</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"env"</span>: &#123;</span><br><span class="line">    <span class="attr">"es6"</span>: <span class="literal">true</span> <span class="comment">// 支持 es6 以及新的 es6 全局变量</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用于检查编写的 js 代码中的可疑部分的 <code>.jshintrc</code></p>
+  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .jshitrc</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"esversion"</span>: <span class="number">6</span> <span class="comment">// 指定代码必须遵循 es6 版本</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用于指定 TypeScript 编译选项的 <code>tsconfig.json</code></p>
+  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"compilerOptions"</span>: &#123; <span class="comment">// 编译选项配置</span></span><br><span class="line">    <span class="attr">"moduleResolution"</span>: <span class="string">"node"</span>, <span class="comment">// 以 Nodejs 方式 resolve 模块</span></span><br><span class="line">    <span class="attr">"target"</span>: <span class="string">"es5"</span>, <span class="comment">// 指定 es 的目标版本，其默认是 es3</span></span><br><span class="line">    <span class="attr">"module"</span>:<span class="string">"es2015"</span>, <span class="comment">// 指定模块代码以 es2015 的方式生成</span></span><br><span class="line">    <span class="attr">"lib"</span>: [<span class="string">"es2015"</span>, <span class="string">"es2016"</span>, <span class="string">"es2017"</span>, <span class="string">"dom"</span>], <span class="comment">// 指定要包含在编译中的库文件列表(编译时要包含进 es5/6/7 以及 DOM 的一些 API)</span></span><br><span class="line">    <span class="attr">"strict"</span>: <span class="literal">true</span>, <span class="comment">// 启用所有的严格类型检查选项</span></span><br><span class="line">    <span class="attr">"sourceMap"</span>: <span class="literal">true</span>, <span class="comment">// 编译后要生成 .map 源码映射文件</span></span><br><span class="line">    <span class="attr">"declaration"</span>: <span class="literal">true</span>, <span class="comment">// 编译后要生成 .d.ts 声明文件</span></span><br><span class="line">    <span class="attr">"allowSyntheticDefaultImports"</span>: <span class="literal">true</span>, <span class="comment">// 默认允许 import 那些没有进行 default export 的模块(这不影响代码的 export，只是会影响到类型检查)</span></span><br><span class="line">    <span class="attr">"experimentalDecorators"</span>: <span class="literal">true</span>, <span class="comment">// 启用对 es 装饰器语法的支持</span></span><br><span class="line">    <span class="attr">"emitDecoratorMetadata"</span>: <span class="literal">true</span>, <span class="comment">// 启用对 reflect-metadata 库的支持</span></span><br><span class="line">    <span class="attr">"declarationDir"</span>: <span class="string">"dist/types"</span>, <span class="comment">// 定义编译后生成的声明文件的输出目录为 dist/types</span></span><br><span class="line">    <span class="attr">"outDir"</span>: <span class="string">"dist/lib"</span>, <span class="comment">// 定义编译后代码文件的输出目录为 dist/lib</span></span><br><span class="line">    <span class="attr">"typeRoots"</span>: [ <span class="comment">// 编译过程中只考虑编译 node_modules/@types 下的包</span></span><br><span class="line">      <span class="string">"node_modules/@types"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"include"</span>: [ <span class="comment">// 只编译 src 下的源码文件</span></span><br><span class="line">    <span class="string">"src"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用于检查编写的 ts 代码中可读性、可维护性和功能错误的 <code>tslint.json</code></p>
+  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// tslint.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"extends"</span>: [ <span class="comment">// 指定使用 tslint-config-standard 和 tslint-config-prettier 来检查</span></span><br><span class="line">    <span class="string">"tslint-config-standard"</span>,</span><br><span class="line">    <span class="string">"tslint-config-prettier"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用于测试代码的 <code>jest.config.js</code></p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// jest.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="string">"verbose"</span>: <span class="literal">true</span>, <span class="comment">// 指定在运行期间需要报告测试结果</span></span><br><span class="line">  <span class="string">"transform"</span>: &#123; <span class="comment">// 转换器</span></span><br><span class="line">    <span class="string">".(ts|tsx)"</span>: <span class="string">"ts-jest"</span> <span class="comment">// 使用 ts-jest 对 .ts/.tsx 文件代码进行测试</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"testEnvironment"</span>: <span class="string">"jsdom"</span>, <span class="comment">// 使用 jsdom 来作为测试环境</span></span><br><span class="line">  <span class="string">"testRegex"</span>: <span class="string">"(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"</span>, <span class="comment">// 测试 __test__ 目录下所有的以 .test/.spec 作为中间名的、以 .ts/.tsx/.js 结尾的文件</span></span><br><span class="line">  <span class="string">"moduleFileExtensions"</span>: [ <span class="comment">// 模块文件拓展，测试文件中引入的模块支持 .ts/.tsx/.js 模块</span></span><br><span class="line">    <span class="string">"ts"</span>,</span><br><span class="line">    <span class="string">"tsx"</span>,</span><br><span class="line">    <span class="string">"js"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"coveragePathIgnorePatterns"</span>: [ <span class="comment">// 执行测试时需要过滤掉的一些目录 node_modules 和 test</span></span><br><span class="line">    <span class="string">"/node_modules/"</span>,</span><br><span class="line">    <span class="string">"/test/"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"coverageThreshold"</span>: &#123; <span class="comment">// 代码测试覆盖率设定</span></span><br><span class="line">    <span class="string">"global"</span>: &#123; <span class="comment">// 指定一个全局的设定</span></span><br><span class="line">      <span class="string">"branches"</span>: <span class="number">90</span>, <span class="comment">// 测试能覆盖到 90% 的代码分支</span></span><br><span class="line">      <span class="string">"functions"</span>: <span class="number">95</span>, <span class="comment">// 测试能覆盖到 95% 的函数</span></span><br><span class="line">      <span class="string">"lines"</span>: <span class="number">95</span>, <span class="comment">// 测试能覆盖到 95% 的代码行数</span></span><br><span class="line">      <span class="string">"statements"</span>: <span class="number">95</span> <span class="comment">// 测试能覆盖到 95% 的声明</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"collectCoverageFrom"</span>: [ <span class="comment">// 从以下文件中收集测试代码覆盖率的信息</span></span><br><span class="line">    <span class="string">"src/*.&#123;js,ts&#125;"</span>, <span class="comment">// src 下的当前目录的 .js 或者 .ts 文件</span></span><br><span class="line">    <span class="string">"src/**/*.&#123;js,ts&#125;"</span> <span class="comment">// src 下的子目录的 .js 或者 .ts 文件</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"setupFilesAfterEnv"</span>: [ <span class="comment">// 在测试之前需要运行的一些启动或者配置文件</span></span><br><span class="line">    <span class="string">"&lt;rootDir&gt;/test/boot.ts"</span> <span class="comment">// 项目根目录下的 test/boot.ts</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  在 <code>boot.ts</code> 中写了什么呢</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// test/boot.ts</span></span><br><span class="line"><span class="keyword">const</span> JasmineCore = <span class="built_in">require</span>(<span class="string">'jasmine-core'</span>)</span><br><span class="line"><span class="comment">// @ts-ignore</span></span><br><span class="line">global.getJasmineRequireObj = <span class="function"><span class="params">()</span> =&gt;</span> JasmineCore</span><br><span class="line"><span class="built_in">require</span>(<span class="string">'jasmine-ajax'</span>)</span><br></pre></td></tr></table></figure>
+<p>  因为这里需要测试 ajax，所以这里用到了 <code>jasmine-ajax</code>，而这个库依赖于 <code>jasmine-core</code>。而为了能让 <code>jasmine-ajax</code> 这个插件运行成功，需要手动添加全局的 <code>getJasmineRequireObj</code> 方法，这样每次在启动测试的时候都会去加载这个插件，那么在测试时就可以使用 <code>jasmine-ajax</code> 了</p>
+</li>
+<li><p>用于整理和打包库的 <code>rollup.config.js</code></p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// rollup.config.js</span></span><br><span class="line"><span class="keyword">import</span> resolve <span class="keyword">from</span> <span class="string">'rollup-plugin-node-resolve'</span></span><br><span class="line"><span class="keyword">import</span> commonjs <span class="keyword">from</span> <span class="string">'rollup-plugin-commonjs'</span></span><br><span class="line"><span class="keyword">import</span> sourceMaps <span class="keyword">from</span> <span class="string">'rollup-plugin-sourcemaps'</span></span><br><span class="line"><span class="keyword">import</span> camelCase <span class="keyword">from</span> <span class="string">'lodash.camelcase'</span></span><br><span class="line"><span class="keyword">import</span> typescript <span class="keyword">from</span> <span class="string">'rollup-plugin-typescript2'</span></span><br><span class="line"><span class="keyword">import</span> json <span class="keyword">from</span> <span class="string">'rollup-plugin-json'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pkg = <span class="built_in">require</span>(<span class="string">'./package.json'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> libraryName = <span class="string">'txios'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  input: <span class="string">`src/index.ts`</span>, <span class="comment">// 入口文件</span></span><br><span class="line">  output: [ <span class="comment">// 出口文件</span></span><br><span class="line">    <span class="comment">// 一个用来打包成 umd</span></span><br><span class="line">    &#123; <span class="attr">file</span>: pkg.ain, <span class="attr">name</span>: camelCase(libraryName), <span class="attr">format</span>: <span class="string">'umd'</span>, <span class="attr">sourcemap</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">    <span class="comment">// 一个用来打包成 es5</span></span><br><span class="line">    &#123; <span class="attr">file</span>: pkg.module, <span class="attr">format</span>: <span class="string">'es'</span>, <span class="attr">sourcemap</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// 指定不会被打包的源码目录</span></span><br><span class="line">  external: [],</span><br><span class="line">  watch: &#123; <span class="comment">// 如果 include 配置下的 src/ 目录下的某个模块源码变更，则自动进行打包</span></span><br><span class="line">    include: <span class="string">'src/**'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [ <span class="comment">// rollup 插件</span></span><br><span class="line">    <span class="comment">// 允许 resolve json 文件</span></span><br><span class="line">    json(),</span><br><span class="line">    <span class="comment">// 编译 TypeScript 文件</span></span><br><span class="line">    <span class="comment">// 并且编译的声明文件将在 tsconfig 中指定的目录中发出</span></span><br><span class="line">    typescript(&#123; <span class="attr">useTsconfigDeclarationDir</span>: <span class="literal">true</span> &#125;),</span><br><span class="line">    <span class="comment">// 允许打包 commonjs 模块</span></span><br><span class="line">    commonjs(),</span><br><span class="line">    <span class="comment">// 允许 resolve node_modules 下的文件，可以使用 'external' 属性去控制</span></span><br><span class="line">    <span class="comment">// 哪个 external 模块是被包含进打包后的文件中的</span></span><br><span class="line">    <span class="comment">// https://github.com/rollup/rollup-plugin-node-resolve#usage</span></span><br><span class="line">    resolve(),</span><br><span class="line"></span><br><span class="line">    <span class="comment">// resolve 对应源码的源码映射文件</span></span><br><span class="line">    sourceMaps(),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="工作流工具配置"><a href="#工作流工具配置" class="headerlink" title="工作流工具配置"></a>工作流工具配置</h4><p>最后再讲讲这个 git commit 以及自动发布 release 如何形成一个 flow 流的。首先我们前面提到了几个工具</p>
+<ul>
+<li>husky</li>
+<li>commitizen</li>
+<li>jest</li>
+<li>conventional-changelog</li>
+<li>semantic-release</li>
+</ul>
+<p>然后看看 <code>package.json</code> 里面是怎么写的，几个相关的配置如下</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"jest --coverage --config ./jest.config.js"</span>,</span><br><span class="line">    <span class="attr">"test:watch"</span>: <span class="string">"jest --coverage --watch --config ./jest.config.js"</span>,</span><br><span class="line">    <span class="attr">"test:prod"</span>: <span class="string">"npm run lint &amp;&amp; npm run test -- --no-cache"</span>,</span><br><span class="line">    <span class="attr">"commit"</span>: <span class="string">"git-cz"</span>,</span><br><span class="line">    <span class="attr">"sr"</span>: <span class="string">"semantic-release"</span>,</span><br><span class="line">    <span class="attr">"srp"</span>: <span class="string">"ts-node tools/semantic-release-prepare"</span>,</span><br><span class="line">    <span class="attr">"pre-commit"</span>: <span class="string">"lint-staged"</span>,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"lint-staged"</span>: &#123;</span><br><span class="line">    <span class="attr">"&#123;src,test&#125;/**/*.ts"</span>: [</span><br><span class="line">      <span class="string">"prettier --write"</span>,</span><br><span class="line">      <span class="string">"git add"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"husky"</span>: &#123;</span><br><span class="line">    <span class="attr">"hooks"</span>: &#123;</span><br><span class="line">      <span class="attr">"commit-msg"</span>: <span class="string">"commitlint -E HUSKY_GIT_PARAMS"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"config"</span>: &#123;</span><br><span class="line">    <span class="attr">"commitizen"</span>: &#123;</span><br><span class="line">      <span class="attr">"path"</span>: <span class="string">"node_modules/cz-conventional-changelog"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"prettier"</span>: &#123;</span><br><span class="line">    <span class="attr">"semi"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"singleQuote"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"commitlint"</span>: &#123;</span><br><span class="line">    <span class="attr">"extends"</span>: [</span><br><span class="line">      <span class="string">"@commitlint/config-conventional"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当 <code>src</code> 下或者 <code>test</code> 目录下的代码文件产生变动后，执行 <code>yarn commit</code>时 ，会先触发 <code>lint-staged</code><br>，<code>lint-staged</code> 里面会先执行 <code>prettier</code> 将代码进行格式化，然后执行 <code>git add</code>。这个执行完之后，就可以执行 <code>git-cz</code> 了，<code>git-cz</code> 是 <code>commitizen</code> 包里面的一个工具，它就会找到 <code>cz-cli</code> 以及 <code>cz-conventional-changelog</code> 这两个工具并执行，执行后会生成如下的命令行界面</p>
+<p><img src="./1.png" alt></p>
+<p>格式都做好了，其他的就是自己选择自己根据提示来 commit message 就好</p>
+<p>在输入的信息完成之后，就会交给 <code>husky</code> 去拦截 git 的 hooks，它一旦发现有 <code>commit msg</code> 要提交了就去拦截，然后执行操作 <code>commitlint -E HUSKY_GIT_PARAMS</code>，<code>commitlint</code> 是一个检查 <code>commit msg</code> 是否符合要求的一个库，这句话的意思是通过 <code>commitlint</code> 这个工具与它自己定义的 <code>HUSKY_GIT_PARAMS</code> 变量结合起来，若 commit 不符合要求，则此次 commit 算作失败</p>
+<p>一般而言，符合 <code>commitlint</code> 要求的 commit 是像下面这样的</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chore: run tests on travis ci</span><br><span class="line">fix(server): send cors headers</span><br><span class="line">feat(blog): add comment section</span><br></pre></td></tr></table></figure>
+<p>其实这些都是根据 <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener">传统提交格式</a> 来的。</p>
+<p>总结一下这个工作流，简单而言就是如下</p>
+<ol start="0">
+<li>代码变更了，我要提交代码，执行 <code>yarn commit</code></li>
+<li><code>lint-staged</code> –&gt; <code>prettier</code> –&gt; <code>git add</code>(格式化代码)</li>
+<li><code>git-cz</code> –&gt; <code>cz-cli</code> –&gt; <code>cz-conventional-changelog</code>(生成选择 commit 格式的界面并记录 changelog)</li>
+<li><code>husky</code>(提供 commit 钩子并触发 <code>commitlint</code>)</li>
+<li><code>commitlint</code>(检查 commit 是否满足要求)</li>
+</ol>
+<p>对于发布一个 release 包而言，其实逻辑都差不多。在执行 <code>yarn sr</code> 时，会执行 <code>semantic-release</code>，这里不做配置会直接校验 npm 的 token 和 github 的 token，校验过后它就会分析你的 commit 然后生成一个 changelog 并上传至 github 。如果想在这条命令之前执行代码测试直接在前面加上 <code>yarn test</code> 即可</p>
+<h2 id="Feature-实现"><a href="#Feature-实现" class="headerlink" title="Feature 实现"></a>Feature 实现</h2><p>这里就大体实现的有一些功能做个总结吧。在 <a href="https://github.com/strugglebak/txios/blob/master/README.md" target="_blank" rel="noopener">txios 的文档</a> 上也有说明</p>
+<ul>
+<li>支持使用 XMLHttpRequest 对象通信</li>
+<li>支持 Promise API</li>
+<li>支持请求/响应拦截以及其过程中的数据转换</li>
+<li>支持取消请求</li>
+<li>支持自动转换 JSON 数据</li>
+<li>客户端支持 XSRF 防御</li>
+</ul>
+<h3 id="支持使用-XMLHttpRequest-对象通信"><a href="#支持使用-XMLHttpRequest-对象通信" class="headerlink" title="支持使用 XMLHttpRequest 对象通信"></a>支持使用 XMLHttpRequest 对象通信</h3><p>其实这里面就是对 <code>XMLHttpRequest</code> 对象的封装。这里整体封装的逻辑是，先写一个大体的逻辑，就是封装一个函数，然后再在其他地方引入这个函数做测试。这个大体的框架是什么呢，就是如下的代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">xhr</span>(<span class="params">config: TxiosRequestConfig</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; data = <span class="literal">null</span>, url, method = <span class="string">'get'</span> &#125; = config</span><br><span class="line">  <span class="keyword">const</span> request = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">  request.open(method.toUpperCase(), url, <span class="literal">true</span>)</span><br><span class="line">  request.send(data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最开始其只有一个 <code>open</code> 跟 <code>send</code>，功能极为简陋，所以需要在上面添砖加瓦。<br>一般来说需要处理的东西包括</p>
+<ul>
+<li>请求的 url 数据</li>
+<li>请求的 body 数据</li>
+<li>请求的 header 数据</li>
+<li>响应的数据</li>
+<li>响应的 header 数据</li>
+</ul>
+<p>所以在这里面，除了要对请求的数据做处理之外，还需要对响应的数据做处理。这一部分主要的操作就是需要定义 <code>TxiosRequestConfig</code> 的类型，因为请求配置的参数很重要，所以在这里可以看到一堆的类型声明。这里有一个比较特别的声明叫做 <strong>字符串索引</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface TxiosRequestConfig &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  [propName: string]: any</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种就是字符串索引签名了，一般会在 <code>xxx[key]</code> 这种方式去访问一个对象内部 <code>key</code> 对应的 <code>value</code> 时用上。</p>
+<p>这里需要注意的一下就是，在对处理请求的 body 数据时(因为要转换成 JSON 字符串发送出去)，会用到一个判断其是不是”普通”的对象的函数，如下所式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">isNormalObject</span> (<span class="params">val: any</span>): <span class="title">val</span> <span class="title">is</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> toString.call(val) === <span class="string">'[object Object]'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 <code>val !== null &amp;&amp; typeof val === &#39;object&#39;</code> 这种方式虽然也能判断一个数是否为对象，但是其已经包括了 <code>FormData</code> 或者 <code>ArrayBuffer</code> 这样的类型了。而这些类型在 body 中是不需要处理成 JSON 字符串的(<code>JSON.stringify</code>)，如果是 <code>FormData</code> 类似这种类型的直接返回 data 就好不需要做处理</p>
+<p>在处理 url 参数上需要注意的情况比较多，一般而言有如下几种</p>
+<ul>
+<li>参数值为数组的</li>
+<li>参数值为对象的</li>
+<li>参数值为 Date 类型的</li>
+<li>还有一些特殊字符的</li>
+<li>一些空值如 null 或者 undefined</li>
+<li>有 hash 参数的比如 # 后面的</li>
+<li>已经有参数的</li>
+</ul>
+<p>需要对这些参数遍历之后重新建立新的 url，对这些条件判断后拼接字符串</p>
+<p>在对异常处理的方面，有两个要注意的点</p>
+<ul>
+<li>使用 TypeScript 继承一个内置对象时，需要使用在你继承的类中使用 <code>Object.setPrototypeOf(this, 你的类.prototype)</code> 才能做到正确的继承</li>
+<li>为了使得代码更加简化，可以为类对外暴露一个 <strong>工厂方法</strong></li>
+</ul>
+<p>什么是工厂方法？工厂方法指的是<strong>一个函数</strong>接受参数并返回一个 <code>new</code> 过的对象，这样在下次使用时就不必频繁的 <code>new</code> 了，直接调用这个方法即可</p>
+<h3 id="支持-Promise-API"><a href="#支持-Promise-API" class="headerlink" title="支持 Promise API"></a>支持 Promise API</h3><p>首先需要构建一个 <code>TxiosPromise</code> 的接口，这个接口继承自 Promise</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface TxiosPromise extends <span class="built_in">Promise</span>&lt;TxiosResponse&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意这里的 <code>Promise</code> 在返回后其 <code>resolve</code> 或者 <code>reject</code> 中的 <code>data</code> 就是 <code>TxiosResponse</code> 类型的</p>
+<p>然后需要在 <code>Txios</code> 这个接口中的每个扩展方法的后面都要加上 <code>TxiosPromise</code> 作为返回值的声明</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface Txios &#123;</span><br><span class="line">  <span class="keyword">get</span>&lt;T = any&gt;(url: string, config?: TxiosRequestConfig): TxiosPromise</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在封装 <code>XMLHttpRequest</code> 那块的代码上也需要加上 <code>TxiosPromise</code> 的声明并返回一个 <code>new Promise</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/xhr.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">xhr</span>(<span class="params">config: TxiosRequestConfig</span>): <span class="title">TxiosPromise</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这里还有个问题，即如何让响应的数据支持泛型呢？首先需要对 <code>TxiosResponse</code> 做改造</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface TxiosResponse&lt;T = any&gt; &#123;</span><br><span class="line">  data: T</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样 <code>data</code> 就是泛型的数据了，接下来还要对上文中出现的 <code>TxiosPromise</code> 做一个改造，使其也变成一个泛型的接口</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface TxiosPromise&lt;T = any&gt; extends <span class="built_in">Promise</span>&lt;TxiosResponse&lt;T&gt;&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样在 <code>Promise</code> 中 <code>resolve</code> 或者 <code>reject</code> 的 <code>data</code> 就是 <code>TxiosResponse&lt;T&gt;</code> 类型的了，需要注意的是这个 <code>data</code> 中还有个 <code>data</code>(这个是在 <code>TxiosResponse</code> 中定义过的) 是 <code>T</code> 类型。<code>TxiosPromise&lt;T = any&gt;</code> 这个表示 <code>resolve</code> 或 <code>reject</code> 的 <code>data</code> 可以是 <code>T</code> 类型的数据</p>
+<h3 id="支持请求-响应拦截以及其过程中的数据转换"><a href="#支持请求-响应拦截以及其过程中的数据转换" class="headerlink" title="支持请求/响应拦截以及其过程中的数据转换"></a>支持请求/响应拦截以及其过程中的数据转换</h3><p>首先拦截器的工作原理可以用一张图来描述</p>
+<p><img src="./2.png" alt></p>
+<p>一般我们使用 <code>txios.interceptors.request.use</code> 来添加请求拦截器，使用 <code>txios.interceptors.response.use</code> 来添加响应拦截器。由上图可以知道，拦截器的执行顺序是 <strong>链式调用的</strong>，并且每个拦截器都支持 <strong>同步和异步</strong>的处理。所以这里最终还是采用 <code>Promise</code> 链式调用去实现这个功能。</p>
+<p>实现的逻辑大概是这样的</p>
+<ul>
+<li><p>首先定义个拦截器的总体的管理类，它里面有两个方法: <code>use</code>(添加拦截器) 和 <code>eject</code>(删除拦截器)。</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface TxiosInterceptorManager&lt;T&gt; &#123;</span><br><span class="line">  use(resolved: ResolvedFn&lt;T&gt;, rejected?: RejectedFn): number</span><br><span class="line">  eject(id: number): <span class="keyword">void</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>use</code> 方法里面有 <code>resolve</code> 和 <code>reject</code> 方法，所以这俩也是要定义的</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/types/index.ts</span></span><br><span class="line"><span class="keyword">export</span> interface ResolvedFn&lt;T = any&gt; &#123;</span><br><span class="line">  (value: T): T | <span class="built_in">Promise</span>&lt;T&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> interface RejectedFn &#123;</span><br><span class="line">  (error: any): any</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下来去实现这个管理类的时候，基本上就是去实现 <code>use</code> 和 <code>eject</code>。注意这个类里面维护了一个私有的 <code>interceptors</code> 数组</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/interceptor.ts</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">InterceptorManager</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// use 就是将 resolve 和 reject push 进这个数组中并返回一个位置 id</span></span><br><span class="line">  use(resolved: ResolvedFn&lt;T&gt;, rejected?: RejectedFn): number &#123;</span><br><span class="line">    <span class="keyword">this</span>.interceptors.push(&#123; resolved, rejected &#125;)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.interceptors.length - <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// eject 就是拿到位置 id 然后删除拦截器</span></span><br><span class="line">  eject(id: number): <span class="keyword">void</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.interceptors[id]) <span class="keyword">this</span>.interceptors[id] = <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 这里还写了个 forEach 函数用来遍历拦截器并执行它传入的拦截器</span></span><br><span class="line">  forEach(fn: <span class="function">(<span class="params">interceptor: Interceptor&lt;T&gt;</span>) =&gt;</span> <span class="keyword">void</span>): <span class="keyword">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.interceptors.forEach(<span class="function"><span class="params">interceptor</span> =&gt;</span> &#123;</span><br><span class="line">      interceptor &amp;&amp; fn(interceptor)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>需要在发送请求的逻辑中构建 <code>Promise</code> 链，这个链的接口定义是这样的</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/txios-core.ts</span></span><br><span class="line">interface PromiseChain &#123;</span><br><span class="line">  resolved: ResolvedFn | <span class="function">(<span class="params">(config: TxiosRequestConfig</span>) =&gt;</span> TxiosPromise)</span><br><span class="line">  rejected?: RejectedFn</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 <code>TxiosCore</code> 这个方法中构造 <code>interceptors</code></p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/txios-core.ts</span></span><br><span class="line"><span class="keyword">constructor</span>(initConfig: TxiosRequestConfig) &#123;</span><br><span class="line">  <span class="keyword">this</span>.interceptors = &#123;</span><br><span class="line">    request: <span class="keyword">new</span> InterceptorManager&lt;TxiosRequestConfig&gt;(),</span><br><span class="line">    response: <span class="keyword">new</span> InterceptorManager&lt;TxiosResponse&gt;()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后在 <code>request</code> 这个请求方法中开始构建这个 <code>Promise Chain</code></p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/txios-core.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">TxiosCore</span> </span>&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  request(url: any, config?: any): TxiosPromise &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">const</span> chain: PromiseChain[] = [</span><br><span class="line">      &#123;</span><br><span class="line">        resolved: dispatchRequest,</span><br><span class="line">        rejected: <span class="literal">undefined</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关键代码!!!</span></span><br><span class="line">    <span class="keyword">this</span>.interceptors.request.forEach(<span class="function"><span class="params">interceptor</span> =&gt;</span> &#123;</span><br><span class="line">      chain.unshift(interceptor) <span class="comment">// 插入到 chain 前面</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">this</span>.interceptors.response.forEach(<span class="function"><span class="params">interceptor</span> =&gt;</span> &#123;</span><br><span class="line">      chain.push(interceptor) <span class="comment">// 插入到 chain 后面</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> promise = <span class="built_in">Promise</span>.resolve(config)</span><br><span class="line">    <span class="comment">// 循环这个 chain 拿到每个拦截器对象</span></span><br><span class="line">    <span class="comment">// 将其 resolved 以及 rejected 函数添加到 promise.then 的参数中</span></span><br><span class="line">    <span class="comment">// 通过 Promise 链式调用方式，可实现拦截器一层一层链式调用效果</span></span><br><span class="line">    <span class="keyword">while</span> (chain.length) &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; resolved, rejected &#125; = chain.shift()!</span><br><span class="line">      promise = promise.then(resolved, rejected)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> promise</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这里链式调用的直接效果，就是其执行完了拦截器之后的代码逻辑之后再发送请求。但是这里需要注意，<strong>拦截响应的逻辑同时也执行了</strong>，也就是说如果你在拦截响应的逻辑中对其 response 的 data 做了什么赋值操作的话，那么最终返回结果就是你拦截之后的结果。其实很好理解，要实现拦截器的真正效果，其核心就是 <strong>优先执行拦截器中的代码逻辑</strong></p>
+</li>
+</ul>
+<h3 id="支持取消请求"><a href="#支持取消请求" class="headerlink" title="支持取消请求"></a>支持取消请求</h3><p>这个功能的适用场景是这样的，一般而言在搜索框输入的时候，如果第一次输入发出请求了，紧接着第二次输入也发出请求了，但是万一第二次输入的请求服务端反应比较快，一下子就返回了，而第一次请求服务端的反应比较慢，等很久之后才返回。这样就会出现一种情况，<strong>前面请求结果把后面的请求结果给覆盖了</strong>，这是用户极为不愿意看到的。所以如果在这种情况下，如果前面的请求响应很慢或者已经没办法响应了，就直接取消掉它就能解决这个问题了</p>
+<p>实现的思路是这样的</p>
+<ul>
+<li>要取消请求，需要为该请求配置一个 <code>CancelToken</code> 来表示取消这次请求的操作，然后在外部调用一个 <code>cancel</code> 方法来取消</li>
+<li><code>cancel</code> 方法本质上是通过执行 <code>XMLHttpRequest</code> 的 <code>abort</code> 方法来取消请求的</li>
+<li>但是由于请求是异步的，而且取消请求操作是用户设置的，并且用户是访问不到这个 <code>XMLHttpRequest</code> 对象的。那么用什么方法才能做到，我外部调用一个 <code>cancel</code> 方法，就能通知到其内部的 <code>XMLHttpRequest</code> 对象，自动执行 <code>abort</code> 终止请求操作呢？</li>
+<li>有个办法是这样的，在 <code>CancelToken</code> 内部维护一个 <code>Promise</code> 的对象，最开始设定这个 <code>Promise</code> 对象内部的 <code>state</code> 为 <code>pending</code> 状态。当我们外部调用了 <code>cancel</code> 方法后，会将这个 <code>CancelToken</code> 内部的 <code>Promise</code> 对象的 <code>state</code> 转变成 <code>fulfilled</code> 状态，这样的话如果之前就写了 <code>CancelToken.promise.then</code>，那么它就会<strong>自动执行</strong> <code>then</code> 里面的逻辑，在 <code>then</code> 里面直接调用 <code>abort</code> 就可以了</li>
+</ul>
+<p>调用是这么调用的</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 该请求通过 cancel() 方式取消</span></span><br><span class="line"><span class="keyword">let</span> cancel: Canceler;</span><br><span class="line">txios.get(<span class="string">'/cancel/get'</span>, &#123;</span><br><span class="line">  cancelToken: <span class="keyword">new</span> CancelToken(<span class="function"><span class="params">c</span> =&gt;</span> &#123; cancel = c &#125;)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (txios.isCancel(e)) <span class="built_in">console</span>.log(<span class="string">'Request canceled'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123; cancel() &#125;, <span class="number">200</span>);</span><br></pre></td></tr></table></figure>
+<p>然后基于 <code>XMLHttpRequest</code> 对象封装下的 <code>xhr</code> 的内部是这样子判断的</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/xhr.ts</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 设置取消请求</span></span><br><span class="line"><span class="keyword">if</span> (cancelToken) &#123;</span><br><span class="line">  cancelToken.promise</span><br><span class="line">    .then(<span class="function"><span class="params">reason</span> =&gt;</span> &#123;</span><br><span class="line">      request.abort()</span><br><span class="line">      reject(reason)</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// TODO</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了使用例子和以上的说明，核心代码就很好理解了</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/cancel/cancelToken.ts</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">CancelToken</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">constructor</span>(executor: CancelExecutor) &#123; <span class="comment">// executor 是一个 callback !!!</span></span><br><span class="line">    <span class="keyword">let</span> resolvePromise: ResolvePromise <span class="comment">// resolvePromise 是一个函数 !!!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// this.promise 用来表示一个 pending 状态的 Promise 对象</span></span><br><span class="line">    <span class="keyword">this</span>.promise = <span class="keyword">new</span> <span class="built_in">Promise</span>&lt;Cancel&gt;(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">      resolvePromise = resolve <span class="comment">// 注意这里将这个 resolve 函数保存起来了 !!!</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行传入的 executor 函数, 传的参数是一个 cancel 函数</span></span><br><span class="line">    <span class="comment">// 此时 executor === (c) =&gt; &#123; cancel = c &#125;</span></span><br><span class="line">    <span class="comment">// c 是 executor 的参数</span></span><br><span class="line">    <span class="comment">// 此时 c === (message) =&gt; &#123;...&#125;</span></span><br><span class="line">    <span class="comment">// 因为此时参数是一个函数</span></span><br><span class="line">    executor(<span class="function"><span class="params">message</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="comment">// 此时 this.promise 会从 pending 状态变为 resolved 状态</span></span><br><span class="line">      <span class="comment">// 便于外部可以做 xxx.promise.then 的调用</span></span><br><span class="line">      resolvePromise(<span class="keyword">this</span>.reason)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意此时 <code>c === (message) =&gt; {...}</code>，而外部变量 <code>cancel === c</code>，所以当外部变量 <code>cancel()</code> 调用时，就会调用 <code>(message) =&gt; {...}</code> 这个函数，调用 <code>resolvePromise</code>，这会把 <code>CancelToken</code> 里面的 <code>this.promise</code> 的 <code>state</code> 从 <code>pending</code> 变为 <code>fulfilled</code> 状态。在程序的外部如果之前<strong>已经写好了 then</strong> ，那么它就会 <strong>自动执行 then</strong>，调用 <code>abort</code> 取消请求，从而达到异步分离的目的</p>
+<blockquote>
+<p>如果上面的函数调用的逻辑看不懂， <a href="https://jsbin.com/yacezusohu/edit?html,js,output" target="_blank" rel="noopener">请点击这个链接</a>相信可以帮助理解</p>
+</blockquote>
+<h3 id="支持自动转换-JSON-数据"><a href="#支持自动转换-JSON-数据" class="headerlink" title="支持自动转换 JSON 数据"></a>支持自动转换 JSON 数据</h3><p>这个逻辑实现就很简单了，在 <code>src/helper/data-helper.ts</code> 文件中，有如下的两个专门用于数据处理的函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">transformRequest</span>(<span class="params">data: any</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isNormalObject(data)) <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(data)</span><br><span class="line">  <span class="keyword">return</span> data</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">transformResponse</span>(<span class="params">data: any</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> data === <span class="string">'string'</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      data = data &amp;&amp; <span class="built_in">JSON</span>.parse(data)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="comment">// TODO</span></span><br><span class="line">      <span class="comment">// console.log(error)</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> data</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在请求数据之前先把数据做一个处理，将数据转换成 JSON 字符串(transformRequest)；在处理响应数据之前先把数据转成 JSON 对象处理(transformResponse)，分别就是调用如上的两个帮助函数实现</p>
+<h3 id="客户端支持-XSRF-防御"><a href="#客户端支持-XSRF-防御" class="headerlink" title="客户端支持 XSRF 防御"></a>客户端支持 XSRF 防御</h3><p>XSRF 又叫 Cross-site request forgery，跨站请求伪造，一种前端老生长谈的攻击方式了，简单点来说你通过一个陌生的链接打开一个恶意的网站，这个网站利用你之前登陆其他网站的登陆状态发起一个跨站点的网络请求，从而伪造身份来攻击</p>
+<p>所以解决这种攻击的一种方式，就是服务端生成一个 token，客户端收到后存为 cookie，每次访问时就带上这个 token，而这个 token 在客户端每次访问站点时都生成，算是一个服务端的验证，这样有了唯一性验证这种攻击方式就弱小了很多。</p>
+<p>所以实现这种功能就是每次发送请求时，自动从 cookie 中读取 token，然后添加进请求头中，一般来说是这么调用</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> instance = txios.create(&#123;</span><br><span class="line">  xsrfCookieName: <span class="string">'XSRF-TOKEN-D'</span>,</span><br><span class="line">  xsrfHeaderName: <span class="string">'X-XSRF-TOKEN-D'</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">instance.get(<span class="string">'/more/get'</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>核心代码如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// src/core/xhr.ts</span></span><br><span class="line"><span class="comment">// 设置 cookie</span></span><br><span class="line"><span class="keyword">if</span> ((withCredentials || isUrlSameOrigin(url!)) &amp;&amp; xsrfCookieName) &#123;</span><br><span class="line">  <span class="keyword">const</span> token = cookie.getToken(xsrfCookieName)</span><br><span class="line">  <span class="keyword">if</span> (token) headers[xsrfHeaderName!] = token</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>逻辑是这样的</p>
+<ol>
+<li>若 withCredentials = true | <strong>同源</strong>请求，在 headers 中添加 xsrf 相关字段</li>
+<li>判断成功,则从 cookie 中读取 xsrf 的 token</li>
+<li>若能读到，则将其添加到请求 headers 的 xsrf 相关字段中</li>
+</ol>
+<blockquote>
+<p>注意跨域请求中若要请求域中携带 cookie 则需要设置 <code>XMLHttpRequest</code> 对象的 <code>withCredentials</code> 为 true</p>
+</blockquote>
+<p>那么 <code>getToken</code> 干了什么事情呢</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//src/helpers/cookie-helper.ts</span></span><br><span class="line">getToken(name: string): string | <span class="literal">null</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> match = <span class="built_in">document</span>.cookie.match(</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'(^|;\\s*)('</span> + name + <span class="string">')=([^;]*)'</span>)</span><br><span class="line">  )</span><br><span class="line">  <span class="keyword">return</span> match ? <span class="built_in">decodeURIComponent</span>(match[<span class="number">3</span>]) : <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里就是利用正则表达式解析到 <code>name</code> 对应的值，如果有的话就取 <code>match[3]</code> 也就是 token 的值了，这里再稍微解释下过程，比如你的 <code>document.cookie</code> 值为 <code>XSRF-TOKEN-D=1234abc</code>，本质上是需要将 <code>1234abc</code> 拿出来，那么实际上你的正则就是 <code>(^|;\s*)(XSRF-TOKEN-D)=([^;]*)</code></p>
+<ul>
+<li><code>(^|;\s*)</code> 表示匹配字符串开头的 <code>;</code> 或者是 <code>;空格</code> 的字符串或者是其他字符串(<code>;</code> 可有可无)</li>
+<li><code>(XSRF-TOKEN-D)</code> 表示匹配 <code>XSRF-TOKEN-D</code> 这样的字符串</li>
+<li><code>=</code> 表示匹配 <code>=</code> 这样的字符</li>
+<li><code>([^;]*)</code> 表示匹配除了 <code>;</code> 这样的字符的其他字符串</li>
+</ul>
+<p>那么连起来就很明了了，就是匹配 <code>XSRF-TOKEN-D=</code> 这样的字符串，匹配到了后 <code>match</code> 伪数组结果长这样</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="number">0</span>: <span class="string">"XSRF-TOKEN-D=1234abc"</span></span><br><span class="line">  <span class="number">1</span>: <span class="string">""</span></span><br><span class="line">  <span class="number">2</span>: <span class="string">"XSRF-TOKEN-D"</span></span><br><span class="line">  <span class="number">3</span>: <span class="string">"1234abc"</span></span><br><span class="line">  index: <span class="number">0</span></span><br><span class="line">  input: <span class="string">"XSRF-TOKEN-D=1234abc"</span></span><br><span class="line">  groups: <span class="literal">undefined</span></span><br><span class="line">  length: <span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>于是 <code>match[3]</code> 就是结果，直接取它就行</p>
+<blockquote>
+<p>若这里不懂也可以点击这个 <a href="https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md" target="_blank" rel="noopener">正则参考链接</a></p>
+</blockquote>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><p>单元测试其实是个比较蛋疼的话题，说实话要做到一个比较高的代码覆盖率，需要自己写很多的代码取做验证，其核心的逻辑就是验证输入跟输出的对比，使用 jest 这个测试框架的 expert 断言去写，利用 <code>jasmine</code> 去做 <code>ajax</code> 异步的请求 mock，基本上就是这么个套路了。</p>
+<p>而如果要做到很高的代码测试覆盖率，需要自己深入到函数里面，理清楚它的每个判断，然后对相应的代码走向编写测试代码就行。这是比较累的地方，但却是最能保证代码质量的地方。</p>
+<h2 id="比较难实现的地方"><a href="#比较难实现的地方" class="headerlink" title="比较难实现的地方"></a>比较难实现的地方</h2><p>除了上面提及到的<a href="#支持-Promise-API">支持 Promise API</a> 以及<a href="#支持取消请求">支持取消请求</a>比较难实现外，还有一个就是合并配置功能的实现。<br>在合并配置时需要注意默认配置和用户在调用 <code>txios</code> 时的自定义配置，优先级比较高的是用户自定义的配置，这部分的配置包括 <code>headers</code> 以及一些 <code>config</code>。但是合并不是简单的合并覆盖属性就完了，对于不同的字段的合并，需要不同的策略</p>
+<p>这里的合并策略主要有3个</p>
+<ul>
+<li><p>默认合并策略</p>
+<p>  如果自定义配置中有某个属性，就采用自定义的，反之采用默认</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defaultPolicy</span>(<span class="params">defaultValue: any, customValue: any</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> customValue !== <span class="string">'undefined'</span> ? customValue : defaultValue</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只接受自定义的配置策略</p>
+<p>  这是对于 url params data 的合并策略</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onlyCustomPolicy</span>(<span class="params">defaultValue: any, customValue: any</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> customValue !== <span class="string">'undefined'</span>) <span class="keyword">return</span> customValue</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂对象合并策略</p>
+  <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepMergePolicy</span>(<span class="params">defaultValue: any, customValue: any</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 优先检测自定义配置</span></span><br><span class="line">  <span class="keyword">if</span> (isNormalObject(customValue)) &#123;</span><br><span class="line">    <span class="comment">// 自定义配置 value 是普通对象</span></span><br><span class="line">    <span class="keyword">return</span> deepMerge(defaultValue, customValue)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> customValue !== <span class="string">'undefined'</span>) &#123; <span class="comment">// 这里判断踩了个坑</span></span><br><span class="line">    <span class="comment">// 自定义配置 value 是其他对象</span></span><br><span class="line">    <span class="keyword">return</span> customValue</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isNormalObject(defaultValue)) &#123;</span><br><span class="line">    <span class="comment">// 默认配置是普通对象</span></span><br><span class="line">    <span class="keyword">return</span> deepMerge(defaultValue)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 默认配置是其他对象</span></span><br><span class="line">    <span class="keyword">return</span> defaultValue</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>之前在复杂策略判断这里踩了个坑，原来的判断是少个 <code>typeof</code> 的，也就是说那条语句变成了 <code>else if (customValue !== &#39;undefined&#39;)</code>，然后单元测试老是过不去，弄了很久，逐行打印分析还以为是 <code>deepMerge</code> 函数那里写错了，后面定位问题才逐渐定位到这里，删除了代码又添加代码之后才发现的。看来使用 TypesSript 也有眼瞎的时候，虽然它已经能够帮你解决 80% 的低端 bug 了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次的项目算是使用 TypeScript 对 axios 库功能的一次仿写，由代码测试来看，部分功能还算是比较成功的。同时也了解到了 TypeScript 这一门语言的强大之处，比起 js 来说，用的人都应该感觉算蛮香的。虽然类型定义有些奇怪，但用习惯之后觉得还好。另外，若大家有兴趣，还请 <a href="https://github.com/strugglebak/txios" target="_blank" rel="noopener">star 下我的 txios 库</a> ，各位有问题也可以直接 <a href="https://github.com/strugglebak/txios/pulls" target="_blank" rel="noopener">PR</a>，我通通合并(开玩笑哈哈)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/" title="txios-基于TypeScript的http库的实践总结">https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Txios/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Txios
+            </a>
+          
+            <a href="/tags/Promise/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Promise
+            </a>
+          
+            <a href="/tags/TypeScript-Http/" rel="tag">
+            <i class="fa fa-tag"></i>
+            TypeScript-Http
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/11/配置代码覆盖率徽标的问题/" rel="next" title="配置代码覆盖率徽标的问题">
+                <i class="fa fa-chevron-left"></i> 配置代码覆盖率徽标的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/17/watermelon-clock-基于TypeScript-React的西瓜闹钟项目的实践总结/" rel="prev" title="watermelon-clock:基于TypeScript+React的西瓜闹钟项目的实践总结">
+                watermelon-clock:基于TypeScript+React的西瓜闹钟项目的实践总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建"><span class="nav-number">1.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用的工具库"><span class="nav-number">1.1.</span> <span class="nav-text">使用的工具库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目结构"><span class="nav-number">1.2.</span> <span class="nav-text">项目结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他工具的配置"><span class="nav-number">1.3.</span> <span class="nav-text">其他工具的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#非工作流工具配置"><span class="nav-number">1.3.1.</span> <span class="nav-text">非工作流工具配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流工具配置"><span class="nav-number">1.3.2.</span> <span class="nav-text">工作流工具配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feature-实现"><span class="nav-number">2.</span> <span class="nav-text">Feature 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#支持使用-XMLHttpRequest-对象通信"><span class="nav-number">2.1.</span> <span class="nav-text">支持使用 XMLHttpRequest 对象通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持-Promise-API"><span class="nav-number">2.2.</span> <span class="nav-text">支持 Promise API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持请求-响应拦截以及其过程中的数据转换"><span class="nav-number">2.3.</span> <span class="nav-text">支持请求/响应拦截以及其过程中的数据转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持取消请求"><span class="nav-number">2.4.</span> <span class="nav-text">支持取消请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持自动转换-JSON-数据"><span class="nav-number">2.5.</span> <span class="nav-text">支持自动转换 JSON 数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端支持-XSRF-防御"><span class="nav-number">2.6.</span> <span class="nav-text">客户端支持 XSRF 防御</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试"><span class="nav-number">3.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较难实现的地方"><span class="nav-number">4.</span> <span class="nav-text">比较难实现的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2020/03/14/txios-基于TypeScript的http库的实践总结/';
+          this.page.identifier = '2020/03/14/txios-基于TypeScript的http库的实践总结/';
+          this.page.title = 'txios-基于TypeScript的http库的实践总结';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
