@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Database,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-03-数据库存储-part1">
+<meta name="keywords" content="Database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU-15-445-645-笔记-03-数据库存储-part1">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-03-数据库存储-part1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/Cover.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/11.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/12.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/13.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/14.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/15.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/16.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/17.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/18.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/19.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/20.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/21.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/22.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/23.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/24.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/25.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/26.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/27.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/28.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/29.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/30.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/31.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/32.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/33.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/34.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/35.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/36.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/37.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/38.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/39.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/40.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/41.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/42.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/43.png">
+<meta property="og:updated_time" content="2022-06-05T13:34:51.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMU-15-445-645-笔记-03-数据库存储-part1">
+<meta name="twitter:description" content="注: 本文首发我的 b 站专栏文章CMU 15-445/645-笔记-03-数据库存储-part1">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/Cover.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/">
+
+
+
+
+
+  <title>CMU-15-445-645-笔记-03-数据库存储-part1 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CMU-15-445-645-笔记-03-数据库存储-part1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-05T21:29:29+08:00">
+                2022-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index">
+                    <span itemprop="name">Database</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注: 本文首发我的 b 站专栏文章<a href="https://www.bilibili.com/read/cv14558199" target="_blank" rel="noopener">CMU 15-445/645-笔记-03-数据库存储-part1</a></p>
+</blockquote>
+<a id="more"></a>
+<p><img src="./Cover.png" alt></p>
+<ul>
+<li><p>课程目标</p>
+<p>  <img src="./1.png" alt></p>
+<ol>
+<li>DBMS 是怎么用磁盘上的文件来表示数据库的（主要是这个）</li>
+<li>DBMS 是怎么管理内存的，是怎么在磁盘间来回移动数据的</li>
+</ol>
+</li>
+<li><p>课程大纲</p>
+<p>  <img src="./2.png" alt></p>
+<p>  上述展示的就是一个数据库中应该包含的东西，一个数据库就是建立在这些层面之上</p>
+</li>
+<li><p>面向磁盘的数据库架构</p>
+<p>  <img src="./3.png" alt></p>
+<p>  由于这门课是面向磁盘（Disk-Oriented）的数据库管理系统，即数据库的主要存储位置都是放在磁盘上的，意味着每次执行查询时，所要访问的数据都不在内存（Memory）中。所以在设计这个数据库管理软件时，要基于一些假设来设计一系列的组件，来保护这个数据库系统，使其免于数据丢失、保存无效或错误的数据等情况。</p>
+<p>  此外还需要区分</p>
+<ol>
+<li>易失性存储</li>
+<li><p>非易失性存储</p>
+<p>简单来讲就是，我们所要的 数据系统 管理了数据从非易失性存储到易失性存储的移动</p>
+<p>计算机的存储结构如图所示</p>
+<p><img src="./4.png" alt></p>
+</li>
+<li><p>越上面的容量越小，速度越快，也越贵</p>
+</li>
+<li><p>越下面的容量越大，速度越慢，也越便宜</p>
+<p><img src="./5.png" alt></p>
+<p>注意这里在 DRAM 和 SSD 有条分界线，这里就是易失性和非易失性存储的分界</p>
+<p>需要稳定的能量（电能）维持它所存储的东西的存储设备，叫做易失性存储，那么反之就是非易失性存储</p>
+</li>
+<li><p>如果数据是保存在易失性存储设备中，那么它就支持 快速随机访问，即无论在什么位置访问数据，访问数据的顺序是怎么样的，访问的速度都大体一致</p>
+</li>
+<li>如果数据是保存在非易失性存储设备中，由于它们具备的是 块寻址（非字节寻址） 能力，无法准确地得到数据的 位大小的数据（32bit, 64bit），所能得到的是包含要访问的数据的 块（Block） 或者 页（Page）</li>
+<li><p>但是在非易失性存储设备中，比起随机读取不同位置上的内容，它能更有效率地去读取一段连续的 块 中的内容。所以对于非易失性存储来讲，是希望按顺序读取的数据量越大越好</p>
+<p>Memory 和 Disk 的区分</p>
+<p><img src="./6.png" alt></p>
+<p>现在已经没人用磁带机来存数据了，但是可用来做容灾</p>
+<p>Network Storage 现在指类似于 Amazon 的 EBS 或者 S3 之类的东西</p>
+<p>实际上在分割线处还有新的一类存储设备，它被称之为非易失性内存（Non-Volatile Memory）</p>
+<p><img src="./7.png" alt></p>
+<p>比如 Intel 的 傲腾（Optane）内存，牙膏厂虽然是第一个发布这种内存的厂商，但这类技术的研究已经有 15-20 年左右的历史了</p>
+<p>它可以像 DRAM 一样，可以插在 DIMM 槽内，却具备 字节寻址 能力，也可以像 SSD 那样，断电也能持久保存数据。</p>
+<p>但残念的是，目前这种既能又能的存储设备并没有被广泛应用</p>
+<p>顺便老师在课上写的这本书有卖吗？</p>
+<p><img src="./8.png" alt></p>
+<p>一张关于各种存储设备的访问耗时表</p>
+<p><img src="./9.png" alt></p>
+</li>
+</ol>
+</li>
+<li><p>系统设计目标</p>
+<p>  <img src="./10.png" alt></p>
+<p>  目标就是，给应用程序提供一种错觉，即这个系统能提供足够的内存，能把整个数据库导入到内存中。并且最小化每次从磁盘读取/查询内容所带来的影响</p>
+<p>  比如这种最小化的方式可以通过以下几种方式达到</p>
+<ol>
+<li>允许在同一时间运行不同的线程/查询</li>
+<li>缓存</li>
+<li><p>提前计算某些数据</p>
+<p>一个访问磁盘数据的示意图</p>
+<p><img src="./11.png" alt></p>
+<p>可以看到有几个关键的地方，Directory、Buffer、Page</p>
+<p>那么这个有点像什么呢？– 虚拟内存</p>
+<p>那么操作系统能做这件事，为什么还这样设计而不直接使用操作系统来做呢？</p>
+<p><img src="./12.png" alt><br><img src="./13.png" alt></p>
+<blockquote>
+<p>注意 mmap 指的是 maps files or devices into memory</p>
+</blockquote>
+<p>虽然操作系统可以利用虚拟内存通过 mmap 来映射到文件，但是这只适用于 只读 的访问，对于有多个 writer 的情况就复杂很多了</p>
+<p><img src="./14.png" alt></p>
+<p>因为操作系统并不知道某些 pages 必须要先于其他 pages ，从内存刷到磁盘，这里有一个竞争的关系</p>
+<p>那么有没有解决方案呢？有的</p>
+<p><img src="./15.png" alt></p>
+</li>
+<li><p>使用 madvise 告诉 OS 怎么去访问某些页面（顺序/随机读取）</p>
+</li>
+<li>使用 mlock 阻止 pages 被 OS 回收（尽管可以被锁定但并不能阻止它被写出到磁盘）</li>
+<li><p>使用 msync 告诉 OS 要把数据刷到磁盘中</p>
+<p>使用 mmap 和 部分使用 mmap 的 Database</p>
+<p><img src="./16.png" alt></p>
+</li>
+<li><p>实际上 MemSQL 已经完全摆脱了 mmap</p>
+</li>
+<li>SQLite 有一个特殊的引擎，在嵌入式设备上 mmap 是可选的，默认情况下用不到</li>
+<li>InfluxDB 只有在只读缓存上才使用 mmap</li>
+<li><p>mongoDB 第一次被开发出来时，它的默认存储引擎用的就是 mmap，但为了让这个引擎能正常工作，开发人员也做了很多无用功，因为这里面存在着巨大的瓶颈，然后等他们筹到很多钱之后，就把 mmap 干掉了，再然后他们买了一个叫做 WiredTiger 的非 mmap 的存储引擎</p>
+<p>注意这张图里面少了很多主流的 Database，比如 MySQL，Oracle，DB2 以及 SQL server，这些数据库都没有使用 mmap，因为 mmap 是一个糟糕的想法，因为缺少人为写代码去控制这种行为。</p>
+<p>所以如果 mmap 是一个好的想法，那么这群土豪（指 mongoDB）手下的顶级工程师肯定能证明这的确是，然后并没有（哈哈哈哈好好笑）</p>
+<p>老师痛恨 mmap</p>
+<p><img src="./17.png" alt></p>
+<p>毕竟操作系统啥也不懂，它只看到了一些读写和调用（</p>
+</li>
+</ol>
+</li>
+<li><p>文件存储</p>
+<p>  <img src="./18.png" alt></p>
+<p>  数据库其实就是磁盘上的一堆文件，SQLite 把数据库存储为一个文件，而其他大部分数据库比如 PostgreSQL 则会把这些分为多个文件来存储，因为数据库可能非常大，甚至可能有 PB 级别的数据量，你不会想要对这么大的一个文件做错误修复</p>
+<p>  现在的一些”企业级”的数据库系统还支持自定义的专属文件系统，但近些年的一些数据库系统已经不支持了，因为非常不值得，要管理这种文件系统是一个很大的坑，同时也大大降低了可移植性。</p>
+</li>
+<li><p>存储管理器</p>
+<p>  <img src="./19.png" alt></p>
+<p>  存储管理器也叫存储引擎，它负责维护磁盘上的数据库文件。</p>
+<p>  某些高端数据库系统在文件系统之上还有一个 shim 层，它允许数据库去做一些磁盘的调度，这就像是可以通过一堆线程来对彼此邻近的区块进行写入，也可以将这些区块合并后做一次写入请求。</p>
+</li>
+<li><p>Database Pages</p>
+<p>  <img src="./20.png" alt></p>
+<p>  一个 page 的集合，就是这一堆文件的一个组织形式。本质上来讲，一个 page 就是一个固定大小的数据块</p>
+<p>  self-contained 的意思是，page 的内容必须存储在 page 本身内。比如 Orcale 就需要将描述该 page 中内容的所有元数据，和这些内容数据一起保存在该 page 中，避免数据库故障的时候你找不到，这样即便丢了一个 page，也不会影响其他的 page</p>
+<p>  indirection 层允许将一个 page ID 映射到某个集合中一个文件的某个位置。相当于记录一个相对位置，方便文件整体移动后，只要知道整体文件的初始位置，依然可以通过该相对位置即 page ID 找到某个文件某个位置的数据所对应的 page。因为一个 page 的大小是固定的，page ID * page Size 即为 offset</p>
+<p>  一些 page 的概念</p>
+<p>  <img src="./21.png" alt></p>
+<p>  Database Page 大小各有不同</p>
+<p>  <img src="./22.png" alt></p>
+<p>  但我们更需要关注的是 Hardware Page 的大小，因为它是原子的，即一次只能写入这么大的 page 数据，如果超过了，那么剩下的数据就会丢失写不进去，写入失败也不会回滚，数据就会损坏</p>
+<p>  高级数据库可以设定它们自己 page 的大小</p>
+<p>  那么为什么有些数据库系统使用的是空间更大的 page 呢？</p>
+<p>  这里是有一些权衡的，比如在数据库系统的内部，通过内存中的 Page 目录将 page 映射到内存或者磁盘上的某个位置，如果现在用一个 page ID 来表示一个更大量的数据，那么一个表所占用的大小就会变小。因为固定容量下，一个 ID 表示的数据量越大，那么它所需要的 ID 数也越小。比如 CPU 中 TLB（页表缓存），如果尝试去匹配所有的 page，那么 page 表将会变得非常的大，然后就会出现 cache misses 的现象。因为 page ID 表示的数据范围太小，在高速缓存中无法全部命中。所以这里可以通过更少的 page ID 来表示更多的数据</p>
+</li>
+<li><p>Page 存储架构</p>
+<p>  <img src="./23.png" alt></p>
+<p>  比较重要的就是 Heap File Organization</p>
+<ul>
+<li><p>Database Heap</p>
+<p>  <img src="./24.png" alt></p>
+<p>  数据库中的 heap 文件是一个无序的 page 集合，即可以以随机的顺序把 tuple 数据存储在里面</p>
+<p>  链表来实现一个 page 是很 low 的，更好的方案是使用 Page 目录</p>
+</li>
+<li><p>Heap File: 链表</p>
+<p>  <img src="./25.png" alt></p>
+<p>  这里的例子中，如果要支持反向查找，那还得是一个双向链表</p>
+<p>  如果需要在 page 中 insert 一些东西，那么还是需要对这个链表做遍历，直到找到 free page 为止，在这个位置 insert。为什么需要遍历，因为有些 page 的剩余空间可大可小，所以需要遍历到那个足以容纳下要 insert 的数据的一个剩余空间里面去</p>
+<p>  写数据时需要注意的问题，即数据写一半，写满一个出了问题，后一半还没来得及写，数据就会损坏，所以要保证写数据的原子性和完整性，需要做很多工作</p>
+<p>  写入数据崩溃，如何查找原因？使用 checksum，类似于 CRC 或者 md5</p>
+</li>
+<li><p>Heap File: Page 目录</p>
+<p>  <img src="./26.png" alt><br>  <img src="./27.png" alt></p>
+<p>  Page 目录是一个通常的做法，好处是假如想要插入一些数据时，没必要像链表那样对整个链表做一次遍历，只需要在 Page 目录中做查找就可以。例子中的每个小格中不仅有对应 page 所在位置，也包含了 page 剩余空间的信息</p>
+</li>
+<li><p>Page 头</p>
+<p>  <img src="./28.png" alt></p>
+</li>
+<li><p>Page 层</p>
+<p>  <img src="./29.png" alt></p>
+<ol>
+<li><p>面向 tuple 的组织方式</p>
+<p> <img src="./30.png" alt></p>
+<p> 这种组织方式是一个 bad idea，为什么呢？</p>
+<ul>
+<li>如果 tuple 都是固定长度的，那么要增删 tuple 的话，通过将其移到一个新的空间来取代这个老的空间就可以了不是么（联想到了 V8 的新生代老生代的 GC 算法了）</li>
+<li>如果 tuple 不是固定长度的，那么你插入 tuple<br>的那个位置可能就没有足够的空间</li>
+<li><p>每次要增删 tuple 时，都需要维护顶部的元数据，也就是 Num Tuples，告诉你哪个位置能插数据，或者遍历整个 page 看看哪里能插</p>
+<p>但更好的方式是使用 slotted pages</p>
+<p><img src="./31.png" alt><br><img src="./32.png" alt></p>
+<p>在顶部有一个称之为 slot 数组 的东西，在底部则用来保存想要保存的数据</p>
+<p>本质上来讲，slot 数组是将一个特定的 slot 映射到 page 上的某个 offset 上，根据这个 offset，就能找到想找的哪个 tuple</p>
+<p>注意 slot 存的是 offset</p>
+<p><img src="./33.png" alt></p>
+<p>而填充 page 的方式是</p>
+</li>
+<li>从前往后对 slot 数组进行填充</li>
+<li><p>从后往前对数据进行填充</p>
+<p>什么是 page 已满，指的是数据占用了该 page 的一半以上的大小，再也无法存入任何信息了</p>
+<p>当然也可以用一种 Postgres 中的 vaccum 的操作来整理数据库，或者使用压缩，也可以对数据库进行扫描并整理碎片</p>
+<p>对于这种例子来讲，肯定是不能把视频存在数据库里面的，因为单个 page 根本放不下它。</p>
+<p>一般来讲，要存 tuple 不应该分散地存在多个 page 上，因为维护元数据很麻烦。最好是当我们想要去访问这个 tuple 的时候，它就在这个 page 上。</p>
+<p>为什么需要这么组织结构呢？</p>
+<p>因为不管是将数据库文件中的 page 移动到磁盘还是网络上，系统的其他部分都不会关心这个 page 实际移动到了哪里，因为有 page ID 的存在，就可以通过 Page 目录来找到它实际所保存的位置，而这些 indirection 层避免了这些位置的更新会传播到系统的其他上层部分。比如某些 GC 算法，只需要保证对象间的引用关系就好，对象存在内存的哪个位置会随着 GC 的进行而变化，page ID 有有点像是在维护这个引用关系</p>
+</li>
+</ul>
+</li>
+<li><p>日志结构的组织方式<br> // Todo:<br> 主要这里 3-1 没有讲到</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>Tuple 层</p>
+<blockquote>
+<p>注: 课程时间不够，这里是简略版本</p>
+</blockquote>
+<p>  <img src="./34.png" alt></p>
+<p>  一个 tuple 基本上就是一串字节，数据库的工作就是再次解释这些字节的实际含义</p>
+<ul>
+<li><p>Tuple 头</p>
+<p>  <img src="./35.png" alt></p>
+<p>  通常没必要将该 tuple 的元数据保存在这个 tuple 里面，因为更高级的元数据信息保存在这个 tuple 对应的 page 中，但可以可以放在 catalog page 里</p>
+</li>
+<li><p>Tuple Data</p>
+<p>  <img src="./36.png" alt></p>
+<p>  通常大部分数据库系统会按照它们创建时的顺寻进行存储，我们知道在关系模型中没必要这么做，但是大部分系统都做了</p>
+</li>
+<li><p>Denormalized Tuple Data</p>
+<p>  <img src="./37.png" alt></p>
+<p>  如果来自不同表的数据保存在同一个 page 中，会发生什么问题？<br>  注意这里大部分数据库系统都不会这么做，因为如果想让 page 变得独立，那么也就不应该去保存一大堆关于不同表的额外的元数据。当对表进行反范式化设计或者对表进行 prejoin 时，就会出现上述图中的情况，也就是数据冗余，一个 page 中存在多个表数据，更新、删除、或者压缩都要对多个表进行处理</p>
+<p>  而数据库规范基本上就是讲如何讲数据库拆分到不同的表中（使用外键时就自然拆分了）</p>
+<p>  下面是一个反范式化的处理例子，将 bar 的 tuple 直接内嵌在 foo 的 tuple 中</p>
+<p>  因为每个 bar 表中的 tuple 复制了 a 属性，如果将它打包进 foo 表的 tuple 中，就没必要重复记录这些数据了，foo 表所拥有的这些列对其他表来说是独一无二的，就像是 prejoin 一样，将 tuple 彼此包装在一起。这样，应用程序依然觉得，这个 db 里面有两张单独的表，但在 db 内部，page 实际上会将它们合并在一起</p>
+<p>  <img src="./38.png" alt><br>  <img src="./39.png" alt><br>  <img src="./40.png" alt></p>
+<p>  但这并不是什么新鲜东西，早在 1970 年代，IBM 在发明它们第一个关系型数据库 System R 的时候，就引入了这个概念</p>
+<p>  然而当 IBM 做出了 DB2 之后，这个方式就被废弃掉了，因为维护它很操蛋</p>
+<p>  System R 是 IBM 发布的第一个关系型数据库，但 IBM 并没有将它商业化，也没有卖掉，10 多年之后，IBM 抽取了 System R 中的部分代码，做出了 DB2</p>
+<p>  实际上在更现代的数据库系统中也出现了这种反范式化的设计</p>
+<p>  <img src="./41.png" alt></p>
+<ol>
+<li>G 家的 Cloud Spanner，如果你定义了一个 Protobuf API，那么你就可以将两张不同表的数据合并在同一个 tuple 中</li>
+<li>10 年前有一个叫 Akiban 的初创公司，他们把他们的存储引擎卖给了 MySQL，MySQL 就可以做到这种反范式化的操作。然后他们被 Foundation DB 收购，之后 Foundation DB 又被苹果收购</li>
+<li>一些文档型数据库或者 JSON 数据库也能做到。比如你在定义你的 JSON document 时，就可以预先对相关属性进行 join 操作</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>记录 ID</p>
+<p>  <img src="./42.png" alt></p>
+<p>  保存元数据的大小</p>
+<ul>
+<li>PostgreSQL CTID（4 bytes）</li>
+<li>SQLite ROWID（8 bytes）</li>
+<li>Oracle ROWID（10 bytes）</li>
+</ul>
+</li>
+<li><p>结论</p>
+<p>  <img src="./43.png" alt></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/" title="CMU-15-445-645-笔记-03-数据库存储-part1">https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Database/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Database
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/05/CMU-15-445-645-笔记-02-高级SQL/" rel="next" title="CMU-15-445-645-笔记-02-高级SQL">
+                <i class="fa fa-chevron-left"></i> CMU-15-445-645-笔记-02-高级SQL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/';
+          this.page.identifier = '2022/06/05/CMU-15-445-645-笔记-03-数据库存储-part1/';
+          this.page.title = 'CMU-15-445-645-笔记-03-数据库存储-part1';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
