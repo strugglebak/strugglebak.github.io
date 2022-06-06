@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Rust,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="注意，本文是对极客时间《Rust 编程第一课》有关所有权、生命周期以及内存管理相关技术这几个 Rust 核心概念的摘抄笔记，虽然我认为 Rust 官方的 《The Rust Programming Language》很好，但是有些地方有些细节没有讲的很清楚，官方的这本英文的适合入门看，稍微进阶一点可以看看极客时间这门课，比张汉东的那个要好">
+<meta name="keywords" content="Rust">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust所有权、生命周期、内存管理">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="注意，本文是对极客时间《Rust 编程第一课》有关所有权、生命周期以及内存管理相关技术这几个 Rust 核心概念的摘抄笔记，虽然我认为 Rust 官方的 《The Rust Programming Language》很好，但是有些地方有些细节没有讲的很清楚，官方的这本英文的适合入门看，稍微进阶一点可以看看极客时间这门课，比张汉东的那个要好">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/7.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/8.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/9.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/10.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/11.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/12.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/13.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/14.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/15.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/16.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/17.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/18.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/19.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/20.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/21.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/22.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/23.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/24.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/25.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/26.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/27.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/28.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/29.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/30.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/31.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/32.png">
+<meta property="og:updated_time" content="2022-06-06T04:52:14.668Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rust所有权、生命周期、内存管理">
+<meta name="twitter:description" content="注意，本文是对极客时间《Rust 编程第一课》有关所有权、生命周期以及内存管理相关技术这几个 Rust 核心概念的摘抄笔记，虽然我认为 Rust 官方的 《The Rust Programming Language》很好，但是有些地方有些细节没有讲的很清楚，官方的这本英文的适合入门看，稍微进阶一点可以看看极客时间这门课，比张汉东的那个要好">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/">
+
+
+
+
+
+  <title>Rust所有权、生命周期、内存管理 | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rust所有权、生命周期、内存管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-06T12:47:12+08:00">
+                2022-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Rust/" itemprop="url" rel="index">
+                    <span itemprop="name">Rust</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/06/Rust所有权、生命周期、内存管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/06/Rust所有权、生命周期、内存管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>注意，本文是对极客时间《Rust 编程第一课》有关所有权、生命周期以及内存管理相关技术这几个 Rust 核心概念的摘抄笔记，虽然我认为 Rust 官方的 《The Rust Programming Language》很好，但是有些地方有些细节没有讲的很清楚，官方的这本英文的适合入门看，稍微进阶一点可以看看极客时间这门课，比张汉东的那个要好</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="底层逻辑"><a href="#底层逻辑" class="headerlink" title="底层逻辑"></a>底层逻辑</h2><h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><p>对于代码</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">"hello world"</span>.to_string();</span><br></pre></td></tr></table></figure>
+<p>上述代码调用栈图示为</p>
+<p><img src="./1.png" alt></p>
+<p>当执行 <code>&quot;hello world&quot; .to_string()</code> 时，在堆上，一块新的内存被分配出来，并把 “hello world” 逐个字节拷贝过去</p>
+<p>在调用的过程中，<strong>一个新的帧会分配足够的空间存储寄存器的上下文</strong></p>
+<p>图示为</p>
+<p><img src="./2.png" alt></p>
+<p><strong>在编译时，一切无法确定大小或者大小可以改变的数据，都无法安全地放在栈上，最好放在堆上</strong></p>
+<p>但是栈的问题就是预留空间一般比较小，容易出现 <strong>栈溢出</strong> 的问题</p>
+<p>栈上的内存分配之所以高效是因为只需要移动指针，不会涉及到额外计算、系统调用</p>
+<p>而当 <strong>需要动态大小的内存时，只能使用堆</strong></p>
+<p>堆内存在分配时一般会预留空间，所以不用担心溢出的问题，然而每次空间的分配都会产生一次系统调用，所以堆内存分配低效，因为 <strong><code>malloc</code> 代价高昂</strong></p>
+<p><strong>动态生命周期的内存也需要分配到堆上，因为从堆上分配出来的每一块内存需要显式的释放，这使得不同的调用栈之间可以共享数据</strong>，如图所示</p>
+<p><img src="./3.png" alt></p>
+<p>但是数据放堆也会有问题</p>
+<ol>
+<li><strong>内存泄露</strong>: 手工管理堆内存，堆上内存分配后忘记释放</li>
+<li><strong>堆越界</strong>: 堆上内存被多个线程的调用栈引用，忘加锁，可能会访问到野指针</li>
+<li><strong>use after free</strong>: 堆上内存被释放，但栈上指向堆上内存的相应指针没有被清空</li>
+</ol>
+<p>所以需要 GC，即垃圾回收</p>
+<ol>
+<li>Tracing GC(Java，定期标记清除不再引用的对象)</li>
+<li>自动引用计数(Object C/Swift，为每个函数插入 retain/release 语句来自动维护堆上对象的引用计数)</li>
+</ol>
+<p>从效率上来说，Tracing GC 在内存分配和释放上无需额外操作，而自动引用计数添加了大量的额外代码处<br>理引用计数，所以 Tracing GC 效率更高，吞吐量(throughput)更大</p>
+<p>但是，GC 释放内存的时机是不确定的，释放时引发的 STW(Stop The World)，也会导致代码执行的延迟(latency)不确定</p>
+<p>一个小总结: <strong>栈上存放的数据是静态的，静态大小，静态生命周期；堆上存放的数据是动态的，动态大小，动态生命周期</strong></p>
+<h2 id="Rust-的所有权"><a href="#Rust-的所有权" class="headerlink" title="Rust 的所有权"></a>Rust 的所有权</h2><h3 id="所有权解决的问题"><a href="#所有权解决的问题" class="headerlink" title="所有权解决的问题"></a>所有权解决的问题</h3><p>Rust 所有权需要解决的一个问题是，<strong>堆上某个数据存在多个引用怎么办</strong>，比如下图</p>
+<p><img src="./4.png" alt></p>
+<p>在 <code>main</code> 函数和 <code>find_pos</code> 函数里面，都有一个指向同一个在堆上的数据引用，这种情况会导致一些问题，比如</p>
+<ol>
+<li>这些引用会做什么操作是无法预测的</li>
+<li>堆上的内存什么时候能释放，尤其在多个调用栈引用时，很难厘清</li>
+</ol>
+<p>大多数语言的方案</p>
+<ol>
+<li><strong>C要求开发者手工处理(手动 <code>malloc</code>)</strong>: 对开发人员要求非常高，一不小心就是 OOM</li>
+<li><strong>C++ 要求开发者半手工处理(引入智能指针)</strong>: 同样会存在 OOM 问题</li>
+<li><strong>Java 等语言使用 Tracing GC</strong>: 会带来 STW 问题，性能上会有影响</li>
+<li><strong>Object C/Swift 等语言使用自动引用计数</strong>: 运行时同样会有性能损耗</li>
+</ol>
+<p>从源头上看，本质问题是堆上内存会被随意引用</p>
+<p>而 Rust 所有权的核心思想，是 <strong>限制引用行为本身</strong></p>
+<p>那么怎么做限制?</p>
+<p>要回答这个问题，我们需要先来回答：谁真正拥有数据或者说值的生杀大权，这种权利可以 <em>共享</em> 还是需要 <em>独占</em> ?</p>
+<p>核心点在于，<strong>一个值最好只有一个拥有者</strong></p>
+<p>对此，Rust 给出了如下规则:</p>
+<ol>
+<li><strong>一个值只能被一个变量所拥有</strong>，这个变量被称为 <strong>所有者</strong> (Each value in Rust has a variable that’ s called its owner)</li>
+<li><strong>一个值同一时刻只能有一个所有者</strong> (There can only be one owner at a time)</li>
+<li><strong>当所有者离开作用域，其拥有的值被丢弃</strong> (When the owner goes out of scope, the value will be dropped)，内存得到释放</li>
+</ol>
+<p>三条规则合起来就是 <strong>要保证单一所有权</strong></p>
+<p>第二条规则跟 Rust <code>Move</code> 语义有关</p>
+<p>第三条规则中的作用域 (scope) 的概念在 Rust 里是指 <em>代码块</em> (block)，即 <strong>一对花括号 <code>{}</code> 括起来的区域</strong></p>
+<p>那么对于上面说的 <strong>堆上某个数据存在多个引用怎么办</strong> 的问题，Rust 解决如下图所示</p>
+<p><img src="./5.png" alt></p>
+<p><code>main</code> 函数中 <code>data</code> 被 <strong>移动</strong> 到 <code>find_pos</code> 函数之后就会 <strong>失效</strong>，这其实就是 <strong>所有权转移</strong> 的一种体现，<code>find_pos</code> 函数此刻拥有了 <code>data</code> 的所有权，编译器会保证 <code>main</code> 函数随后的代码无法访问到这个 <code>data</code>，即 <code>main</code> 函数丢失了对 <code>data</code> 的所有权，这样就能确保 <strong>堆上某个数据只能存在唯一引用</strong></p>
+<p>所以 <strong>所有权规则，本质上就是让堆上数据的多重引用不复存在</strong></p>
+<h3 id="Copy-Move-语义"><a href="#Copy-Move-语义" class="headerlink" title="Copy/Move 语义"></a>Copy/Move 语义</h3><p>当然，如果要避免所有权转移之后不能访问的情况，除了需要手动调用 <code>clone</code> (深拷贝)来解决之外，Rust 还提供了 2 种方案</p>
+<ol>
+<li>如果你不希望值的所有权被转移，在 Move 语义外，Rust 提供了 <strong>Copy 语义</strong>。如果一个数据结构实现了 <code>Copy trait</code>， 那么它就会使用 Copy 语义。这样在赋值或者是传参时，值会自动 <strong>按位拷贝(浅拷贝)</strong></li>
+<li>如果你不希望值的所有权被转移，又无法使用 Copy 语义，那可以通过 <strong>Borrow 语义借用数据</strong></li>
+</ol>
+<p><strong>当要移动一个值，如果值的类型实现了 Copy trait，就会自动使用 Copy 语义进行按位浅拷贝，否则使用 Move 语义进行移动</strong></p>
+<p><strong>Move 语义是指，赋值或者传参会导致值 Move，所有权被转移，一旦所有权转移，之前的变量就不能访问</strong></p>
+<p>如图所示</p>
+<p><img src="./6.png" alt></p>
+<h3 id="Borrow-语义"><a href="#Borrow-语义" class="headerlink" title="Borrow 语义"></a>Borrow 语义</h3><p><strong>Borrow 语义</strong> 允许一个值的所有权，在不发生转移的情况下，被其它上下文使用</p>
+<blockquote>
+<p>注意: <strong>在 Rust 中，”借用” 和 “引用” 是一个概念</strong></p>
+</blockquote>
+<ol>
+<li>在其他语言中，<strong>引用</strong> 是一种别名，多个引用拥有对值的无差别的访问权限，<strong>本质上是共享了所有权</strong></li>
+<li>而在 Rust 中，所有的 <strong>引用</strong> 都只是 <strong>借用了”临时使用权”</strong>，它并不破坏值的单一所有权约束。</li>
+</ol>
+<blockquote>
+<p>注意: <strong>默认情况下，Rust 的借用都是只读的</strong></p>
+</blockquote>
+<p>在 Rust 中，<strong>所有的参数传递都是传值</strong>，如果要传引用，那么你必须要显示的指定，我要传什么引用</p>
+<p>而 Rust 的引用实现了 Copy trait，按照 Copy 语义，这个引用会被复制一份交给要调用的函数。但是对于这个函数来说，<strong>它并不拥有数据本身，数据只是临时借给他使用，所有权还在原来的拥有者那里</strong></p>
+<p>比如下面的图</p>
+<p><img src="./7.png" alt></p>
+<p><strong>虽然 <code>data</code> 有很多只读借用指向它，但堆上的数据依旧只有 <code>data</code> 一个所有者，即它仍然只有唯一的一个引用，所以值的任意多个引用并不会影响所有权的唯一性</strong></p>
+<blockquote>
+<p>注意: <strong>借用不能超过(outlive)值的生存期</strong></p>
+</blockquote>
+<p>那么，既然有 <strong>只读借用</strong>，有没有 <strong>可变借用</strong>?</p>
+<p>有的，只不过 Rust 对 <strong>可变借用</strong> 做了限制，为了限制两种情况</p>
+<ol>
+<li><p><strong>多个可变借用共存</strong></p>
+<p> 比如代码</p>
+ <figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> data = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> data.iter_mut() &#123;</span><br><span class="line">    data.push(*item + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 这段代码在遍历可变数组 <code>data</code> 的过程中，还往 <code>data</code> 里添加新的数据，会导致死循环，因为 <code>data</code> 的长度一直在增长</p>
+</li>
+<li><p><strong>同时有一个可变借用和若干个只读借用</strong></p>
+<p> 比如代码</p>
+ <figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> data = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">let</span> data1 = <span class="built_in">vec!</span>[&amp;data[<span class="number">0</span>]];</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..<span class="number">100</span> &#123; data.push(i); &#125;</span><br></pre></td></tr></table></figure>
+<p> 如果继续往 <code>data</code> 添加元素，<code>data</code> 对应的堆上的数据预留的空间不够了，就会 <strong>重新分配</strong> 一片足够大的内存，把之前的值拷过来，然后 <strong>释放旧的内存</strong>。这样就会让 <code>data1</code> 中保存的 <strong><code>&amp;data[0]</code> 借用失效</strong>，导致内存安全问题</p>
+</li>
+</ol>
+<p>GC 可以解决情况 2，但是无法解决情况 1，所以 Rust 对于此就有约束，即</p>
+<ol>
+<li><strong>在一个作用域内，仅允许一个 <code>活跃</code> 的可变借用</strong>，活跃是指真正被用来修改数据的可变借用，定义了没有使用的不算</li>
+<li>在一个作用域内，<strong><code>活跃</code> 的可变借用(写)和只读借用(读)是互斥的，不能同时存在</strong></li>
+</ol>
+<h3 id="单一所有权的例外情况"><a href="#单一所有权的例外情况" class="headerlink" title="单一所有权的例外情况"></a>单一所有权的例外情况</h3><p>这个例外情况就是，<strong>一个值拥有多个所有者</strong>，例如下面 2 个</p>
+<ol>
+<li>一个有向无环图中，某个节点可能有 2 个以上的节点指向它，这个按照所有权模型如何描述?</li>
+<li>多个线程要访问同一块共享内存，怎么办?</li>
+</ol>
+<p>因为这些问题在程序的 <strong>运行时</strong> 才可能遇到，为了灵活性，Rust 提供了 <strong>运行时的动态检查</strong></p>
+<p>那具体如何在运行时做动态检查呢？运行时的动态检查又如何与编译时的静态检查自洽呢?</p>
+<p>答案是使用 <strong>引用计数的智能指针</strong>: <strong>Rc(Reference counter)</strong> 和 <strong>Arc(Atomic reference counter)</strong></p>
+<p>Rc 用来解决情况 1，Arc 用来解决情况 2</p>
+<p>即 <strong>在运行时检测引用计数</strong></p>
+<h4 id="Rc"><a href="#Rc" class="headerlink" title="Rc"></a>Rc</h4><p>对某个数据结构 T，我们可以创建引用计数 Rc，使其 <strong>拥有多个所有者</strong>，而 Rc 会把对应的数据结构 <strong>创建在堆上</strong></p>
+<p><strong>对一个 Rc 结构进行 <code>clone()</code>，不会将其内部的数据复制，只会增加引用计数</strong><br><strong>当一个 Rc 结构离开作用域被 drop() 时，也只会减少其引用计数</strong><br><strong>引用计数为零时，对应的内存才会被真正的清理掉</strong></p>
+<p>比如，对于代码</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::rc::Rc;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> a = Rc::new(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">let</span> b = a.clone();</span><br><span class="line">    <span class="keyword">let</span> c = a.clone();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它们共享的堆数据如下图所示</p>
+<p><img src="./8.png" alt></p>
+<blockquote>
+<p>注意: 在这段代码结束时，c 先 drop，引用计数变成 2，然后 b drop、a drop，引用计数归零，堆上内存被释放</p>
+</blockquote>
+<p>但是，上面的代码为何不报错? 因为 Rc 的 <code>clone()</code> 的源码是这样的</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">clone</span></span>(&amp;<span class="keyword">self</span>) -&gt; Rc&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">unsafe</span> &#123;</span><br><span class="line">        <span class="comment">// 这里是增加引用计数</span></span><br><span class="line">        <span class="keyword">self</span>.inner().inc_strong();</span><br><span class="line">        <span class="comment">// 通过 self.ptr 生成一个新的 Rc 结构</span></span><br><span class="line">        Self::from_inner(<span class="keyword">self</span>.ptr)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以 <strong>Rc 的 <code>clone()</code> 不复制实际的数据，只是一个引用计数的增加</strong>，对于编译器来讲，a、b、c 各自都拥有一个 Rc，所以并不会报错</p>
+<p>需要注意的是，<strong>Rc 指向的堆内存数据，不会受栈内存生命周期的控制</strong>，为什么? 因为存在 <strong><code>Box::leak()</code></strong></p>
+<h4 id="Box-leak-机制"><a href="#Box-leak-机制" class="headerlink" title="Box::leak() 机制"></a>Box::leak() 机制</h4><p>为了能够处理 Rc 这样的引用计数，Rust 提供了这样一种机制，即能 <strong>创建不受栈内存控制的堆内存</strong>，让其绕过编译器对所有权规则的检查。而实现这种机制的方式就是 <strong><code>Box::leak()</code></strong></p>
+<p>Box 是 Rust 下的智能指针，它可以强制把任何数据结构创建在堆上，然后在栈上放一个指针指向这个数据结构，<strong>但此时堆内存的生命周期仍然是受控的，跟栈上的指针一致</strong></p>
+<p>而 <code>Box::leak()</code>，即 <strong>通过它创建的对象，从堆内存上泄漏出去，不受栈内存控制</strong>，是一个自由的、<strong>生命周期可以大到和整个进程的生命周期一致的对象</strong></p>
+<p>如下图所示</p>
+<p><img src="./9.png" alt></p>
+<p>也相当于 <strong>主动撕开了一个口子，允许内存泄漏</strong>，而这其实有点类似于 C/C++ 中的 <code>malloc</code></p>
+<p>有了 <code>Box::leak()</code>，我们就可以跳出 Rust 编译器的静态检查，<strong>保证 Rc 指向的堆内存，有最大的生命周期</strong>，然后我们再通过引用计数，在合适的时机，结束这段内存的生命周期，释放掉通过这种方式创建出来的堆内存</p>
+<h4 id="RefCell"><a href="#RefCell" class="headerlink" title="RefCell"></a>RefCell</h4><p>对于 Rc 来说，它只是一个 <strong>只读的引用计数器</strong>，你无法拿到 Rc 结构内部数据的可变引用来修改对应的数据，这个时候就需要 <strong>RefCell</strong></p>
+<p>和 Rc 类似，RefCell 也绕过了 Rust 编译器的静态检查，允许我们在运行时，对某个只读数据进行可变借用</p>
+<p>这里又会涉及到 2 个概念: <strong>外部可变性</strong> 和 <strong>内部可变性</strong></p>
+<ol>
+<li>外部可变性: 通过 <code>mut</code>/<code>&amp;mut</code> 关键字声明，<strong>显式</strong> 地声明一个可变的值/引用。编译器在 <strong>编译时</strong> 会对这个值/引用进行严格的检查，保证只有可变的值/引用，才能<strong>修改值/引用内部的数据</strong></li>
+<li>内部可变性: <strong>不</strong> 通过 <code>mut</code>/<code>&amp;mut</code> 关键字声明，<strong>绕过编译时的检查</strong>，在 <strong>运行时</strong> <strong>得到值/引用的可变借用</strong>，从而修改值/引用内部的数据</li>
+</ol>
+<p><strong>而 RefCell 利用就是内部可变性</strong></p>
+<p>比如如下的代码</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::cell::RefCell;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="comment">// 注意这里并未将 data 声明为可变变量</span></span><br><span class="line">    <span class="keyword">let</span> data = RefCell::new(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 花括号的意思是</span></span><br><span class="line">    <span class="comment">// 同一个作用域下，我们不能同时有活跃的 可变借用 和 不可变借用</span></span><br><span class="line">    <span class="comment">// 括起来缩小了可变借用的生命周期</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 通过 RefCell 的 borrow_mut() 方法</span></span><br><span class="line">        <span class="comment">// 获得 RefCell 内部数据的 可变借用</span></span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut</span> v = data.borrow_mut();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 现在数据可以更改了</span></span><br><span class="line">        *v += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过 RefCell 的 borrow() 方法</span></span><br><span class="line">    <span class="comment">// 获得 RefCell 内部数据的 不可变借用</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"data: &#123;:?&#125;"</span>, data.borrow());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结如图所示</p>
+<p><img src="./10.png" alt></p>
+<p>一般来说，<strong>Rc 和 RefCell 结合来使用</strong>，就可以利用 RefCell 的内部可变性，来获得数据的可变借用了，即 <strong>既可以通过引用计数的方式让一个值可以拥有多个所有者，也能在运行时修改这个值内部的数据</strong></p>
+<p>比如下图</p>
+<p><img src="./11.png" alt></p>
+<h4 id="Arc"><a href="#Arc" class="headerlink" title="Arc"></a>Arc</h4><p>Rc 为了性能，使用的<strong>不是线程安全的引用计数器</strong>，解决上面提到的情况 2，也就是在多个线程访问同一块内存的情况下，只能使用 Arc，因为它实现了 <strong>线程安全的引用计数器</strong></p>
+<p>Arc 内部的引用计数使用了 <code>Atomic Usize</code>，而非普通的 <code>usize</code>，<code>Atomic Usize</code> 是 <code>usize</code> 的原子类型，使用特殊的 CPU 指令来保证多线程下的安全</p>
+<p><strong>如果不用跨线程访问，可以用效率非常高的 Rc；如果要跨线程访问，那么必须用 Arc</strong></p>
+<p>而对于 RefCell 而言，它也不是线程安全的，如果要在 <strong>多线程中使用内部可变性，就需要 Mutex 和 RwLock</strong></p>
+<blockquote>
+<p>Mutex: 互斥量，获得互斥量的线程对数据独占访问<br>RwLock: 读写锁，获得 <strong>写锁</strong> 的线程对数据独占访问，但当没有写锁的时候，允许有 <strong>多个读锁</strong></p>
+</blockquote>
+<p>比如，原来是用 <code>Rc&lt;RefCell&lt;T&gt;&gt;</code> 声明的在单线程环境下使用的数据，可以使用 <code>Arc&lt;Mutex&lt;T&gt;&gt;</code> 或者 <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> 来替换，以便在多线程环境下使用</p>
+<h2 id="Rust-的生命周期"><a href="#Rust-的生命周期" class="headerlink" title="Rust 的生命周期"></a>Rust 的生命周期</h2><p>先来看几个借用的生命周期的例子</p>
+<p>对于代码 1</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> r = local_ref();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"r: &#123;:p&#125;"</span>, r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">local_ref</span></span>&lt;<span class="symbol">'a</span>&gt;() -&gt; &amp;<span class="symbol">'a</span> <span class="built_in">i32</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">42</span>;</span><br><span class="line">    &amp;a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里生命周期更长的 <code>main()</code> 函数变量 <code>r</code> ，引用了 <strong>生命周期更短</strong> 的 <code>local_ref()</code> 函数里的变量 <code>a</code>，这违背了有关引用的约束，编译器会报错</p>
+<p>如下图所示</p>
+<p><img src="./12.png" alt></p>
+<p>对于代码 2</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> data: <span class="built_in">Vec</span>&lt;&amp;<span class="built_in">u32</span>&gt; = <span class="built_in">Vec</span>::new();</span><br><span class="line">    <span class="keyword">let</span> v = <span class="number">42</span>;</span><br><span class="line">    data.push(&amp;v);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"data: &#123;:?&#125;"</span>, data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里尝试把一个本地变量的引用 <code>&amp;v</code> 存入一个可变数组 <code>data</code> 中，由于可变数组 <code>data</code> 存放在堆上，栈上只有一个胖指针指向它，所以这是一个典型的 <strong>把栈上变量的引用存在堆上的例子</strong>，然而这个是编译通过的，因为 <strong>本地变量 <code>v</code> 和可变数组 <code>data</code> 的生命周期是相同的</strong></p>
+<p>如下图所示</p>
+<p><img src="./13.png" alt></p>
+<p>对于代码 3</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> data: <span class="built_in">Vec</span>&lt;&amp;<span class="built_in">u32</span>&gt; = <span class="built_in">Vec</span>::new();</span><br><span class="line">    push_local_ref(&amp;<span class="keyword">mut</span> data);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"data: &#123;:?&#125;"</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">push_local_ref</span></span>(data: &amp;<span class="keyword">mut</span> <span class="built_in">Vec</span>&lt;&amp;<span class="built_in">u32</span>&gt;) &#123;</span><br><span class="line">    <span class="keyword">let</span> v = <span class="number">42</span>;</span><br><span class="line">    data.push(&amp;v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同代码 1 差不多，这里生命周期更长的 <code>main()</code> 函数的可变数组 <code>data</code> ，引用了 <strong>生命周期更短</strong> 的 <code>push_local_ref()</code> 函数里的变量 <code>v</code>，这违背了有关引用的约束，编译器会报错</p>
+<p>如下图所示</p>
+<p><img src="./14.png" alt></p>
+<p>可以看到，堆变量的生命周期不具备任意长短的灵活性，因为堆上内存的生死存亡，跟栈上的所有者牢牢绑定，而栈上内存的生命周期，又跟栈的生命周期相关，所以我们 <strong>核心只需要关心调用栈的生命周期</strong>(除非显式地做 <code>Box::leak()</code> / <code>Box::into_raw()</code> / ManualDrop 等动作)</p>
+<p>那么 Rust 是如何确保 <em>引用的生命周期不超出值的生命周期</em> 的呢?</p>
+<h3 id="生命周期分类"><a href="#生命周期分类" class="headerlink" title="生命周期分类"></a>生命周期分类</h3><p>有 2 类</p>
+<ol>
+<li><p><strong>静态生命周期</strong></p>
+<p> 即某个值/引用的生命周期 <strong>贯穿整个进程的生命周期</strong>，btw，<strong>当值拥有静态生命周期，其引用也具有静态生命周期</strong>，在表述这种引用的时候，可以用 <code>&#39;static</code> 来表示。比如 <code>&amp;&#39;static str</code> 代表这是一个具有静态生命周期的字符串</p>
+<p> 一般而言，<strong>全局变量</strong>、<strong>静态变量</strong>、<strong>字符串字面量</strong>、代码(code)、<strong>函数指针</strong> 以及使用了 <strong><code>Box::leak</code></strong> 后的堆内存，都具有静态生命周期</p>
+</li>
+<li><p><strong>动态生命周期</strong></p>
+<p> 即某个值在 <strong>某个作用域中定义</strong>，比如它被创建在 <strong>栈</strong> 上或 <strong>堆</strong> 上，其生命周期就是动态生命周期</p>
+<p> 当这个值的 <strong>作用域结束</strong> 时，值的生命周期也随之结束</p>
+<p> 对于动态生命周期，我们约定用 <code>&#39;a</code> 或 <code>&#39;b</code> 或 <code>&#39;hello</code> 这样的 <strong>小写字符</strong> 或者 <strong>字符串</strong> 来表述</p>
+</li>
+</ol>
+<p>用图来总结就是</p>
+<p><img src="./15.png" alt></p>
+<h3 id="编译器如何识别生命周期"><a href="#编译器如何识别生命周期" class="headerlink" title="编译器如何识别生命周期"></a>编译器如何识别生命周期</h3><p>有 2 个很简单的例子，如图所示</p>
+<p><img src="./16.png" alt></p>
+<p>再看一个比较复杂的例子</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::new(<span class="string">"Lindsey"</span>);</span><br><span class="line">    <span class="keyword">let</span> s2 = <span class="built_in">String</span>::new(<span class="string">"Rosie"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> result = max(&amp;s1, &amp;s2);</span><br><span class="line">    <span class="keyword">let</span> result = get_max(s1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">max</span></span>(s1: &amp;<span class="built_in">str</span>, s2: &amp;<span class="built_in">str</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> s1 &gt; s2 &#123;</span><br><span class="line">        s1</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        s2</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">get_max</span></span>(s1: &amp;<span class="built_in">str</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</span><br><span class="line">    max(s1, <span class="string">"Cynthia"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，因为 <strong>在 <code>get_max</code> 函数中，字符串字面量 <code>Cynthia</code> 的生命周期是静态的，而 <code>s1</code> 是动态的，它们的生命周期显然不一致</strong>，所以编译器就会报错</p>
+<p>当出现了多个参数，它们的生命周期可能不一致时，返回值的生命周期就不好确定了</p>
+<p>编译器在编译某个函数时，并不知道这个函数将来有谁调用、怎么调用，所以，<strong>函数本身携带的信息，就是编译器在编译时使用的全部信息</strong></p>
+<p>此时，就需要我们在函数签名中提供生命周期的信息，也就是 <strong>生命周期标注(lifetime specifier)</strong>，在生命周期标注时，使用的参数叫 <strong>生命周期参数(lifetime parameter)</strong>，而 <strong>生命周期参数，描述的是参数和参数之间、参数和返回值之间的关系，并不改变原有的生命周期</strong>，通过生命周期标注，<strong>我们可以告诉编译器这些引用间生命周期的约束</strong></p>
+<p>所以可以这么改 <code>max()</code> 函数</p>
+<figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 添加生命周期参数</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">max</span></span>&lt;<span class="symbol">'a</span>&gt;(s1: &amp;<span class="symbol">'a</span> <span class="built_in">str</span>, s2: &amp;<span class="symbol">'a</span> <span class="built_in">str</span>) -&gt; &amp;<span class="symbol">'a</span> <span class="built_in">str</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> s1 &gt; s2 &#123;</span><br><span class="line">        s1</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        s2</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 <strong><code>s1</code></strong> 和 <strong><code>s2</code></strong> 以及 <strong><code>max</code> 函数的返回值</strong> 的生命周期只要大于等于(outlive) <code>&#39;a</code>，就符合参数约束，编译器就不会报错</p>
+<p>在 <code>get_max</code> 函数中，字符串字面量 <code>Cynthia</code> 的生命周期是静态的，它大于 <code>s1</code> 的生命周期 <code>&#39;a</code>，所以编译器也不会报错</p>
+<blockquote>
+<p>注意，在没有做任何生命周期的标注的情况下，编译器会通过一些简单的规则为函数自动添加标注</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>所有引用类型的参数都有独立的生命周期 <code>&#39;a</code>、<code>&#39;b</code> 等</li>
+<li>如果只有一个引用型输入，它的生命周期会赋给所有输出</li>
+<li>如果有多个引用类型的参数，其中一个是 self，那么它的生命周期会赋给所有输出</li>
+</ol>
+</blockquote>
+<p>一个更复杂的生命周期的图如下</p>
+<p><img src="./17.png" alt></p>
+<h2 id="Rust-的内存管理"><a href="#Rust-的内存管理" class="headerlink" title="Rust 的内存管理"></a>Rust 的内存管理</h2><p>对于 Rust 而言，它是这么看待堆内存的生命周期的，即 <strong>大部分堆内存的需求在于动态大小，小部分需求是更长的生命周期</strong>，所以它默认将堆内存的生命周期和使用它的栈内存的生命周期绑在一起，并留了个小口子 <code>Box::leak()</code> 机制，让堆内存在需要的时候，可以有超出栈内存存活期的生命周期</p>
+<p>那么如何看待 Rust 的内存管理? 其实可以从 Rust 的几个重要的数据结构(<code>struct</code>/<code>enum</code>/<code>Vec&lt;T&gt;</code>/<code>String</code>)开始，看看它们的数据在内存中是怎么编排的</p>
+<h3 id="值的创建"><a href="#值的创建" class="headerlink" title="值的创建"></a>值的创建</h3><h4 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h4><p>对于 <code>struct</code> 而言，Rust 在内存中排布数据时，<strong>会根据每个域的 对齐(aligment) 对数据进行重排</strong>，使其 <strong>内存大小</strong> 和 <strong>访问效率</strong> 最好</p>
+<p>比如下图</p>
+<p><img src="./18.png" alt></p>
+<p>如果 <code>struct</code> 内存不对齐会怎么样? 会 <strong>严重影响 CPU 加载这段不对齐的内存，从而影响性能</strong></p>
+<p>而对于 C 来说，它的 <code>struct</code> 会有如下的规则</p>
+<ol>
+<li>首先确定每个域的长度和对齐长度，原始类型的对齐长度和类型的长度一致</li>
+<li>每个域的起始位置要和其对齐长度对齐，如果无法对齐，则添加 padding 直至对齐</li>
+<li>结构体的对齐大小和其最大域的对齐大小相同，而结构体的长度则四舍五入到其对齐的倍数</li>
+</ol>
+<p>用图来对比 C 中 <code>struct</code> 有关域(field)摆放顺序对内存大小的影响就是</p>
+<p><img src="./19.png" alt></p>
+<p>所以，<strong>如果结构体的定义考虑地不够周全，会为了对齐浪费很多空间</strong></p>
+<p>所以在使用 C 时，需要充分考虑每一个域的对齐，合理地排列它们，使其内存使用最高效。但是这个由开发者来干就很费劲，尤其是嵌套的结构体，往往需要经过很仔细的计算和敲打</p>
+<p><strong>而 Rust 编译器替我们自动完成了这个优化</strong>，用图来解释就是</p>
+<p><img src="./20.png" alt></p>
+<blockquote>
+<p>注意，也可以使用 <code>#[repr]</code> 宏来强制让 Rust 编译器不做这个优化，这样它的表现就会和 C 的行为一致了</p>
+</blockquote>
+<h4 id="enum"><a href="#enum" class="headerlink" title="enum"></a>enum</h4><p>对于 Rust 下的 <code>enum</code> 而言，它的大小是 <strong>标签(tag)的大小 + 最大类型的长度</strong></p>
+<blockquote>
+<p>注意: Rust 中的 <code>enum</code> 存在 2 种设计: <code>Option&lt;T&gt;</code> 和 <code>Result&lt;T, E&gt;</code></p>
+</blockquote>
+<blockquote>
+<p><code>Option</code> 是有值 / 无值这种最简单的枚举类型<br><code>Result</code> 包括成功返回数据和错误返回数据的枚举类型</p>
+</blockquote>
+<p>所以</p>
+<p>对于 <code>Option&lt;u8&gt;</code>，其大小是 <strong>1 + 1 = 2 字节</strong><br>对于 <code>Option&lt;f64&gt;</code>，其大小是 <strong>8 + 8 = 16 字节</strong></p>
+<p>下图展示了 <code>enum</code>、 <code>Option&lt;T&gt;</code> 以及 <code>Result&lt;T, E&gt;</code> 的布局</p>
+<p><img src="./21.png" alt></p>
+<p>Rust 编译器会对 <code>enum</code> 做一些额外的优化，让某些常用结构的内存布局更紧凑</p>
+<p>比如，对于 <code>Option&lt;T&gt;</code> 结构而言，它的 tag 只有两种情况：</p>
+<ol>
+<li>tag == 0: 表示为 <code>None</code></li>
+<li>tag == 1: 表示为 <code>Some</code></li>
+</ol>
+<p><em>如果 <code>T</code> 是一个引用</em>，按照 <code>enum</code> 的对齐规则，在 64 位的 CPU 下，其大小应该是 <strong>8(引用结构对齐是 8) + 8(额外的 padding) = 16 字节</strong>，这就很浪费内存了</p>
+<p>而 Rust 是这么优化的，因为引用类型的第一个域(field)是个指针，而<strong>指针是不可能等于 0</strong> 的，所以对于 <code>Option&lt;T&gt;</code>，Rust 就 <strong>复用了这个指针，当其为 0 时，表示为 <code>None</code>，否则就是 <code>Some</code></strong>，这样就能很巧妙地减少了内存的占用</p>
+<h4 id="Vec-和-String"><a href="#Vec-和-String" class="headerlink" title="Vec 和 String"></a>Vec<t> 和 String</t></h4><p>之所以 <code>Vec&lt;T&gt;</code> 和 <code>String</code> 要放在一起讲，是因为在 Rust 源码中，<code>String</code> 结构内部就是一个 <code>Vec&lt;u8&gt;</code></p>
+<p>如图所示</p>
+<p><img src="./22.png" alt></p>
+<p>其中 <code>Vec&lt;T&gt;</code> 结构是一个 3 个 word 的胖指针，它包含</p>
+<ol>
+<li>ptr: 指向堆内存的指针 pointer</li>
+<li>cap: 分配的堆内存的容量 capacity</li>
+<li>len: 数据在堆内存的长度 length</li>
+</ol>
+<h3 id="值的使用"><a href="#值的使用" class="headerlink" title="值的使用"></a>值的使用</h3><p>值的使用大部分都是 Copy 或者 Move，而 <strong>Copy 和 Move 在内部实现上，都是浅层的按位做内存复制，只不过 Copy 允许你访问之前的变量，而 Move 不允许</strong></p>
+<p>用图来表示就是</p>
+<p><img src="./23.png" alt></p>
+<p>为什么 Copy 和 Move 的效率高呢? <strong>因为它们要复制的都只是原生类型(Copy)或者栈上的胖指针(Move)，并不涉及到堆内存的复制(深拷贝)</strong></p>
+<blockquote>
+<p>一个例外是 <strong>对栈上的大数组传参</strong>，这个就需要复制整个数组了，所以 <strong>不要在栈上放大数组</strong></p>
+</blockquote>
+<p>在 Rust 下，值使用的过程中还会产生一种情况，就是 <strong>值的动态增长</strong>，这种情况会发生在 <strong>集合类型的数据结构</strong> 中</p>
+<p>比如 <code>Vec&lt;T&gt;</code>，当你使用完堆内存目前的容量后，还继续添加新的内容，就会触发堆内存的自动增长。有时候，集合类型里的数据不断进进出出，导致集合一直增长，但很可能只使用到了很小一部分内存容量，这个时候可以使用 <code>shrink_to_fit</code> 的方法，来节约对内存的使用</p>
+<h3 id="值的销毁"><a href="#值的销毁" class="headerlink" title="值的销毁"></a>值的销毁</h3><h4 id="值的释放"><a href="#值的释放" class="headerlink" title="值的释放"></a>值的释放</h4><p>当所有者离开作用域，它拥有的值会被丢弃，那么它是怎么被丢弃的?</p>
+<p>主要是使用了 <strong>Drop trait</strong></p>
+<p>Drop trait 有点类似于 C++ 中的析构函数，<strong>当一个值要被释放，它的 Drop trait 就会被调用</strong></p>
+<p>比如下图</p>
+<p><img src="./24.png" alt></p>
+<p>如果要释放的值是一个复杂的数据结构，比如一个结构体，那么这个结构体在调用 <code>drop()</code> 时，会依次调用每一个域(field)的 <code>drop()</code> 函数，如果这个域(field) 也是一个结构体，那么就 <strong>递归调用它对应的 <code>drop()</code> 函数</strong></p>
+<p>如图所示</p>
+<p><img src="./25.png" alt></p>
+<h4 id="堆内存的释放"><a href="#堆内存的释放" class="headerlink" title="堆内存的释放"></a>堆内存的释放</h4><p>在释放堆内存的时候，整个过程简单清晰，<strong>就是单纯调用 Drop trait</strong>，不需要有其他顾虑。</p>
+<blockquote>
+<p>注意: 如果你定义的 <code>drop()</code> 函数和系统自定义的 <code>drop()</code> 函数都 <code>drop()</code> 某个域(field)， Rust 编译器会确保，这个域(field) <strong>只会被 drop 一次</strong></p>
+</blockquote>
+<h4 id="释放其他资源"><a href="#释放其他资源" class="headerlink" title="释放其他资源"></a>释放其他资源</h4><p>Drop trait 也可以释放一些如 socket、文件、锁等等资源，Rust 对所有的资源都有很好的 RAII (Resource Acquisition Is Initialization 即 资源获取即初始化)支持。</p>
+<p>由于 Rust 的这个支持，就可以 <strong>不用显式地关闭文件、 关闭 socket、 释放锁</strong>，就可以 <strong>避免因为多个变量和多种异常或者错误叠加，从而成倍增加因为忘记释放资源的而产生的风险，比如死锁或者资源泄露等问题</strong></p>
+<h2 id="Rust-存在-GC-吗"><a href="#Rust-存在-GC-吗" class="headerlink" title="Rust 存在 GC 吗"></a>Rust 存在 GC 吗</h2><p>先说结论，<strong>Rust 不存在 GC</strong>，为什么?</p>
+<p>在<a href="https://prev.rust-lang.org/en-US/faq.html" target="_blank" rel="noopener">之前的 Rust 官方的 FAQ 页面中</a>，(为什么是 prev，因为现在 Rust 官方网站翻新了，这个属于旧页面)有这么一段</p>
+<p><img src="./26.png" alt></p>
+<p>那么</p>
+<ol>
+<li>Rust 有 RC 和 Arc 智能指针，存在 reference counting 即引用计数</li>
+<li>Rust 有 Drop trait 去释放结束生命周期的变量或者内存</li>
+</ol>
+<p>这 2 点不算 GC 吗</p>
+<p><strong>不能算</strong>，因为</p>
+<ol>
+<li>GC 作为惯用语，通常并不单单指释放内存的行为，不然栈上变量自动释放是否也算 GC?</li>
+<li>使用 Rc 和 Arc 智能指针仍然需要认真考虑变量的生命周期，Rust 这种强制的约束规则也不太符合 GC 能自动化的帮你处理这些事情一起处理好了的特征，因为这只是 <strong>只是换了一种更安全的方式让我们手动管理内存而已</strong></li>
+</ol>
+<h2 id="其他零散-CS-概念"><a href="#其他零散-CS-概念" class="headerlink" title="其他零散 CS 概念"></a>其他零散 CS 概念</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>如图所示</p>
+<p><img src="./27.png" alt></p>
+<h3 id="编程语言类型"><a href="#编程语言类型" class="headerlink" title="编程语言类型"></a>编程语言类型</h3><p>如图所示</p>
+<p><img src="./28.png" alt></p>
+<blockquote>
+<p>注意: <strong>所有原生类型的大小都是固定的，因此它们可以被分配到栈上</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>引用(reference)和指针非常类似，不同的是，引用的解引用访问是受限的，它只能解引 用到它引用数据的类型，不能用作它用</strong></p>
+</blockquote>
+<h3 id="函数、方法和闭包"><a href="#函数、方法和闭包" class="headerlink" title="函数、方法和闭包"></a>函数、方法和闭包</h3><p>如图所示</p>
+<p><img src="./29.png" alt></p>
+<p><strong>函数是对代码中重复行为的抽象</strong></p>
+<p><strong>而闭包是将函数，或者说代码和其环境一起存储的一种数据结构。闭包引用的上下文中的自由变量，会被捕获到闭包的结构中，成为闭包类型的一部分</strong></p>
+<h3 id="接口和虚表"><a href="#接口和虚表" class="headerlink" title="接口和虚表"></a>接口和虚表</h3><p>下图展示了一个 Vec 数据在运行期被抹去类型，生成一个指向 Write 接口引用的过程：</p>
+<p><img src="./30.png" alt></p>
+<p><strong>接口是一个软件系统开发的核心部分，它反映了系统的设计者对系统的抽象理解。作为一个抽象层，接口将使用方和实现方隔离开来，使两者不直接有依赖关系，大大提高了复用性和扩展性</strong></p>
+<h3 id="并发-concurreny-与并行-parallel"><a href="#并发-concurreny-与并行-parallel" class="headerlink" title="并发(concurreny)与并行(parallel)"></a>并发(concurreny)与并行(parallel)</h3><p>如图所示</p>
+<p><img src="./31.png" alt></p>
+<p><strong>并发是同时与多件事情打交道的能力</strong>。比如系统可以在任务 1 做到一定程度后，保存该任务的上下文，挂起并切换到任务 2，然后过段时间再切换回任务 1。</p>
+<p><strong>并行是同时处理多件事情的手段</strong>。任务 1 和任务 2 可以在同一个时间片下工作，无需上下文切换。</p>
+<h3 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h3><ol>
+<li><strong>同步是指一个任务开始执行后，后续的操作会阻塞，直到这个任务结束</strong></li>
+<li><strong>异步是指一个任务开始执行后，与它没有因果关系的其它任务可以正常执行，不必等待前一个任务结束</strong></li>
+</ol>
+<h3 id="编程范式"><a href="#编程范式" class="headerlink" title="编程范式"></a>编程范式</h3><p>编程范式主要是用来 <strong>提升代码质量</strong> 的，主要有几个方面的内容</p>
+<ol>
+<li><p><strong>数据结构的泛型</strong><br> 比如如下的的代码</p>
+ <figure class="highlight rs"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Connection</span></span>&lt;S&gt; &#123;</span><br><span class="line">    io: S,</span><br><span class="line">    state: State,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>代码的泛型化</strong></p>
+<p> 比如如下的代码</p>
+<p> <img src="./32.png" alt></p>
+</li>
+</ol>
+<h3 id="指针和引用"><a href="#指针和引用" class="headerlink" title="指针和引用"></a>指针和引用</h3><p>指针是一个持有内存地址的值，可以通过解引用(deference)来访问它指向的 <strong>内存地址</strong><br>引用(reference)和指针非常类似，<strong>引用的解引用访问是受限的，它只能解引用到它引用数据的类型，不能用作它用</strong></p>
+<p><strong>指针和引用是原生类型，它们可以分配在栈上</strong></p>
+<p><strong>比正常指针携带更多信息的指针，我们称之为胖指针(fat pointer)</strong></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://time.geekbang.org/column/intro/100085301" target="_blank" rel="noopener">陈天 · Rust 编程第一课</a><br><a href="https://prev.rust-lang.org/en-US/faq.html" target="_blank" rel="noopener">prev Rust FAQ</a><br><a href="http://songtianyi.info/pages/programming/programming-languages/is-rust-garbage-collected.html" target="_blank" rel="noopener">关于 Rust GC 的争议</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/" title="Rust所有权、生命周期、内存管理">https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Rust/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Rust
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/06/B-Tree的Rust实现及其原理/" rel="next" title="B-Tree的Rust实现及其原理">
+                <i class="fa fa-chevron-left"></i> B-Tree的Rust实现及其原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#底层逻辑"><span class="nav-number">1.</span> <span class="nav-text">底层逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">1.1.</span> <span class="nav-text">内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-的所有权"><span class="nav-number">2.</span> <span class="nav-text">Rust 的所有权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#所有权解决的问题"><span class="nav-number">2.1.</span> <span class="nav-text">所有权解决的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy-Move-语义"><span class="nav-number">2.2.</span> <span class="nav-text">Copy/Move 语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Borrow-语义"><span class="nav-number">2.3.</span> <span class="nav-text">Borrow 语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单一所有权的例外情况"><span class="nav-number">2.4.</span> <span class="nav-text">单一所有权的例外情况</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rc"><span class="nav-number">2.4.1.</span> <span class="nav-text">Rc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Box-leak-机制"><span class="nav-number">2.4.2.</span> <span class="nav-text">Box::leak() 机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RefCell"><span class="nav-number">2.4.3.</span> <span class="nav-text">RefCell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Arc"><span class="nav-number">2.4.4.</span> <span class="nav-text">Arc</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-的生命周期"><span class="nav-number">3.</span> <span class="nav-text">Rust 的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期分类"><span class="nav-number">3.1.</span> <span class="nav-text">生命周期分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译器如何识别生命周期"><span class="nav-number">3.2.</span> <span class="nav-text">编译器如何识别生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-的内存管理"><span class="nav-number">4.</span> <span class="nav-text">Rust 的内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#值的创建"><span class="nav-number">4.1.</span> <span class="nav-text">值的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#struct"><span class="nav-number">4.1.1.</span> <span class="nav-text">struct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#enum"><span class="nav-number">4.1.2.</span> <span class="nav-text">enum</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vec-和-String"><span class="nav-number">4.1.3.</span> <span class="nav-text">Vec 和 String</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#值的使用"><span class="nav-number">4.2.</span> <span class="nav-text">值的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#值的销毁"><span class="nav-number">4.3.</span> <span class="nav-text">值的销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#值的释放"><span class="nav-number">4.3.1.</span> <span class="nav-text">值的释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆内存的释放"><span class="nav-number">4.3.2.</span> <span class="nav-text">堆内存的释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#释放其他资源"><span class="nav-number">4.3.3.</span> <span class="nav-text">释放其他资源</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-存在-GC-吗"><span class="nav-number">5.</span> <span class="nav-text">Rust 存在 GC 吗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他零散-CS-概念"><span class="nav-number">6.</span> <span class="nav-text">其他零散 CS 概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">6.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程语言类型"><span class="nav-number">6.2.</span> <span class="nav-text">编程语言类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数、方法和闭包"><span class="nav-number">6.3.</span> <span class="nav-text">函数、方法和闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口和虚表"><span class="nav-number">6.4.</span> <span class="nav-text">接口和虚表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发-concurreny-与并行-parallel"><span class="nav-number">6.5.</span> <span class="nav-text">并发(concurreny)与并行(parallel)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步和异步"><span class="nav-number">6.6.</span> <span class="nav-text">同步和异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程范式"><span class="nav-number">6.7.</span> <span class="nav-text">编程范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针和引用"><span class="nav-number">6.8.</span> <span class="nav-text">指针和引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/06/Rust所有权、生命周期、内存管理/';
+          this.page.identifier = '2022/06/06/Rust所有权、生命周期、内存管理/';
+          this.page.title = 'Rust所有权、生命周期、内存管理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
