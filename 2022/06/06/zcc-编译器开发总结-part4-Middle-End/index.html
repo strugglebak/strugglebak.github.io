@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ajax,promise,">
+  <meta name="keywords" content="编译原理,">
 
 
 
@@ -81,18 +81,20 @@
 
 
 
-<meta name="description" content="JS 操作请求与响应 客户端的JS发起请求（浏览器上的）  使用 XMLHttpRequest 的 setRequestHeader 修改请求头的第二部分  使用 send 修改请求头第四部分  使用 getAllResponseHeaders 获取全部的响应头  使用 getResponseHeader 获取响应头第二部分  使用 statusText 获取到响应状态是否 OK  使用 resp">
-<meta name="keywords" content="ajax,promise">
+<meta name="description" content="注意：本系列文章是 zcc 编译器 总结系列文章，本系列文章并不打算呈现所有的代码细节（主要是细节太多了，全部呈现既不现实文章也看着冗长而没有意义）。因为是总结性质的文章，所以更多是分享实现的过程中个人感兴趣的点">
+<meta name="keywords" content="编译原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实现AJAX以及Promise">
-<meta property="og:url" content="https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/index.html">
+<meta property="og:title" content="zcc-编译器开发总结-part4-Middle-End">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/index.html">
 <meta property="og:site_name" content="Stay Hungry">
-<meta property="og:description" content="JS 操作请求与响应 客户端的JS发起请求（浏览器上的）  使用 XMLHttpRequest 的 setRequestHeader 修改请求头的第二部分  使用 send 修改请求头第四部分  使用 getAllResponseHeaders 获取全部的响应头  使用 getResponseHeader 获取响应头第二部分  使用 statusText 获取到响应状态是否 OK  使用 resp">
+<meta property="og:description" content="注意：本系列文章是 zcc 编译器 总结系列文章，本系列文章并不打算呈现所有的代码细节（主要是细节太多了，全部呈现既不现实文章也看着冗长而没有意义）。因为是总结性质的文章，所以更多是分享实现的过程中个人感兴趣的点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-06-04T08:13:29.403Z">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/1.png">
+<meta property="og:updated_time" content="2022-06-06T04:06:50.048Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实现AJAX以及Promise">
-<meta name="twitter:description" content="JS 操作请求与响应 客户端的JS发起请求（浏览器上的）  使用 XMLHttpRequest 的 setRequestHeader 修改请求头的第二部分  使用 send 修改请求头第四部分  使用 getAllResponseHeaders 获取全部的响应头  使用 getResponseHeader 获取响应头第二部分  使用 statusText 获取到响应状态是否 OK  使用 resp">
+<meta name="twitter:title" content="zcc-编译器开发总结-part4-Middle-End">
+<meta name="twitter:description" content="注意：本系列文章是 zcc 编译器 总结系列文章，本系列文章并不打算呈现所有的代码细节（主要是细节太多了，全部呈现既不现实文章也看着冗长而没有意义）。因为是总结性质的文章，所以更多是分享实现的过程中个人感兴趣的点">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/1.png">
 
 
 
@@ -122,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/">
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/">
 
 
 
 
 
-  <title>实现AJAX以及Promise | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>zcc-编译器开发总结-part4-Middle-End | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -296,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="strugglebak">
@@ -313,7 +315,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">实现AJAX以及Promise</h1>
+          <h1 class="post-title" itemprop="name headline">zcc-编译器开发总结-part4-Middle-End</h1>
         
 
         <div class="post-meta">
@@ -325,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T17:37:55+08:00">
-                2019-02-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-06T12:04:33+08:00">
+                2022-06-06
               </time>
             
 
@@ -348,8 +350,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web前端/" itemprop="url" rel="index">
-                    <span itemprop="name">web前端</span>
+                  <a href="/categories/编译原理/" itemprop="url" rel="index">
+                    <span itemprop="name">编译原理</span>
                   </a>
                 </span>
 
@@ -366,8 +368,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/02/20/实现AJAX以及Promise/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/20/实现AJAX以及Promise/" itemprop="commentCount"></span>
+                <a href="/2022/06/06/zcc-编译器开发总结-part4-Middle-End/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/06/zcc-编译器开发总结-part4-Middle-End/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -395,27 +397,44 @@
       
 
       
-        <h2 id="JS-操作请求与响应"><a href="#JS-操作请求与响应" class="headerlink" title="JS 操作请求与响应"></a>JS 操作请求与响应</h2><ul>
-<li><p>客户端的JS发起请求（浏览器上的）<br>  使用 <code>XMLHttpRequest</code> 的 <code>setRequestHeader</code> 修改请求头的第二部分<br>  使用 <code>send</code> 修改请求头第四部分<br>  使用 <code>getAllResponseHeaders</code> 获取全部的响应头<br>  使用 <code>getResponseHeader</code> 获取响应头第二部分<br>  使用 <code>statusText</code> 获取到响应状态是否 OK<br>  使用 <code>responseText</code> 获取响应头第四部分</p>
-<p>  AJAX 设置请求<br>  第一部分 request.open(‘get’, ‘/xxx’);<br>  第二部分 request.setHeader(‘ContentType’, ‘x-www-form-urlencodeed’);<br>  第四部分 request.send(‘a=1&amp;b=2’);</p>
-<p>  AJAX 设置响应<br>  第一部分 request.status / request.statusText<br>  第二部分 request.getResponseHeader() / request.getAllResponseHeaders()<br>  第四部分 request.responseText</p>
-</li>
-<li><p>服务端的JS发送响应（Node.js上的）<br>  待续</p>
-</li>
-</ul>
-<h2 id="自己实现-jQuery-ajax"><a href="#自己实现-jQuery-ajax" class="headerlink" title="自己实现 jQuery.ajax"></a>自己实现 jQuery.ajax</h2><p>就是对 ajax 的封装,代码如下<br><figure class="highlight qml"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.jQuery.ajax = <span class="function"><span class="keyword">function</span>(<span class="params">url, method, body, success, fail</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> request = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    request.open(method, <span class="built_in">url</span>);</span><br><span class="line">    request.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (request.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (request.status &gt;= <span class="number">200</span> &amp;&amp; request.status &lt; <span class="number">300</span>) &#123;</span><br><span class="line">                <span class="comment">// 成功就打印出响应</span></span><br><span class="line">                success.call(<span class="literal">undefined</span>, request.responseText);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">                <span class="comment">// 失败就打印出 request</span></span><br><span class="line">                fail.call(<span class="literal">undefined</span>, request);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// body 为消息实体,即为 HTTP 请求的第 4 部分</span></span><br><span class="line">    request.send(body);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 重命名</span></span><br><span class="line"><span class="built_in">window</span>.$ = <span class="built_in">window</span>.jQuery;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义成功回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">success</span>(<span class="params">responseText</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(responseText);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fail</span>(<span class="params">request</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(request);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="ES-6-语法之解构赋值"><a href="#ES-6-语法之解构赋值" class="headerlink" title="ES 6 语法之解构赋值"></a>ES 6 语法之解构赋值</h2><p>比如有这样的赋值<br><figure class="highlight nix"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">method</span> = options.method</span><br><span class="line"><span class="keyword">let</span> <span class="attr">body</span> = options.body</span><br><span class="line"><span class="keyword">let</span> <span class="attr">successFn</span> = options.successFn</span><br><span class="line"><span class="keyword">let</span> <span class="attr">failFn</span> = options.failFn</span><br><span class="line"><span class="keyword">let</span> <span class="attr">headers</span> = options.headers</span><br></pre></td></tr></table></figure></p>
-<p>在 ES 6 中是这样赋值的<br><figure class="highlight ceylon"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 析构赋值</span></span><br><span class="line"><span class="keyword">let</span> &#123;method, body, successFn, failFn, headers&#125; = options</span><br></pre></td></tr></table></figure></p>
-<p>跟 <code>python</code> 一些语法有点像<br>又例如<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES5</span></span><br><span class="line">f = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line">f2 = <span class="function">(<span class="params">a</span>)=&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="string">'???'</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line">o[x] = <span class="literal">true</span>; <span class="comment">// '???' as key</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="string">'???'</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">    [x]: <span class="literal">true</span> <span class="comment">// [x] is '???'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h2><p>一个确定函数形式的 <strong>规范</strong><br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">success</span>(<span class="params">responseText</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(responseText);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fail</span>(<span class="params">request</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(request);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myButton.addEventListener(<span class="string">'click'</span>, (e)=&gt; &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'/frank'</span>,</span><br><span class="line">        method: <span class="string">'get'</span></span><br><span class="line">    &#125;).then(success, fail); <span class="comment">// 成功调用 success , 失败调用 fail</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>这样一来就不用管成功或者是失败用的函数名是什么了</p>
-<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line">myButton.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(e)</span>=&gt;</span> &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'/frank'</span>,</span><br><span class="line">        method: <span class="string">'get'</span></span><br><span class="line">    &#125;).<span class="keyword">then</span>(</span><br><span class="line">            (responseText)=&gt; &#123;</span><br><span class="line">                <span class="built_in">console</span>.log(responseText);</span><br><span class="line">                <span class="keyword">return</span> responseText;</span><br><span class="line">            &#125;,</span><br><span class="line">            (request)=&gt; &#123;</span><br><span class="line">                <span class="built_in">console</span>.log(request);</span><br><span class="line">                <span class="keyword">return</span> request;</span><br><span class="line">            &#125;</span><br><span class="line">    ).<span class="keyword">then</span>(</span><br><span class="line">        (上一次的处理结果)=&gt; &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(上一次的处理结果);</span><br><span class="line">        &#125;,</span><br><span class="line">        (request)=&gt; &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(request);</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>以上就是对同一个状态进行多次处理</p>
-<p>在自己写的 ajax 里面添加<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.jQuery.ajax = <span class="function"><span class="keyword">function</span>(<span class="params">&#123;url, method, body, headers&#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//... ajax 逻辑代码</span></span><br><span class="line">        <span class="keyword">let</span> request = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        request.open(method, url);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> headers) &#123;</span><br><span class="line">            <span class="keyword">let</span> value = headers[key];</span><br><span class="line">            request.setRequestHeader(value);</span><br><span class="line">        &#125;</span><br><span class="line">        request.onreadystatechange = <span class="function"><span class="params">()</span>=&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (request.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (request.status &gt;= <span class="number">200</span> &amp;&amp; request.status &lt; <span class="number">300</span>) &#123;</span><br><span class="line">                    <span class="comment">// 注意这里用的是 resovle</span></span><br><span class="line">                    resolve.call(<span class="literal">undefined</span>, request.responseText);</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">                    <span class="comment">// 注意这里用的是 reject</span></span><br><span class="line">                    reject.call(<span class="literal">undefined</span>, request);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        request.send(body);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这是 <code>window</code> 下的一个全局属性叫 <code>Promise</code><br>那么如何调用呢<br><figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line">myButton.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(e)</span>=&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">window</span>.jQuery.ajax(&#123;</span><br><span class="line">        url: <span class="string">'/frank'</span>,</span><br><span class="line">        method: <span class="string">'get'</span>,</span><br><span class="line">        headers: &#123;</span><br><span class="line">            <span class="string">'Content-Type:'</span>, <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">            <span class="string">'frank'</span>: <span class="string">'18'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).<span class="keyword">then</span>(</span><br><span class="line">        (text)=&gt; &#123;<span class="built_in">console</span>.log(text);&#125;, <span class="regexp">//</span> 成功调用</span><br><span class="line">        (request)=&gt; &#123;<span class="built_in">console</span>.log(request);&#125; <span class="regexp">//</span> 失败调用</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>而 <code>Promise</code> 的源码大致是这样的<br><figure class="highlight qml"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.Promise = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attribute">then</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>注意，假设有这样的一个 <code>Promise</code> 对象 <code>xxx</code>,在调用 <code>then</code> 的时候出现以下情况<br><figure class="highlight erlang"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="title">xxx</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    .<span class="title">then</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        fn1, fn2</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span></span></span><br><span class="line"><span class="function">    .<span class="title">then</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        fn3, fn4</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span></span></span><br></pre></td></tr></table></figure></p>
-<p><strong>fn3 是在 fn1 以及 fn2 都没有问题的情况下调用</strong><br><strong>fn4 是在 fn1 或者 fn2 有问题的情况下调用</strong></p>
+        <blockquote>
+<p>注意：本系列文章是 <a href="https://github.com/strugglebak/zcc" target="_blank" rel="noopener">zcc 编译器</a> 总结系列文章，本系列文章并不打算呈现所有的代码细节（主要是细节太多了，全部呈现既不现实文章也看着冗长而没有意义）。因为是总结性质的文章，所以更多是分享实现的过程中个人感兴趣的点</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="什么是-Middle-End"><a href="#什么是-Middle-End" class="headerlink" title="什么是 Middle-End"></a>什么是 Middle-End</h2><p>所谓的 <em>Middle-End</em>，其实就是夹在编译器 <em>Front-End</em> 和 <em>Back-End</em> 中间的这么一个玩意儿，作用主要是执行 <strong>优化</strong> 过程，以提高生成机器码的性能和质量</p>
+<p>在 zcc 编译器中，做了比较简单的一步优化，即 <strong>常量折叠(Constant Folding)</strong></p>
+<h2 id="什么是常量折叠"><a href="#什么是常量折叠" class="headerlink" title="什么是常量折叠"></a>什么是常量折叠</h2><p>很简单，就是在 <strong>编译时</strong> 计算表达式，而不是 <strong>运行时</strong> 计算表达式</p>
+<p>比如下面的代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">x = (<span class="number">1</span>+<span class="number">2</span>) * (<span class="number">3</span><span class="number">-4</span>)</span><br></pre></td></tr></table></figure>
+<p>在编译时就处理成</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">x = <span class="number">-3</span>;</span><br></pre></td></tr></table></figure>
+<p>最后交给 <em>Back-End</em> 生成汇编代码，就很简单了</p>
+<p>能节省寄存器的同时，也减少了汇编代码的生成</p>
+<h2 id="如何进行常量折叠"><a href="#如何进行常量折叠" class="headerlink" title="如何进行常量折叠"></a>如何进行常量折叠</h2><p>一个最简单的思路就是 <strong>优化 ast</strong>，如下图所示</p>
+<p><img src="./1.png" alt></p>
+<p>那么逻辑上，需要做几件事</p>
+<ol>
+<li>递归折叠左子树</li>
+<li>递归折叠右子树</li>
+<li>如果当前节点是一个二元操作符节点(比如 <code>+-*/</code>)，并且有两个 <code>AST_INTEGER_LITERAL</code> 类型的叶子节点，需要折叠</li>
+<li>如果当前节点是一个一元操作符节点(比如 <code>~!</code>)，并且只有一个 <code>AST_INTEGER_LITERAL</code> 节点，需要折叠</li>
+</ol>
+<p>以下要讲的代码见 <a href="https://github.com/strugglebak/zcc/blob/main/optimizer.c" target="_blank" rel="noopener">optimizer.c</a></p>
+<p>对于整体的 <code>optimise</code> 函数来说，返回的是一个整体的 <code>fold</code> 函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">struct ASTNode *<span class="title">optimise</span><span class="params">(struct ASTNode *node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (fold(node));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 <code>fold</code> 函数来说，它是这样</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct ASTNode *<span class="title">fold</span><span class="params">(struct ASTNode *node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!node) <span class="keyword">return</span> (<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  1. 递归折叠左子树</span></span><br><span class="line">  node-&gt;left = fold(node-&gt;left);</span><br><span class="line">  <span class="comment">//  2. 递归折叠右子树</span></span><br><span class="line">  node-&gt;right = fold(node-&gt;right);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (node-&gt;left &amp;&amp; node-&gt;left-&gt;operation == AST_INTEGER_LITERAL)</span><br><span class="line">    <span class="keyword">if</span> (node-&gt;right &amp;&amp; node-&gt;right-&gt;operation == AST_INTEGER_LITERAL)</span><br><span class="line">      <span class="comment">// 3. 如果当前节点是一个二元操作符节点(比如 `+-*/`)，并且有两个 `AST_INTEGER_LITERAL` 类型的叶子节点，需要折叠</span></span><br><span class="line">      node = fold_2_children(node);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="comment">//  4. 如果当前节点是一个一元操作符节点(比如 `~!`)，并且只有一个 `AST_INTEGER_LITERAL` 节点，需要折叠</span></span><br><span class="line">      node = fold_1_children(node);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (node);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>依然是做一个 <strong>后序递归遍历</strong></p>
+<p>注意对于一元操作符节点来说，它 <strong>只有一个</strong> 类型为 <code>AST_INTEGER_LITERAL</code> 的 <strong>左叶子节点</strong></p>
+<p>对于二元操作符来说，就需要做一个统一的计算，最后返回一个 <code>AST_INTEGER_LITERAL</code> 节点即可，如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct ASTNode *<span class="title">fold_2_children</span><span class="params">(struct ASTNode *node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> value, left_value, right_value;</span><br><span class="line"></span><br><span class="line">  left_value = node-&gt;left-&gt;ast_node_integer_value;</span><br><span class="line">  right_value = node-&gt;right-&gt;ast_node_integer_value;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">switch</span> (node-&gt;operation) &#123;</span><br><span class="line">    <span class="keyword">case</span> AST_PLUS:</span><br><span class="line">      value = left_value + right_value;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> AST_MINUS:</span><br><span class="line">      value = left_value - right_value;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> AST_MULTIPLY:</span><br><span class="line">      value = left_value * right_value;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> AST_DIVIDE:</span><br><span class="line">      <span class="keyword">if</span> (!right_value) <span class="keyword">return</span> (node);</span><br><span class="line">      value = left_value / right_value;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> (node);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (create_ast_leaf(AST_INTEGER_LITERAL, node-&gt;primitive_type, value, <span class="literal">NULL</span>, <span class="literal">NULL</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于一元操作符，也很简单，对其左叶子节点做一个计算即可</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct ASTNode *<span class="title">fold_1_children</span><span class="params">(struct ASTNode *node)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> value = node-&gt;left-&gt;ast_node_integer_value;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">switch</span> (node-&gt;operation) &#123;</span><br><span class="line">    <span class="keyword">case</span> AST_WIDEN: <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> AST_INVERT: value = ~value; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> AST_LOGIC_NOT: value = !value; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">return</span> (node);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (create_ast_leaf(AST_INTEGER_LITERAL, node-&gt;primitive_type, value, <span class="literal">NULL</span>, <span class="literal">NULL</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意这里当前节点可能是一个 <code>AST_WIDEN</code> 的节点，也就是说这个节点可能曾经经历过 <em>隐式类型转换</em>，这个时候则不需要对其做任何处理，直接返回一个 <code>AST_INTEGER_LITERAL</code> 节点即可</p>
+<h2 id="在哪里调用常量折叠优化代码"><a href="#在哪里调用常量折叠优化代码" class="headerlink" title="在哪里调用常量折叠优化代码"></a>在哪里调用常量折叠优化代码</h2><p>在解析函数定义的 <code>parse_function_declaration</code> 函数里面调用，如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">struct SymbolTable *<span class="title">parse_function_declaration</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="keyword">int</span> primitive_type,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="keyword">char</span> *function_name,</span></span></span><br><span class="line"><span class="function"><span class="params">  struct SymbolTable *composite_type,</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="keyword">int</span> storage_class</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  verify_left_brace();</span><br><span class="line">  tree = parse_compound_statement(<span class="number">0</span>);</span><br><span class="line">  verify_right_brace();</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  tree = create_ast_left_node(</span><br><span class="line">    AST_FUNCTION,</span><br><span class="line">    primitive_type,</span><br><span class="line">    tree,</span><br><span class="line">    end_label,</span><br><span class="line">    old_function_symbol_table,</span><br><span class="line">    composite_type);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 优化 ast tree</span></span><br><span class="line">  tree = optimise(tree);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即先生成一个函数里面的复合语句的 ast，然后再对这个 ast 进行优化。因为 <strong>要计算的和优化的语句本来就在函数里面</strong>，所以这么做是合理的</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于优化来讲，其实也有很多的方法，比如 <code>inline expansion</code>、<code>dead code elimination</code>, <code>loop transformation</code>, <code>automatic parallelization</code> 等，不过这些都不在本 zcc 编译器的讨论范围内。为了简便起见，zcc 编译器弄了一个比较简单的 <code>constant folding</code> 方法，通过后序遍历 ast 的方式，一定程度上对 ast 进行了优化</p>
 
       
     </div>
@@ -436,7 +455,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/" title="实现AJAX以及Promise">https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/</a>
+    <a href="https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/" title="zcc-编译器开发总结-part4-Middle-End">https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -451,14 +470,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ajax/" rel="tag">
+            <a href="/tags/编译原理/" rel="tag">
             <i class="fa fa-tag"></i>
-            ajax
-            </a>
-          
-            <a href="/tags/promise/" rel="tag">
-            <i class="fa fa-tag"></i>
-            promise
+            编译原理
             </a>
           
         </div>
@@ -472,8 +486,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/20/一些面试题/" rel="next" title="一些面试题">
-                <i class="fa fa-chevron-left"></i> 一些面试题
+              <a href="/2022/06/06/zcc-编译器开发总结-part3-Back-End/" rel="next" title="zcc-编译器开发总结-part3-Back-End">
+                <i class="fa fa-chevron-left"></i> zcc-编译器开发总结-part3-Back-End
               </a>
             
           </div>
@@ -481,10 +495,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/20/尝试理解一下MVC/" rel="prev" title="尝试理解一下MVC">
-                尝试理解一下MVC <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -649,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-操作请求与响应"><span class="nav-number">1.</span> <span class="nav-text">JS 操作请求与响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自己实现-jQuery-ajax"><span class="nav-number">2.</span> <span class="nav-text">自己实现 jQuery.ajax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES-6-语法之解构赋值"><span class="nav-number">3.</span> <span class="nav-text">ES 6 语法之解构赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#promise"><span class="nav-number">4.</span> <span class="nav-text">promise</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Middle-End"><span class="nav-number">1.</span> <span class="nav-text">什么是 Middle-End</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是常量折叠"><span class="nav-number">2.</span> <span class="nav-text">什么是常量折叠</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何进行常量折叠"><span class="nav-number">3.</span> <span class="nav-text">如何进行常量折叠</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在哪里调用常量折叠优化代码"><span class="nav-number">4.</span> <span class="nav-text">在哪里调用常量折叠优化代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -801,9 +811,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://strugglebak.github.io/2019/02/20/实现AJAX以及Promise/';
-          this.page.identifier = '2019/02/20/实现AJAX以及Promise/';
-          this.page.title = '实现AJAX以及Promise';
+          this.page.url = 'https://strugglebak.github.io/2022/06/06/zcc-编译器开发总结-part4-Middle-End/';
+          this.page.identifier = '2022/06/06/zcc-编译器开发总结-part4-Middle-End/';
+          this.page.title = 'zcc-编译器开发总结-part4-Middle-End';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://FrontendChang.disqus.com/embed.js';
