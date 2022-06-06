@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Stay Hungry" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅析Go内存模型、goroutine以及channel">
+<meta property="og:url" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/index.html">
+<meta property="og:site_name" content="Stay Hungry">
+<meta property="og:description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/1.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/2.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/3.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/4.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/5.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/6.png">
+<meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/7.png">
+<meta property="og:updated_time" content="2022-06-06T05:00:29.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅析Go内存模型、goroutine以及channel">
+<meta name="twitter:description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
+<meta name="twitter:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/">
+
+
+
+
+
+  <title>浅析Go内存模型、goroutine以及channel | Stay Hungry</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/strugglebak" class="github-corner" aria-label="View source on Github">
+      <svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+      </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Stay Hungry</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">对，跑快一些，再快一些</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="strugglebak">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stay Hungry">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅析Go内存模型、goroutine以及channel</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-06-06T12:56:30+08:00">
+                2022-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/06/06/浅析Go内存模型、goroutine以及channel/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/06/浅析Go内存模型、goroutine以及channel/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="Go-内存模型"><a href="#Go-内存模型" class="headerlink" title="Go 内存模型"></a>Go 内存模型</h2><p>先来看一段代码</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x, y <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">	x = <span class="number">1</span></span><br><span class="line">	y = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">g</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r1 = y</span><br><span class="line">    r2 = x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">go</span> f()</span><br><span class="line">	g()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们将代码分成如下几个部分</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span>     <span class="function"><span class="keyword">func</span> <span class="title">g</span><span class="params">()</span></span></span><br><span class="line"><span class="number">1</span>: x = <span class="number">1</span>     <span class="number">3</span>: r1 = y</span><br><span class="line"><span class="number">2</span>: y = <span class="number">1</span>     <span class="number">4</span>: r2 = x</span><br></pre></td></tr></table></figure>
+<p>代码执行时，<code>r1</code> 和 <code>r2</code> 会发生什么结果呢?</p>
+<p>一个朴素的想法是</p>
+<ul>
+<li>执行步骤为 1 -&gt; 2 -&gt; 3 -&gt; 4，那么 <code>r1 = 1</code>，<code>r2 = 1</code></li>
+<li>执行步骤为 3 -&gt; 4 -&gt; 1 -&gt; 2，那么 <code>r1 = 0</code>，<code>r2 = 0</code></li>
+</ul>
+<p>那么难道只有这几种结果么? 其实不是的，它的结果可能会有如下的 6 种</p>
+<p><img src="./1.png" alt></p>
+<p>那么为什么会出现上述的这几种情况呢?</p>
+<p>主要是因为 <strong>硬件(CPU) 或者 软件(编译器) 可以根据其对代码的分析的结果，一定程度上打乱代码的执行顺序，以达到提高 CPU 利用率，或者让程序运行得更快的目的</strong></p>
+<p>那么硬件和软件是怎么做的，它们也有对应的内存模型吗?</p>
+<p>是的</p>
+<p>对于硬件的内存模型来讲，就不得不要引入一个概念: <em>顺序一致性</em></p>
+<p>那么什么是 <em>顺序一致性</em>?</p>
+<p><strong>对于某个多处理器的计算机系统而言，其任何执行的结果都是相同的，看上去其所有的处理器的操作都是按照某种顺序执行的，而每个处理器的操作都是按照程序指定的顺序出现的。这样的特征就被称之为 顺序一致性</strong></p>
+<p>一个总体的思维模型图如下</p>
+<p><img src="./2.png" alt></p>
+<p>即所有的处理器直接连接到 <strong>一个共享内存</strong>，这样对于这个系统来说，由于不涉及到缓存，每次处理器需要做 读/写 操作时，处理器对于 读/写 的请求都会先转到共享内存。同时，由于 <strong>一次只处理一个线程</strong> ，所以当这个系统在处理多个线程的 读/写 操作时，这多个线程在访问内存时就会有一个 <strong>先来后到</strong> 的关系，这个时候我们认为它实现了某种顺序，这个顺序就是 <em>顺序一致性</em></p>
+<p>对于软件的内存模型来讲，其主要表现是在编译器上，这里同样需要理解几个概念: <em>Happens Before</em> 和 <em>编译器重排</em> 以及 <em>内存重排</em></p>
+<p>什么是 <em>Happens Before</em>?</p>
+<p>假设 A 和 B 表示一个多线程的程序执行的两个不同的操作，如果 A <em>Happens Before</em> B，那么 <strong>A 操作对内存的影响 将对执行 B 操作的线程(且执行 B 操作之前) 可见</strong></p>
+<p>同时</p>
+<ol>
+<li>如果 A 操作和 B 操作在 <strong>同一线程</strong> 中执行，并且 A 操作的声明在 B 操作之前，这个时候我们说 A <em>Happens Before</em> B</li>
+<li>如果 A 操作 <em>Happens Before</em> B 操作，而 B 操作又 <em>Happens Before</em> C 操作，这个时候我们说 A <em>Happens Before</em> C</li>
+</ol>
+<p>但是需要注意</p>
+<ol>
+<li><p><strong>A 操作 Happens Before B 操作并不意味着 A 操作在 B 操作之前发生</strong>(考虑下编译器重排)</p>
+<p> 比如代码</p>
+ <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x, y <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    x = y + <span class="number">1</span> <span class="comment">// A 操作</span></span><br><span class="line">    y = <span class="number">1</span>     <span class="comment">// B 操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 尽管根据定义，A 操作 <em>Happens Before</em> B 操作，但是编译器可能会对上面的代码产生一些重排序，即 <em>编译器重排</em>，编译成汇编代码时，执行顺序可能如下</p>
+ <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">y = <span class="number">1</span>     <span class="comment">// B 操作</span></span><br><span class="line">x = y + <span class="number">1</span> <span class="comment">// A 操作</span></span><br></pre></td></tr></table></figure>
+<p> 即 <strong>A 操作并没有在 B 操作之前发生</strong>，但这 <strong>并没有违反</strong> <em>Happens Before</em> 的定义，因为在上述的例子中，<strong>对 <code>x</code> 的赋值(A 操作)并没有对 <code>y</code> 的赋值(B 操作)有影响</strong>，即假如 A 操作和 B 操作之间互不影响，那么它们之间对内存的影响也就不存在可见和不可见的关系，但是这样依然是遵循 <em>Happens Before</em> 定义的</p>
+</li>
+<li><p><strong>A 操作在 B 操作之前发生也并不意味着 A 操作 Happens Before B 操作</strong>(考虑多线程的情况)</p>
+<p> 比如代码</p>
+ <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">package</span> fmt</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x, y <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    x = <span class="number">1</span> <span class="comment">// A 操作</span></span><br><span class="line">    y = <span class="number">1</span> <span class="comment">// B 操作</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> foo()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (y) &#123;                  <span class="comment">// C 操作</span></span><br><span class="line">        fmt.Printf(<span class="string">"%v\n"</span>, x) <span class="comment">// D 操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 根据上述代码可知:</p>
+<ul>
+<li>A 操作 <em>Happens Before</em> B 操作</li>
+<li><p>C 操作 <em>Happens Before</em> D 操作</p>
+<p>假设此时在 <code>main</code> 中，<code>y</code> 读取到的值是 <code>1</code>，此时我们知道 B 操作在 C 操作之前发生，<strong>但是这并不意味着 B 操作 Happens Before C 操作</strong>，因为这里并没有 <strong>任何规则说明</strong> B 操作 <em>Happens Before</em> C 操作</p>
+<p>同时 A 操作和 D 操作也不存在 <em>Happens Before</em> 关系，A 操作和 D 操作之间的内存交互也可能被重排序(<em>编译器重排</em> 或者 <em>CPU 内存重排</em>)</p>
+<p>即便 C 操作中 <code>y</code> 的值是 <code>1</code>，D 操作中打印出来的 <code>x</code> 的值也可能是 <code>0</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>上面的例子中讲到了什么是 <em>编译器重排</em> ，其实就是将代码的执行顺序打乱以提升代码的执行性能，那么为什么需要 <em>编译器重排</em>?</p>
+<p>比如下面的伪代码</p>
+<figure class="highlight tp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">X</span> = <span class="number">0</span></span><br><span class="line">for i in range(<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">X</span> = <span class="number">1</span></span><br><span class="line">    print <span class="keyword">X</span></span><br></pre></td></tr></table></figure>
+<p>在上述代码中，<code>X = 1</code> 被 <strong>重复赋值</strong> 了 100 次，这完全是没有必要的，所以编译器会经过 <em>重排</em> 将代码优化如下</p>
+<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">X = <span class="number">1</span></span><br><span class="line">for i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    <span class="built_in">print</span> X</span><br></pre></td></tr></table></figure>
+<p>这样就能避免被重复赋值这种情况，在生成汇编时也没必要用到一个寄存器专门做这件事，相当于提升了代码最终的执行效率</p>
+<p>那么什么是 <em>内存重排</em>?</p>
+<p><em>内存重排</em> 这里指的是 <strong>CPU 对缓存中数据的重排</strong>，那么为什么需要这种重排?</p>
+<p>对于 CPU 来说，有 一级/二级/三级 缓存，缓存大小越大访问速度越慢，为了更高效率地平衡访问速度和数据存储而衍生出来的一种体系，最终的目的都是为了在当前的数据存储条件下，能达到最高的访问速度。由于这些缓存访问速度的不同，那么其访问到的数据也会带来一定的 <strong>不一致</strong> 的问题</p>
+<p>如下图所示</p>
+<p><img src="./3.png" alt></p>
+<p>由图可以看到，Cache 和 Memory 由于某种原因，导致了其存储的数据不一致，那么最终就会导致其访问到的数据与期望的数据不一致的情况: <code>a = 1 b = 2</code> 和 <code>a = 0 b = 2</code></p>
+<p>那么 CPU 是如何解决这种 <strong>不一致</strong> 问题带来的不确定性呢?</p>
+<p>答案就是用某种方式保持 Cache 和 Memory 的 <strong>读写一致性</strong></p>
+<p>大体上有 2 种方式:</p>
+<ol>
+<li>write back(稍后同步)<br> 可以减少不必要的内存写入，减轻总线竞争，性能较强</li>
+<li>write through(立刻同步)<br> 性能相较 write back 差，但读 Cache 以及其与 Memory 的一致性维护也更简单</li>
+</ol>
+<p>以单核环境，并且只有一个 level 的 Cache 的 write back 为例，它为了维护读写一致性有 2 种操作</p>
+<ol>
+<li>flush<br>如果 CPU 更改了某条 Cache line 中的数据导致了 Cache 数据比 Memory 数据要新，那么就需要将这条 Cache line <strong>标记为 Modified</strong>，在该 Cache line 需要被释放时，需要把其中的数据 <strong>flush</strong> 到 Memory 来保持同步</li>
+<li>invalidate<br>如果在 DMA 时，外来的数据不经过 CPU 直接传送到了 Memory 的某个位置导致了 Memory 数据比对应的某个 Cache line 的数据要新，那么就需要将这条 Cache line <strong>invalidate 化并将其标记为 dirty</strong>。下次 CPU 从这条 Cache line 读数据时就知道这个数据是旧的，得从 Memory 读</li>
+</ol>
+<p>Cache 读</p>
+<ol>
+<li>若 Cache miss，从 Memory 读取数据，然后 fill 数据到 Cache line 上</li>
+<li>若 Cache hit，但是对应的 Cache line 被标记为 invalidate/dirty，则执行步骤 1</li>
+<li>若 Cache hit，对应的 Cache line 没有标记，则直接读这个 Cache line</li>
+</ol>
+<p>Cache 写</p>
+<ol>
+<li>若 Cache miss，先 fill 数据到 Cache line 上，再改写 Cache line 的内容，将其 <strong>标记为 Modified</strong></li>
+<li>若 Cache hit，但是对应的 Cache line 被标记为 invalidate/dirty，则执行步骤 1</li>
+<li>若 Cache hit，对应的 Cache line 没有标记，则直接写这个 Cache line，并将其 <strong>标记为 Modified</strong></li>
+</ol>
+<p>总之，有了 flush 和 invalidate 的操作后，在 Cache line 上就有对应的数据的新旧标记了，有了这个标记，在设定了系统优先对 Cache line 优先读写的情况下，就可以知道什么情况下数据是新的还是旧的，什么情况下可以从 Cache line 读写还是从 Memory 读写，那么也就可以保证 Cache 和 Memory 的读写一致性了</p>
+<h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine 是什么? 简单来讲，goroutine 就是一个 <strong>由 go 运行时负责调度的用户层轻量级线程</strong>，由于其线程并不是由操作系统来调度，所以 goroutine 上下文切换代价小，资源占用也低</p>
+<p>既然 go 运行时能负责调度 goroutine，那么它是怎么被调度的?</p>
+<p>先来看一张图</p>
+<p><img src="./4.png" alt></p>
+<p>这个图即 G-P-M 模型</p>
+<ul>
+<li>G: 即 goroutine</li>
+<li>P: 即 processor，它是一个 <strong>逻辑处理器</strong></li>
+<li>M: 即 machine，它往往代表着一个物理 CPU</li>
+</ul>
+<p>对于 G 和 M 来讲，P 是它们的一个中间层，对于 G 来说，P 就是运行它的 CPU；而对于 goroutine 调度器来讲，M 才是它真正的 CPU。本质上来说，通过 P 这个中间层，可以让 G 真正的运行起来，然后通过与 P <strong>绑定</strong> 的 M 去执行相应的操作</p>
+<p>那么 M 是如何做到让 G 停下来并调度下一个可运行的 G 的呢?</p>
+<p>答案是 <strong>使用 抢占式调度</strong>，原理是 <strong>只要某个 G 调用了某个函数，那么 Go 运行时就有了抢占这个 G 的机会</strong></p>
+<p>怎么做到抢占的呢?</p>
+<p>在 Go 程序启动时，运行时会启动一个特殊的 M 线程，这个线程的名字叫做 <strong>sysmon</strong>，这是一个监视线程，它无须与 P 进行绑定，它在运行期间的作用主要有如下几种</p>
+<ol>
+<li>在一定时间内释放闲置的物理内存</li>
+<li>在一定时间内做垃圾回收</li>
+<li><strong>向长时间运行的 G 任务发出抢占调度</strong></li>
+<li>收回因为系统调用而长时间阻塞的 P</li>
+</ol>
+<p>一旦一个 G 任务运行时间过长，那么 sysmon 就会对这个 G 发出抢占调度的请求。一旦这个 G 的 <strong>抢占标志位被置为了 true</strong>，那么在这个 G 下一次调用某个函数时，运行时便可以将这个 G 抢占，并将其移出到 P 的本地队列中。如果 P 的本地队列已满，则移出到 Global 队列中，等待下一次被调度</p>
+<h2 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h2><p>在提到 channel 之前，首先应该提到的应该是 CSP 模型</p>
+<p>什么是 CSP 模型? CSP 模型就是 <strong>Communicating Sequential Process</strong>，即 <strong>通信顺序进程</strong>，这是为了简化并发代码的编写而创建的一个理论模型，如图所示</p>
+<p><img src="./5.png" alt></p>
+<p>相比于使用 <strong>共享内存来通信</strong> 的方式来编写并发代码，使用 CSP 模型更简洁易懂，可维护性也更高</p>
+<blockquote>
+<p>图中 Actor 模型表示 Erlang 采用的一种并发模型，跟 CSP 模型相似，都是使用 <strong>通信来共享内存</strong></p>
+</blockquote>
+<p>通过共享内存来通信就需要用到互斥锁、CAS(Compare And Swap) 等来保证并发访问内存的安全，而在 Go 中为了实现通过通信来共享内存，Go 引入了 <strong>channel</strong> 和 <strong>goroutine</strong> 来实现 CSP 模型去解耦这个操作。</p>
+<p>channel 的作用是建立起 goroutine 之间的 <strong>桥梁</strong>，好处是在 goroutine 中 <strong>不用手动去做资源的锁定和释放</strong></p>
+<blockquote>
+<p>注意: channel 底层也是通过互斥锁、原子操作这些低级并发原语(low level primitive)实现的，所以性能上相比较于这些会差些。对于有性能要求的场景可以使用 Go 的 sync 的包提供的一些低级并发原语</p>
+</blockquote>
+<p>这里还要说明的一个概念是 <strong>原子操作</strong></p>
+<p>原子操作是什么?</p>
+<p>CPU 在执行一条指令的时候对于 <strong>单个机器字长</strong> 的的数据的写入可以保证是原子的，比如 32 Bit 的系统对应的单个机器字长就是 4 byte，而 64 Bit 系统对应的单个机器字长就是 8 byte。对于一个 32 Bit 的系统，它要去写入一个 8 byte 的数据时，就需要执行 <strong>2 次写入操作</strong>，这 2 次操作之间就 <strong>没有原子性</strong>，可能会出现 2 种情况</p>
+<ol>
+<li>数据先写入后半部分，再写入前半部分</li>
+<li>数据先写入前半部分，写入后半部分时失败</li>
+</ol>
+<p>所以所谓的原子性，就是在对某个数据进行操作时，这个操作是 <strong>一次性的，顺序确定的，以及成功的</strong></p>
+<p>下面回到 channel，对于 channel 来说，它分 2 种</p>
+<ol>
+<li><p>无缓冲的 channel</p>
+<p> 无缓冲的 channel 会阻塞直到数据接收完成，<strong>常用于 2 个 goroutine 互相等待同步</strong></p>
+<p> <img src="./6.png" alt></p>
+</li>
+<li><p>有缓冲的 channel</p>
+<p> 有缓冲的 channel 如果在缓冲区未满的情况下发送是不阻塞的，在缓冲区不为空时，接收是不阻塞的</p>
+<p> <img src="./7.png" alt></p>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://colobu.com/2021/07/13/Updating-the-Go-Memory-Model/" target="_blank" rel="noopener">[译]更新Go内存模型</a></li>
+<li><a href="https://tiancaiamao.gitbooks.io/go-internals/content/zh/10.1.html" target="_blank" rel="noopener">深入解析 Go - 内存模型</a></li>
+<li><a href="https://lailin.xyz/post/go-training-week3-go-memory-model.html" target="_blank" rel="noopener">Go并发编程(二) Go 内存模型</a></li>
+<li><a href="https://lailin.xyz/post/go-training-week3-channel.html" target="_blank" rel="noopener">Go并发编程(十) 深入理解 Channel</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/65245043" target="_blank" rel="noopener">cache之读写一致性</a></li>
+<li><a href="https://blog.csdn.net/weixin_41519463/article/details/109208380" target="_blank" rel="noopener">Golang GMP 机制</a></li>
+<li>《Go 语言精进之路: 从新手到高手的编程思想、方法和技巧》</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    strugglebak
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/" title="浅析Go内存模型、goroutine以及channel">https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">
+            <i class="fa fa-tag"></i>
+            Go
+            </a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/06/06/Rust所有权、生命周期、内存管理/" rel="next" title="Rust所有权、生命周期、内存管理">
+                <i class="fa fa-chevron-left"></i> Rust所有权、生命周期、内存管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">strugglebak</p>
+              <p class="site-description motion-element" itemprop="description">个人技术博客，记录工作中遇到的问题以及学习过程中的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/strugglebak" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:strugglebak@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go-内存模型"><span class="nav-number">1.</span> <span class="nav-text">Go 内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#goroutine"><span class="nav-number">2.</span> <span class="nav-text">goroutine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#channel"><span class="nav-number">3.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">strugglebak</span>
+
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://FrontendChang.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/';
+          this.page.identifier = '2022/06/06/浅析Go内存模型、goroutine以及channel/';
+          this.page.title = '浅析Go内存模型、goroutine以及channel';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://FrontendChang.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
