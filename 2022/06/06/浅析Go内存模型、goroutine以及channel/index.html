@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Go,">
+  <meta name="keywords" content="Go并发,">
 
 
 
@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
-<meta name="keywords" content="Go">
+<meta name="description" content="注: 本文是对 Go 内存模型、goroutine 以及 channel 的原理的浅析，并不涉及到 go 源码部分">
+<meta name="keywords" content="Go并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅析Go内存模型、goroutine以及channel">
 <meta property="og:url" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/index.html">
 <meta property="og:site_name" content="Stay Hungry">
-<meta property="og:description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
+<meta property="og:description" content="注: 本文是对 Go 内存模型、goroutine 以及 channel 的原理的浅析，并不涉及到 go 源码部分">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/1.png">
 <meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/2.png">
@@ -96,10 +96,10 @@
 <meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/5.png">
 <meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/6.png">
 <meta property="og:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/7.png">
-<meta property="og:updated_time" content="2022-06-06T05:00:29.199Z">
+<meta property="og:updated_time" content="2022-06-06T05:08:16.935Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析Go内存模型、goroutine以及channel">
-<meta name="twitter:description" content="Go 内存模型先来看一段代码 package mainvar x, y intfunc f() &amp;#123;	x = 1	y = 1&amp;#125;func g() &amp;#123;    r1 = y    r2 = x&amp;#125;func main() &amp;#123;	go f()	g()&amp;#125; 我们将代码分成如下几个部分    func f()     func g()1: x = 1">
+<meta name="twitter:description" content="注: 本文是对 Go 内存模型、goroutine 以及 channel 的原理的浅析，并不涉及到 go 源码部分">
 <meta name="twitter:image" content="https://strugglebak.github.io/2022/06/06/浅析Go内存模型、goroutine以及channel/1.png">
 
 
@@ -403,7 +403,10 @@
       
 
       
-        <a id="more"></a>
+        <blockquote>
+<p>注: 本文是对 Go 内存模型、goroutine 以及 channel 的原理的浅析，并不涉及到 go 源码部分</p>
+</blockquote>
+<a id="more"></a>
 <h2 id="Go-内存模型"><a href="#Go-内存模型" class="headerlink" title="Go 内存模型"></a>Go 内存模型</h2><p>先来看一段代码</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x, y <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">	x = <span class="number">1</span></span><br><span class="line">	y = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">g</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r1 = y</span><br><span class="line">    r2 = x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">go</span> f()</span><br><span class="line">	g()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们将代码分成如下几个部分</p>
@@ -591,9 +594,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Go/" rel="tag">
+            <a href="/tags/Go并发/" rel="tag">
             <i class="fa fa-tag"></i>
-            Go
+            Go并发
             </a>
           
         </div>
@@ -616,6 +619,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/06/06/Go泛型学习笔记/" rel="prev" title="Go泛型学习笔记">
+                Go泛型学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -702,7 +709,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -724,7 +731,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
