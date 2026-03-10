@@ -4,7 +4,7 @@
   <url>
     <loc>https://strugglebak.github.io/2026/03/10/%E5%9F%BA%E4%BA%8Egateway%E7%9A%84bff%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E5%A4%8D%E7%9B%98/</loc>
     
-    <lastmod>2026-03-10T13:14:30.402Z</lastmod>
+    <lastmod>2026-03-10T13:23:01.407Z</lastmod>
     
   </url>
   
@@ -135,14 +135,14 @@
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/03/09/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E5%9B%9B-%E6%89%8B%E5%86%99tapable/</loc>
+    <loc>https://strugglebak.github.io/2020/02/24/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%BA%8C-%E6%89%8B%E5%86%99loader/</loc>
     
     <lastmod>2026-03-10T12:53:29.563Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/02/24/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%BA%8C-%E6%89%8B%E5%86%99loader/</loc>
+    <loc>https://strugglebak.github.io/2020/03/09/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E5%9B%9B-%E6%89%8B%E5%86%99tapable/</loc>
     
     <lastmod>2026-03-10T12:53:29.563Z</lastmod>
     
@@ -156,14 +156,14 @@
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/02/23/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%80-%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AAWebpack/</loc>
+    <loc>https://strugglebak.github.io/2020/03/09/%E4%BB%8EPromise%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%80-%E5%AE%9E%E7%8E%B0Promise%E5%89%8D%E8%A8%80/</loc>
     
     <lastmod>2026-03-10T12:53:29.557Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2019/02/20/%E4%B8%80%E4%BA%9B%E9%9D%A2%E8%AF%95%E9%A2%98/</loc>
+    <loc>https://strugglebak.github.io/2020/05/28/%E4%BB%8EPromise%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%89-TDD%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8EPromises-A-%E8%A7%84%E8%8C%83%E7%9A%84%E5%A4%8D%E6%9D%82Promise/</loc>
     
     <lastmod>2026-03-10T12:53:29.557Z</lastmod>
     
@@ -177,14 +177,14 @@
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/03/09/%E4%BB%8EPromise%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%80-%E5%AE%9E%E7%8E%B0Promise%E5%89%8D%E8%A8%80/</loc>
+    <loc>https://strugglebak.github.io/2020/02/23/%E4%BB%8EWebpack%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%80-%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AAWebpack/</loc>
     
     <lastmod>2026-03-10T12:53:29.557Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/05/28/%E4%BB%8EPromise%E6%9C%AC%E8%B4%A8%E5%BC%80%E5%A7%8B-%E4%B8%89-TDD%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8EPromises-A-%E8%A7%84%E8%8C%83%E7%9A%84%E5%A4%8D%E6%9D%82Promise/</loc>
+    <loc>https://strugglebak.github.io/2019/02/20/%E4%B8%80%E4%BA%9B%E9%9D%A2%E8%AF%95%E9%A2%98/</loc>
     
     <lastmod>2026-03-10T12:53:29.557Z</lastmod>
     
@@ -254,14 +254,7 @@
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2020/03/14/txios-%E5%9F%BA%E4%BA%8ETypeScript%E7%9A%84http%E5%BA%93%E7%9A%84%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2026-03-10T12:53:29.525Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://strugglebak.github.io/2019/03/17/Vue%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%B9%8BVue-Router/</loc>
+    <loc>https://strugglebak.github.io/2019/03/16/Vue%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%B9%8BVuex/</loc>
     
     <lastmod>2026-03-10T12:53:29.525Z</lastmod>
     
@@ -275,7 +268,14 @@
   </url>
   
   <url>
-    <loc>https://strugglebak.github.io/2019/03/16/Vue%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%B9%8BVuex/</loc>
+    <loc>https://strugglebak.github.io/2020/03/14/txios-%E5%9F%BA%E4%BA%8ETypeScript%E7%9A%84http%E5%BA%93%E7%9A%84%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2026-03-10T12:53:29.525Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://strugglebak.github.io/2019/03/17/Vue%E5%85%A8%E5%AE%B6%E6%A1%B6%E4%B9%8BVue-Router/</loc>
     
     <lastmod>2026-03-10T12:53:29.525Z</lastmod>
     
