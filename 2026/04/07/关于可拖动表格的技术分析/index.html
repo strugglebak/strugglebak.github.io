@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Stay Hungry">
 <meta property="og:description" content="前两天我专门抽了点时间，把一个“能拖列、能拖行、还有二级表头”的表格实现拆了一遍。为了不被业务名词干扰，我先做了一个最小 demo，只保留结构和交互，再回过头去看原来的实现，很多地方一下子就顺了。 这篇文章不聊具体业务，只聊这种表格为什么难、难在哪，以及我最后是怎么把它想明白的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2026-04-07T07:39:10.497Z">
+<meta property="og:updated_time" content="2026-04-07T07:48:25.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于可拖动表格的技术分析">
 <meta name="twitter:description" content="前两天我专门抽了点时间，把一个“能拖列、能拖行、还有二级表头”的表格实现拆了一遍。为了不被业务名词干扰，我先做了一个最小 demo，只保留结构和交互，再回过头去看原来的实现，很多地方一下子就顺了。 这篇文章不聊具体业务，只聊这种表格为什么难、难在哪，以及我最后是怎么把它想明白的。">
@@ -398,7 +398,7 @@
         <p>前两天我专门抽了点时间，把一个“能拖列、能拖行、还有二级表头”的表格实现拆了一遍。为了不被业务名词干扰，我先做了一个最小 demo，只保留结构和交互，再回过头去看原来的实现，很多地方一下子就顺了。</p>
 <p>这篇文章不聊具体业务，只聊这种表格为什么难、难在哪，以及我最后是怎么把它想明白的。</p>
 <a id="more"></a>
-<h2 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h2><p><a href="https://strugglebak.github.io/vue-draggable-table-demo/">demo 预览点击这里</a></p>
+<h2 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h2><p><a href="https://strugglebak.github.io/vue-draggable-table-demo/">demo 预览点击这里</a><br><a href="https://github.com/strugglebak/vue-draggable-table-demo" target="_blank" rel="noopener">demo 代码点击这里</a></p>
 <p>这种表格最难的地方，其实不是拖拽本身，而是这两件事：</p>
 <ol>
 <li>页面上看到的是“一级表头、二级表头、表体单元格”，但代码里真正稳定的数据结构，往往是另一套。</li>
