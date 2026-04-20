@@ -90,7 +90,7 @@
 <meta property="og:description" content="注: 本文是对已经部署在生产环境应用下的基于 gateway 的三层架构复盘解析">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://strugglebak.github.io/2026/03/10/基于gateway的bff三层架构复盘/1.jpg">
-<meta property="og:updated_time" content="2026-03-10T14:15:41.645Z">
+<meta property="og:updated_time" content="2026-04-20T12:33:26.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从入口到回包：一篇看懂 gateway 架构思路">
 <meta name="twitter:description" content="注: 本文是对已经部署在生产环境应用下的基于 gateway 的三层架构复盘解析">
@@ -455,7 +455,7 @@
 <li><code>oia.wallstreetcn.com</code></li>
 </ul>
 <p>这些域名的 <code>location /</code> 基本都是直接 <code>proxy_pass</code> 到 COS 上的某个 <code>index.html</code>，例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://static-1258626455.cos.ap-shanghai.myqcloud.com/juicy/index.html?;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://static-xxx.cos.ap-yyy.myqcloud.com/zzz/index.html?;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>说白了，这类配置就是 nginx 直接把对象存储里的静态站点挂出来。</p>
 <h4 id="2-根据设备类型选择不同静态站点"><a href="#2-根据设备类型选择不同静态站点" class="headerlink" title="2. 根据设备类型选择不同静态站点"></a>2. 根据设备类型选择不同静态站点</h4><p>像 <code>org.wallstreetcn.com</code>、<code>org-sit.wallstreetcn.com</code>、<code>org-stage.wallstreetcn.com</code> 这几组域名，会根据 <code>User-Agent</code> 先判断桌面端还是移动端，然后再决定回源哪个静态目录：</p>
 <ul>
